@@ -72,3 +72,4 @@ wordsearch/
 - `pnpm run db:push`: Push schema changes to database
 - `pnpm run db:studio`: Open database studio UI
 - `pnpm run check`: Run Oxlint and Oxfmt
+# bundy
