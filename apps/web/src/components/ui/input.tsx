@@ -1,20 +1,33 @@
-import { Input as InputPrimitive } from "@base-ui/react/input";
-import * as React from "react";
-
-import { cn } from "@/lib/utils";
+import * as React from "react"
+import { Input as InputPrimitive } from "@base-ui/react/input"
+import { cn } from "@/lib/utils"
 
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (
-    <InputPrimitive
-      type={type}
-      data-slot="input"
-      className={cn(
-        "dark:bg-input/30 border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 disabled:bg-input/50 dark:disabled:bg-input/80 h-8 rounded-none border bg-transparent px-2.5 py-1 text-xs transition-colors file:h-6 file:text-xs file:font-medium focus-visible:ring-1 aria-invalid:ring-1 md:text-xs file:text-foreground placeholder:text-muted-foreground w-full min-w-0 outline-none file:inline-flex file:border-0 file:bg-transparent disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
-        className,
-      )}
-      {...props}
-    />
-  );
+    <div className="relative w-full group">
+      <InputPrimitive
+        type={type}
+        data-slot="input"
+        className={cn(
+          // 1. Base Styles: Chunky and Rounded
+          "w-full rounded-2xl border-2 border-b-4 border-slate-200 bg-slate-100/50 px-4 py-3",
+          "text-base font-bold text-slate-700 placeholder:text-slate-400 outline-none transition-all",
+
+          // 2. The "Inset" Effect: A subtle top border to simulate depth
+          "border-t-slate-300",
+
+          // 3. Focus State: Switch to brand blue
+          "focus:bg-white focus:border-input-focus focus:border-b-input-focus ring-0",
+
+          // 4. Disabled State
+          "disabled:opacity-50 disabled:bg-neutral-100 disabled:cursor-not-allowed",
+
+          className
+        )}
+        {...props}
+      />
+    </div>
+  )
 }
 
-export { Input };
+export { Input }

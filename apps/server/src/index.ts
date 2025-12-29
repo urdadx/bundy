@@ -31,4 +31,8 @@ app.get("/", (c) => {
   return c.text("OK");
 });
 
+app.get("/shit", (c) => {
+  return c.text("SHITTT");
+});
+
 export default app;

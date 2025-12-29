@@ -1,58 +1,93 @@
-import type { VariantProps } from "class-variance-authority";
+import * as React from 'react'
+import { Slot } from '@radix-ui/react-slot'
+import { cva, type VariantProps } from 'class-variance-authority'
 
-import { Button as ButtonPrimitive } from "@base-ui/react/button";
-import { cva } from "class-variance-authority";
-
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils'
 
 const buttonVariants = cva(
-  "focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 rounded-none border border-transparent bg-clip-padding text-xs font-medium focus-visible:ring-1 aria-invalid:ring-1 [&_svg:not([class*='size-'])]:size-4 inline-flex items-center justify-center whitespace-nowrap transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0 outline-none group/button select-none",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-xl text-sm font-bold uppercase tracking-wide transition-all active:duration-75 focus-visible:outline-none disabled:pointer-events-none disabled:bg-neutral-200 disabled:text-neutral-400 disabled:border-b-0",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground [a]:hover:bg-primary/80",
-        outline:
-          "border-border bg-background hover:bg-muted hover:text-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 aria-expanded:bg-muted aria-expanded:text-foreground",
+        default:
+          "bg-white text-slate-500 border-2 border-b-4 border-slate-200 hover:bg-slate-50 active:border-b-0 active:translate-y-[2px]",
+        primary:
+          "bg-[#58cc02] text-white border-b-4 border-primary-depth hover:bg-[#61e002] active:border-b-0 active:translate-y-[2px]",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
+          "bg-[#1cb0f6] text-white border-b-4 border-secondary-depth hover:bg-[#20c4ff] active:border-b-0 active:translate-y-[2px]",
+        danger:
+          "bg-[#ff4b4b] text-white border-b-4 border-danger-depth hover:bg-[#ff5f5f] active:border-b-0 active:translate-y-[2px]",
+        super:
+          "bg-[#ce82ff] text-white border-b-4 border-super-depth hover:bg-[#d794ff] active:border-b-0 active:translate-y-[2px]",
         ghost:
-          "hover:bg-muted hover:text-foreground dark:hover:bg-muted/50 aria-expanded:bg-muted aria-expanded:text-foreground",
-        destructive:
-          "bg-destructive/10 hover:bg-destructive/20 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/20 text-destructive focus-visible:border-destructive/40 dark:hover:bg-destructive/30",
-        link: "text-primary underline-offset-4 hover:underline",
+          "bg-transparent text-slate-500 border-none hover:bg-slate-100 active:translate-y-0",
+        highlight:
+          "bg-highlight text-white border-b-4 border-highlight-depth hover:bg-highlight/90 active:border-b-0 active:translate-y-[2px]",
+
+        golden:
+          "bg-golden text-white border-b-4 border-golden-depth hover:bg-golden/90 active:border-b-0 active:translate-y-[2px]",
+
+        locked:
+          "bg-[#e5e5e5] text-[#afafaf] border-b-4 border-[#afafaf] cursor-not-allowed active:translate-y-0",
+
+        immersive:
+          "bg-white/20 text-white border-2 border-b-4 border-white/40 hover:bg-white/30 active:border-b-0 active:translate-y-[2px]",
+
+        active:
+          "bg-[#ddf4ff] text-[#1cb0f6] border-2 border-b-4 border-[#1cb0f6] hover:bg-[#c6ecff] active:border-b-0 active:translate-y-[2px]",
+
+        correct:
+          "bg-[#d7ffb8] text-[#58cc02] border-2 border-b-4 border-[#58cc02] hover:bg-[#c6f7a1] active:border-b-0 active:translate-y-[2px]",
+
+        incorrect:
+          "bg-[#ffdfe0] active:animate-shake text-[#ea2b2b] border-2 border-b-4 border-[#ea2b2b] hover:bg-[#ffcfd1] active:border-b-0 active:translate-y-[2px]",
+        select: " bg-gray-50 border-2 border-b-4 border-transparent hover:bg-gray-100 data-[selected=true]:border-green-500  transition-all",
       },
       size: {
-        default:
-          "h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
-        xs: "h-6 gap-1 rounded-none px-2 text-xs has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3",
-        sm: "h-7 gap-1 rounded-none px-2.5 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3.5",
-        lg: "h-9 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-3 has-data-[icon=inline-start]:pl-3",
-        icon: "size-8",
-        "icon-xs": "size-6 rounded-none [&_svg:not([class*='size-'])]:size-3",
-        "icon-sm": "size-7 rounded-none",
-        "icon-lg": "size-9",
+        default: "h-12 px-6",
+        sm: "h-9 px-3 text-xs",
+        lg: "h-[52px] px-10 text-lg",
+        icon: "h-12 w-12",
       },
     },
     defaultVariants: {
       variant: "default",
       size: "default",
     },
-  },
-);
+  }
+)
 
-function Button({
-  className,
-  variant = "default",
-  size = "default",
-  ...props
-}: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
-  return (
-    <ButtonPrimitive
-      data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
-      {...props}
-    />
-  );
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  asChild?: boolean;
+  variant?:
+  | "default"
+  | "primary"
+  | "secondary"
+  | "danger"
+  | "super"
+  | "highlight"
+  | "golden"
+  | "locked"
+  | "ghost"
+  | "immersive"
+  | "active"
+  | "correct"
+  | "incorrect"
+  | "select"
+  | null
+  | undefined;
+  size?: VariantProps<typeof buttonVariants>["size"];
 }
 
-export { Button, buttonVariants };
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : 'button'
+    return (
+      <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />
+    )
+  }
+)
+Button.displayName = 'Button'
+
+export { Button, buttonVariants }
