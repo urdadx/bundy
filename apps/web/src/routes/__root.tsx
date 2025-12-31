@@ -7,7 +7,7 @@ import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import type { trpc } from "@/utils/trpc";
 
 import Header from "@/components/header";
-import { ThemeProvider } from "@/components/theme-provider";
+import { useTheme } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 
 import "../index.css";
@@ -39,12 +39,14 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 });
 
 function RootComponent() {
+  const { theme } = useTheme();
+
   return (
     <>
       <div className="grid grid-rows-[auto_1fr] h-svh">
         <Outlet />
       </div>
-      <Toaster theme="light" richColors />
+      <Toaster theme={theme as "light" | "dark"} richColors />
       <TanStackRouterDevtools position="bottom-left" />
       <ReactQueryDevtools position="bottom" buttonPosition="bottom-right" />
     </>

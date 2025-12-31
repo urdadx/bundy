@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { GoogleSVG } from './ui/google-svg';
+import { useRouter } from '@tanstack/react-router';
 
 export const AuthForm = () => {
   const [isGuest, setIsGuest] = useState(false);
   const [battleName, setBattleName] = useState('');
+  const router = useRouter();
 
   const handleGoogleSignIn = () => {
     console.log('Sign in with Google');
@@ -17,6 +19,9 @@ export const AuthForm = () => {
 
   const handleSubmitGuest = () => {
     console.log('Playing as guest with name:', battleName);
+    router.navigate({
+      to: '/worlds',
+    });
   };
 
   if (isGuest) {

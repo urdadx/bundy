@@ -11,11 +11,11 @@ import planet06 from '@/assets/planets/planet06.png'
 
 const WORLDS = [
   { name: 'Meadow', icon: planet01, id: 1 },
-  { name: 'Tundra', icon: planet02, id: 2 },
-  { name: 'Volcano', icon: planet03, id: 3 },
+  { name: 'Relic', icon: planet02, id: 2 },
+  { name: 'Volcano', icon: planet06, id: 3 },
   { name: 'Cyber', icon: planet04, id: 4 },
   { name: 'Void', icon: planet05, id: 5 },
-  { name: 'Relic', icon: planet06, id: 6 },
+  { name: 'Malyka', icon: planet03, id: 6 },
 
 ]
 

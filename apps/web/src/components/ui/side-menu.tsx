@@ -1,20 +1,22 @@
-import { SideMenuThemeButton } from '@/components/ui/side-menu-button'
 import { Link } from '@tanstack/react-router'
 import { SideMenuItem } from './side-menu-item'
+import Logo from '@/assets/word-search-logo.png'
+import { SideMenuThemeButton } from './side-menu-theme-button'
 
 export function SideMenu() {
   return (
     <div className="flex h-screen flex-col justify-between pt-6 w-64 border-r-2 pb-4 sm:max-lg:w-20 sm:max-lg:pb-6">
       <nav className="flex flex-col gap-6 px-4 sm:max-lg:px-2">
         <Link
-          href="/learn"
-          className="focus-visible self-start rounded-xl max-sm:ml-4 sm:max-lg:self-center lg:ml-4" to={'.'}        >
+          to="/"
+          className="focus-visible self-start rounded-xl max-sm:ml-4 sm:max-lg:self-center lg:ml-4" >
           <span className="hidden sm:max-lg:block">
-            <img src="logo" alt="bundy-logo" />
+            <img src={Logo} alt="bundy-logo" />
           </span>
-          <span className="sm:max-lg:hidden">
-            <span className="font-display text-3xl font-bold -tracking-wide text-primary">
-              Bundy
+          <span className="sm:max-lg:hidden flex items-center gap-1">
+
+            <span className="font-display text-primary-depth text-3xl font-bold -tracking-normal">
+              Bundylearn
             </span>
           </span>
         </Link>

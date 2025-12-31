@@ -3,7 +3,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
 
 const worldSearchSchema = z.object({
-  world: z.string().optional().catch('Meadow'),
+  world: z.string().default('Meadow'),
 })
 
 export const Route = createFileRoute('/worlds')({

@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WorldsRouteImport } from './routes/worlds'
 import { Route as LobbyRouteImport } from './routes/lobby'
+import { Route as GameSettingsRouteImport } from './routes/game-settings'
 import { Route as ComponentsRouteImport } from './routes/components'
 import { Route as ArenaRouteRouteImport } from './routes/arena/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -24,6 +25,11 @@ const WorldsRoute = WorldsRouteImport.update({
 const LobbyRoute = LobbyRouteImport.update({
   id: '/lobby',
   path: '/lobby',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GameSettingsRoute = GameSettingsRouteImport.update({
+  id: '/game-settings',
+  path: '/game-settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ComponentsRoute = ComponentsRouteImport.update({
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/arena': typeof ArenaRouteRouteWithChildren
   '/components': typeof ComponentsRoute
+  '/game-settings': typeof GameSettingsRoute
   '/lobby': typeof LobbyRoute
   '/worlds': typeof WorldsRoute
   '/arena/learn': typeof ArenaLearnRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/arena': typeof ArenaRouteRouteWithChildren
   '/components': typeof ComponentsRoute
+  '/game-settings': typeof GameSettingsRoute
   '/lobby': typeof LobbyRoute
   '/worlds': typeof WorldsRoute
   '/arena/learn': typeof ArenaLearnRoute
@@ -68,6 +76,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/arena': typeof ArenaRouteRouteWithChildren
   '/components': typeof ComponentsRoute
+  '/game-settings': typeof GameSettingsRoute
   '/lobby': typeof LobbyRoute
   '/worlds': typeof WorldsRoute
   '/arena/learn': typeof ArenaLearnRoute
@@ -78,16 +87,25 @@ export interface FileRouteTypes {
     | '/'
     | '/arena'
     | '/components'
+    | '/game-settings'
     | '/lobby'
     | '/worlds'
     | '/arena/learn'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/arena' | '/components' | '/lobby' | '/worlds' | '/arena/learn'
+  to:
+    | '/'
+    | '/arena'
+    | '/components'
+    | '/game-settings'
+    | '/lobby'
+    | '/worlds'
+    | '/arena/learn'
   id:
     | '__root__'
     | '/'
     | '/arena'
     | '/components'
+    | '/game-settings'
     | '/lobby'
     | '/worlds'
     | '/arena/learn'
@@ -97,6 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ArenaRouteRoute: typeof ArenaRouteRouteWithChildren
   ComponentsRoute: typeof ComponentsRoute
+  GameSettingsRoute: typeof GameSettingsRoute
   LobbyRoute: typeof LobbyRoute
   WorldsRoute: typeof WorldsRoute
 }
@@ -115,6 +134,13 @@ declare module '@tanstack/react-router' {
       path: '/lobby'
       fullPath: '/lobby'
       preLoaderRoute: typeof LobbyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/game-settings': {
+      id: '/game-settings'
+      path: '/game-settings'
+      fullPath: '/game-settings'
+      preLoaderRoute: typeof GameSettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/components': {
@@ -164,6 +190,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ArenaRouteRoute: ArenaRouteRouteWithChildren,
   ComponentsRoute: ComponentsRoute,
+  GameSettingsRoute: GameSettingsRoute,
   LobbyRoute: LobbyRoute,
   WorldsRoute: WorldsRoute,
 }

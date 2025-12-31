@@ -4,6 +4,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { ActiveButton } from '../components/duolingo-buttons/active-button'
 import { HealthBar } from '../components/health-bar'
 import { Input } from '@/components/ui/input'
+import { Switch } from '@/components/ui/switch'
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from '@/components/ui/alert-dialog'
 
@@ -13,6 +14,8 @@ export const Route = createFileRoute('/components')({
 
 function RouteComponent() {
   const [playerHP, setPlayerHP] = useState(100);
+  const [switchChecked, setSwitchChecked] = useState(false);
+  const [smallSwitchChecked, setSmallSwitchChecked] = useState(false);
 
   // Example: When an opponent hits an UPPERCUT
   const handleDamage = () => {
@@ -62,6 +65,21 @@ function RouteComponent() {
         <div className="max-w-md space-y-2">
           <h2 className="text-xl font-bold mb-2">Input Component Demo</h2>
           <Input placeholder="Type something..." />
+        </div>
+      </div>
+
+      {/* Demo of Switch component */}
+      <div className="my-8">
+        <h2 className="text-xl font-bold mb-2">Switch Demo</h2>
+        <div className="space-y-4">
+          <div className="flex items-center space-x-2">
+            <Switch size="default" checked={switchChecked} onCheckedChange={setSwitchChecked} />
+            <span>Default Switch is {switchChecked ? 'on' : 'off'}</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Switch size="sm" checked={smallSwitchChecked} onCheckedChange={setSmallSwitchChecked} />
+            <span>Small Switch is {smallSwitchChecked ? 'on' : 'off'}</span>
+          </div>
         </div>
       </div>
 
