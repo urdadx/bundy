@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { getValidEndCell } from '@/utils/valid-search'
 import { Cell } from './cell'
-import { WordList } from './word-list'
-import { GameHeader } from '../game-header'
-import { AvatarStage } from '../players/avatar-stage'
 import {
   generateWordSearch,
   getCellsInPath,
@@ -13,9 +10,6 @@ import {
   type Theme,
   type Difficulty
 } from '@/utils/word-search-generator'
-import maleIdleImage from '@/assets/characters/male-idle.png'
-import femaleIdleImage from '@/assets/characters/female-idle.png'
-import backgroundCastles from '@/assets/background/backgroundEmpty.png'
 
 interface WordSearchProps {
   theme?: Theme;
@@ -24,7 +18,6 @@ interface WordSearchProps {
   onWordFound?: (word: string, remaining: number) => void;
   onPuzzleComplete?: () => void;
   colorTheme?: 'default' | 'ocean' | 'forest' | 'sunset';
-  showWordList?: boolean;
 }
 
 export function WordSearch({
@@ -34,14 +27,9 @@ export function WordSearch({
   onWordFound,
   onPuzzleComplete,
   colorTheme = 'default',
-  showWordList = true
 }: WordSearchProps) {
   const puzzle = useMemo<WordSearchPuzzle>(() => {
-    const config: WordSearchConfig = {
-      theme,
-      difficulty,
-      size: size || 0
-    };
+    const config: WordSearchConfig = { theme, difficulty, size: size || 0 };
     return generateWordSearch(config);
   }, [theme, difficulty, size]);
 
@@ -51,48 +39,31 @@ export function WordSearch({
   const [isDragging, setIsDragging] = useState(false);
   const [selectedCells, setSelectedCells] = useState<Set<string>>(new Set());
 
-  const [player1HP, setPlayer1HP] = useState(100);
-  const [player2HP, setPlayer2HP] = useState(100);
-  const [player1Message, setPlayer1Message] = useState<string | undefined>();
-  const [player2Message, setPlayer2Message] = useState<string | undefined>();
-
-  useEffect(() => {
-
-    const timer = setTimeout(() => {
-      setPlayer1Message(undefined);
-      setPlayer2Message(undefined);
-    }, 3000);
-    return () => clearTimeout(timer);
-  }, []);
-
   const gridSize = puzzle.grid.length;
+  const gap = gridSize <= 10 ? 4 : 2;
+  const padding = 40;
 
-  const getCellSize = () => {
-    const reservedHeight = 220;
-    const reservedWidth = 32;
-    const maxGridHeight = typeof window !== 'undefined' ? window.innerHeight - reservedHeight : 500;
-    const maxGridWidth = typeof window !== 'undefined' ? Math.min(window.innerWidth - reservedWidth, 600) : 500;
-    const maxGridSize = Math.min(maxGridHeight, maxGridWidth);
-    const gap = gridSize <= 10 ? 4 : 2;
-    const totalGap = gap * (gridSize - 1);
-    const cellSize = Math.floor((maxGridSize - totalGap - 32) / gridSize);
-    return Math.max(cellSize, 20);
-  };
+  const getCellSize = useCallback(() => {
+    if (typeof window === 'undefined') return 48;
+
+    const isLargeScreen = window.innerWidth >= 1024;
+    const maxWidth = isLargeScreen ? 700 : Math.min(window.innerWidth - 32, 800);
+    const maxHeight = window.innerHeight - 100;
+    const maxSize = Math.min(maxWidth, maxHeight);
+
+    const totalGaps = gap * (gridSize - 1);
+    const availableSpace = maxSize - (padding * 2) - totalGaps;
+
+    return Math.max(Math.floor(availableSpace / gridSize), 28);
+  }, [gridSize, gap]);
 
   const [cellSize, setCellSize] = useState(getCellSize);
-  const gap = gridSize <= 10 ? 4 : 2;
 
-  useEffect(() => {
-    const handleResize = () => setCellSize(getCellSize());
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [gridSize]);
 
   useEffect(() => {
     if (startCell && currentCell && isDragging) {
       const cells = getCellsInPath(startCell, currentCell);
-      const cellSet = new Set(cells.map(c => `${c.r}-${c.c}`));
-      setSelectedCells(cellSet);
+      setSelectedCells(new Set(cells.map(c => `${c.r}-${c.c}`)));
     } else {
       setSelectedCells(new Set());
     }
@@ -106,8 +77,7 @@ export function WordSearch({
 
   const handleMouseEnter = useCallback((r: number, c: number) => {
     if (isDragging && startCell) {
-      const validCell = getValidEndCell(startCell, { r, c });
-      setCurrentCell(validCell);
+      setCurrentCell(getValidEndCell(startCell, { r, c }));
     }
   }, [isDragging, startCell]);
 
@@ -122,17 +92,11 @@ export function WordSearch({
 
     const touch = e.touches[0];
     const element = document.elementFromPoint(touch.clientX, touch.clientY);
+    const row = element?.getAttribute('data-row');
+    const col = element?.getAttribute('data-col');
 
-    if (element) {
-      const row = element.getAttribute('data-row');
-      const col = element.getAttribute('data-col');
-
-      if (row && col) {
-        const r = parseInt(row);
-        const c = parseInt(col);
-        const validCell = getValidEndCell(startCell, { r, c });
-        setCurrentCell(validCell);
-      }
+    if (row && col) {
+      setCurrentCell(getValidEndCell(startCell, { r: parseInt(row), c: parseInt(col) }));
     }
   }, [isDragging, startCell]);
 
@@ -147,16 +111,10 @@ export function WordSearch({
       newFoundWords.add(match.word);
       setFoundWords(newFoundWords);
 
-      // Show message
-      setPlayer1Message(`Found ${match.word}!`);
-      setTimeout(() => setPlayer1Message(undefined), 4000);
+      onWordFound?.(match.word, puzzle.words.length - newFoundWords.size);
 
-      if (onWordFound) {
-        onWordFound(match.word, puzzle.words.length - newFoundWords.size);
-      }
-
-      if (newFoundWords.size === puzzle.words.length && onPuzzleComplete) {
-        onPuzzleComplete();
+      if (newFoundWords.size === puzzle.words.length) {
+        onPuzzleComplete?.();
       }
     }
 
@@ -165,103 +123,50 @@ export function WordSearch({
     setCurrentCell(null);
   }, [isDragging, startCell, currentCell, puzzle, foundWords, onWordFound, onPuzzleComplete]);
 
-  const handleMouseUp = useCallback(() => {
-    handleSelectionEnd();
-  }, [handleSelectionEnd]);
-
-  const handleTouchEnd = useCallback(() => {
-    handleSelectionEnd();
-  }, [handleSelectionEnd]);
-
   const isCellInFoundWord = useCallback((r: number, c: number): boolean => {
-    for (const word of puzzle.words) {
-      if (foundWords.has(word.word)) {
-        const cells = getCellsInPath(word.start, word.end);
-        if (cells.some(cell => cell.r === r && cell.c === c)) {
-          return true;
-        }
-      }
-    }
-    return false;
+    return puzzle.words.some(word => {
+      if (!foundWords.has(word.word)) return false;
+      const cells = getCellsInPath(word.start, word.end);
+      return cells.some(cell => cell.r === r && cell.c === c);
+    });
   }, [puzzle.words, foundWords]);
 
   return (
-    <div
-      className="flex flex-col gap-6 w-full h-screen overflow-hidden py-2 bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${backgroundCastles})` }}
-    >
-      <GameHeader
-        player1={{
-          score: 0,
-          name: 'Player 1',
-          avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Player1'
-        }}
-        player2={{
-          score: 0,
-          name: 'Player 2',
-          avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Player2'
-        }}
-      />
-      <div className="flex flex-col lg:flex-row gap-4 w-full items-center justify-center flex-1 min-h-0 px-2">
-        <AvatarStage
-          imageSrc={maleIdleImage}
-          alt="Player 1"
-          side="left"
-          message={player1Message}
-          className="hidden lg:flex flex-1 justify-center"
-        />
-
-        <div className="flex flex-col gap-2 items-center">
-          <div
-            className="relative p-4 bg-white rounded-2xl border-4 border-slate-200 shadow-xl select-none touch-none"
-            onMouseLeave={handleMouseUp}
-            onTouchEnd={handleTouchEnd}
-          >
-            <div
-              className="grid"
-              style={{
-                gridTemplateColumns: `repeat(${gridSize}, minmax(0, 1fr))`,
-                gap: `${gap}px`
-              }}
-              onMouseUp={handleMouseUp}
-            >
-              {puzzle.grid.map((row, r) =>
-                row.map((char, c) => (
-                  <Cell
-                    key={`${r}-${c}`}
-                    char={char}
-                    row={r}
-                    col={c}
-                    isSelected={selectedCells.has(`${r}-${c}`)}
-                    isFound={isCellInFoundWord(r, c)}
-                    isHighlighted={false}
-                    onMouseDown={() => handleMouseDown(r, c)}
-                    onMouseEnter={() => handleMouseEnter(r, c)}
-                    onTouchStart={() => handleTouchStart(r, c)}
-                    onTouchMove={(e) => handleTouchMove(e)}
-                    size={cellSize}
-                    theme={colorTheme}
-                  />
-                ))
-              )}
-            </div>
-          </div>
-
-          {showWordList && (
-            <WordList
-              words={puzzle.words.map(w => w.word)}
-              foundWords={foundWords}
-            />
+    <div className="flex items-center justify-center w-full h-full min-h-100">
+      <div
+        className="bg-white rounded-3xl border-4 border-slate-200 shadow-xl select-none touch-none"
+        style={{ padding }}
+        onMouseLeave={handleSelectionEnd}
+        onMouseUp={handleSelectionEnd}
+        onTouchEnd={handleSelectionEnd}
+      >
+        <div
+          className="grid"
+          style={{
+            gridTemplateColumns: `repeat(${gridSize}, ${cellSize}px)`,
+            gap: `${gap}px`
+          }}
+        >
+          {puzzle.grid.map((row, r) =>
+            row.map((char, c) => (
+              <Cell
+                key={`${r}-${c}`}
+                char={char}
+                row={r}
+                col={c}
+                isSelected={selectedCells.has(`${r}-${c}`)}
+                isFound={isCellInFoundWord(r, c)}
+                isHighlighted={false}
+                onMouseDown={() => handleMouseDown(r, c)}
+                onMouseEnter={() => handleMouseEnter(r, c)}
+                onTouchStart={() => handleTouchStart(r, c)}
+                onTouchMove={handleTouchMove}
+                size={cellSize}
+                theme={colorTheme}
+              />
+            ))
           )}
         </div>
-
-        <AvatarStage
-          imageSrc={femaleIdleImage}
-          alt="Player 2"
-          side="right"
-          message={player2Message}
-          className="hidden lg:flex flex-1 justify-center"
-        />
       </div>
     </div>
   );

@@ -1,0 +1,138 @@
+import type { ReactNode } from 'react'
+import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
+import { Lightbulb, Flag, Settings } from 'lucide-react'
+
+interface Player {
+  name: string
+  avatar?: string
+  score?: number
+  rating?: number
+  isCurrentTurn?: boolean
+}
+
+interface PlaygroundLayoutProps {
+  children: ReactNode
+  player1: Player
+  player2: Player
+  timer?: ReactNode
+  rightPanel?: ReactNode
+  className?: string
+}
+
+
+export function PlaygroundLayout({
+  children,
+  rightPanel,
+  className
+}: PlaygroundLayoutProps) {
+  return (
+    <div className={cn(
+      "min-h-screen w-full bg-slate-50",
+      className
+    )}>
+      <div className="flex justify-center items-start w-full min-h-screen py-6 px-4">
+        <div className="flex gap-4 max-w-7xl w-full">
+          <div className="flex-3 flex flex-col items-center gap-3">
+            <div className="shrink-0">
+              {children}
+            </div>
+          </div>
+          <div className="hidden lg:flex flex-2 flex-col gap-3">
+            {rightPanel}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export function GameInfoPanel({
+  children,
+  title,
+  headerRight,
+  className
+}: {
+  children: ReactNode
+  title?: string
+  headerRight?: ReactNode
+  className?: string
+}) {
+  return (
+    <div className={cn(
+      "bg-white border-2 border-b-4 border-slate-200 rounded-xl overflow-hidden",
+      className
+    )}>
+      {title && (
+        <div className="px-4 py-3 bg-slate-50 border-b-2 border-slate-200 flex justify-between items-center">
+          <h3 className="text-slate-600 font-bold text-sm uppercase tracking-wide">
+            {title}
+          </h3>
+          {headerRight && (
+            <div className="text-slate-600 text-sm font-medium">
+              {headerRight}
+            </div>
+          )}
+        </div>
+      )}
+      <div className="p-3">
+        {children}
+      </div>
+    </div>
+  )
+}
+
+export function WordListPanel({
+  words,
+  foundWords
+}: {
+  words: string[]
+  foundWords: Set<string>
+}) {
+  return (
+    <GameInfoPanel
+      title="Words to Find"
+      headerRight={
+        <span>
+          <span className="text-[#58cc02] font-bold">{foundWords.size}</span> / {words.length}
+        </span>
+      }
+    >
+      <div className="flex flex-wrap gap-2">
+        {words.map((word) => (
+          <span
+            key={word}
+            className={cn(
+              "px-3 py-1.5 rounded-xl text-sm font-bold uppercase transition-all border-2 border-b-4",
+              foundWords.has(word)
+                ? "bg-[#d7ffb8] text-[#58cc02] border-[#58cc02] line-through"
+                : "bg-white text-slate-500 border-slate-200 hover:bg-slate-50"
+            )}
+          >
+            {word}
+          </span>
+        ))}
+      </div>
+
+    </GameInfoPanel>
+  )
+}
+
+export function GameActionsPanel() {
+  return (
+    <GameInfoPanel>
+      <div className="flex gap-3 justify-center">
+        <Button variant="primary" size="icon" className='w-full'>
+          Hint
+          <Lightbulb className="h-5 w-5 ml-1" />
+        </Button>
+        <Button variant="highlight" size="icon" className='w-full'>
+          Resign <Flag className="h-5 w-5 ml-1" />
+        </Button>
+        <Button variant="super" size="icon" className='w-full'>
+          Settings <Settings className="h-5 w-5 ml-1" />
+        </Button>
+      </div>
+    </GameInfoPanel>
+  )
+}

@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import diamondIcon from '@/assets/icons/diamond.svg'
-import xpIcon from '@/assets/xp.svg'
+import xpIcon from '@/assets/icons/xp.svg'
 import medalIcon from '@/assets/medals/flatshadow_medal3.png'
 
 type UserStatsProps = {

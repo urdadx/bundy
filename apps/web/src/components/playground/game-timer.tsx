@@ -1,12 +1,14 @@
 import { useGameTimer } from '@/hooks/use-game-timer';
+import { cn } from '@/lib/utils';
 
 interface GameTimerProps {
   duration?: number;
   onTimeUp?: () => void;
   autoStart?: boolean;
+  className?: string;
 }
 
-export function GameTimer({ duration = 600, onTimeUp, autoStart = true }: GameTimerProps) {
+export function GameTimer({ duration = 600, onTimeUp, autoStart = true, className }: GameTimerProps) {
   const { formattedTime, timeLeft, isRunning, start, pause, reset } = useGameTimer({
     initialTime: duration,
     onTimeUp,
@@ -20,14 +22,16 @@ export function GameTimer({ duration = 600, onTimeUp, autoStart = true }: GameTi
   const isTimeUp = timeLeft === 0;
 
   return (
-    <div className="flex items-center justify-center ">
+    <div className={cn("flex items-center justify-center", className)}>
       <span
-        className={`text-3xl font-bold  ${isTimeUp
-          ? 'text-red-600'
-          : isLowTime
-            ? 'text-orange-500 animate-pulse'
-            : 'text-slate-700'
-          }`}
+        className={cn(
+          "text-2xl font-bold",
+          isTimeUp
+            ? 'text-red-500'
+            : isLowTime
+              ? 'text-orange-400 animate-pulse'
+              : 'text-slate-700'
+        )}
       >
         {formattedTime}
       </span>

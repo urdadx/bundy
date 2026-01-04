@@ -13,7 +13,6 @@ function RouteComponent() {
   return (
     <div className="flex w-full gap-x-12">
       <div className="flex-1 space-y-5">
-        <GoBackHeader />
 
         <BattleBanner title="World 1: Nebula" color="primary" description='
           '/>

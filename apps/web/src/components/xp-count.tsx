@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import xpIcon from "@/assets/xp.svg";
+import xpIcon from "@/assets/icons/xp.svg";
 
 interface XPCountProps {
   count: number;
