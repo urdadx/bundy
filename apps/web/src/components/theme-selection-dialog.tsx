@@ -10,7 +10,7 @@ const THEMES = [
   { id: 'cities', name: 'Cities', icon: '🏙️' },
   { id: 'countries', name: 'Countries', icon: '🌍' },
   { id: 'foods', name: 'Foods', icon: '🍕' },
-  { id: 'space', name: 'Space', icon: '🚀' },
+  { id: 'cars', name: 'Cars', icon: '🚗' },
 ]
 
 export const ThemeSelectionDialog = ({

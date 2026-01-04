@@ -1,7 +1,6 @@
 import { forwardRef } from 'react'
 import { Check, Crown, Star, Swords } from 'lucide-react'
 import { Button, type ButtonProps } from '@/components/ui/button'
-
 import { cn } from '@/lib/utils'
 
 const icons = {
@@ -28,7 +27,7 @@ export const ButtonBase = forwardRef<HTMLButtonElement, ButtonBaseProps>(
         size="icon"
         variant={variant}
         className={cn(
-          'size-17.5 border-b-8',
+          'size-17.5 border-b-8 rounded-full',
           (variant === 'primary' || variant === 'secondary') && 'dark:text-white',
           className
         )}

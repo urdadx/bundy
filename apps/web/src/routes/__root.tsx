@@ -47,7 +47,6 @@ function RootComponent() {
         <Outlet />
       </div>
       <Toaster theme={theme as "light" | "dark"} richColors />
-      <TanStackRouterDevtools position="bottom-left" />
       <ReactQueryDevtools position="bottom" buttonPosition="bottom-right" />
     </>
   );

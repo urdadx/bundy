@@ -1,6 +1,5 @@
 import type { ComponentProps } from 'react'
-import { Arrow as PopoverArrow } from '@radix-ui/react-popover'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { Popover, PopoverContent, PopoverTrigger, Arrow } from '@radix-ui/react-popover'
 import { Button } from '@/components/ui/button'
 import { ButtonBase } from './button-base'
 
@@ -30,7 +29,7 @@ export function LockedButton({
             Locked
           </Button>
         </div>
-        <PopoverArrow className="fill-border" />
+        <Arrow className="fill-border" />
       </PopoverContent>
     </Popover>
   )

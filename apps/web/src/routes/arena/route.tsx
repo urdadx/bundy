@@ -1,14 +1,18 @@
+// routes/arena.tsx
 import { SideMenu } from '@/components/ui/side-menu'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Outlet } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/arena')({
-  component: RouteComponent,
+  component: ArenaLayout,
 })
 
-function RouteComponent() {
+function ArenaLayout() {
   return (
-    <>
+    <div className="flex h-screen">
       <SideMenu />
-    </>
+      <div className="flex-1 overflow-auto bg-white">
+        <Outlet />
+      </div>
+    </div>
   )
 }

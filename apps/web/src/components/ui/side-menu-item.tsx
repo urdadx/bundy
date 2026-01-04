@@ -31,10 +31,10 @@ export function SideMenuItem({ href, icon, label, hideLabel }: SideMenuItemProps
   const { pathname } = useLocation()
   const isActive = pathname === href
   return (
-    <li>
+    <div>
       <Button
         variant={isActive ? 'active' : 'ghost'}
-        className={`h-14 w-full justify-start py-2 border-b-2 sm:max-lg:w-auto sm:max-lg:px-2 ${isActive ? '' : 'border-transparent text-foreground/85'}`}
+        className={`h-14 w-full justify-start py-2 border-b-2 sm:max-lg:w-auto sm:max-lg:px-2 ${isActive ? '' : 'border-transparent text-foreground/85'} ${hideLabel ? 'h-12 w-12 justify-center border-none py-1 p-0' : ''}`}
         asChild
       >
         <Link to={href} title={label} {...(hideLabel && { 'aria-label': label })}>
@@ -48,6 +48,6 @@ export function SideMenuItem({ href, icon, label, hideLabel }: SideMenuItemProps
           {!hideLabel && <span className="ml-5 truncate sm:max-lg:sr-only">{label}</span>}
         </Link>
       </Button>
-    </li>
+    </div>
   )
 }

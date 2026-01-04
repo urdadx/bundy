@@ -23,6 +23,7 @@ export function WorldSelector() {
   const navigate = useNavigate({ from: '/worlds' })
   const { world: selectedWorld } = useSearch({ from: '/worlds' })
 
+
   const handleSelect = (name: string) => {
     navigate({
       search: (prev) => ({
@@ -31,6 +32,13 @@ export function WorldSelector() {
       }),
     })
   }
+
+  const handleContinue = () => {
+    navigate({
+      to: '/arena/battles',
+    })
+  }
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen w-full max-w-xl mx-auto p-4">
       <h1 className="text-3xl font-black text-slate-700 mb-8 uppercase tracking-widest">Choose your world</h1>
@@ -82,7 +90,7 @@ export function WorldSelector() {
           size="lg"
           className="w-full text-xl h-16 shadow-xl"
           disabled={!selectedWorld}
-          onClick={() => console.log("Navigating to game with:", selectedWorld)}
+          onClick={handleContinue}
         >
           Continue
         </Button>

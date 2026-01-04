@@ -15,7 +15,11 @@ import { Route as GameSettingsRouteImport } from './routes/game-settings'
 import { Route as ComponentsRouteImport } from './routes/components'
 import { Route as ArenaRouteRouteImport } from './routes/arena/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ArenaLearnRouteImport } from './routes/arena/learn'
+import { Route as ArenaBattlesRouteRouteImport } from './routes/arena/battles/route'
+import { Route as ArenaPlaygroundIndexRouteImport } from './routes/arena/playground/index'
+import { Route as ArenaBattlesIndexRouteImport } from './routes/arena/battles/index'
+import { Route as ArenaBattlesBattleNameIndexRouteImport } from './routes/arena/battles/$battleName/index'
+import { Route as ArenaBattlesBattleNameLevelRouteImport } from './routes/arena/battles/$battleName/$level'
 
 const WorldsRoute = WorldsRouteImport.update({
   id: '/worlds',
@@ -47,11 +51,33 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ArenaLearnRoute = ArenaLearnRouteImport.update({
-  id: '/learn',
-  path: '/learn',
+const ArenaBattlesRouteRoute = ArenaBattlesRouteRouteImport.update({
+  id: '/battles',
+  path: '/battles',
   getParentRoute: () => ArenaRouteRoute,
 } as any)
+const ArenaPlaygroundIndexRoute = ArenaPlaygroundIndexRouteImport.update({
+  id: '/playground/',
+  path: '/playground/',
+  getParentRoute: () => ArenaRouteRoute,
+} as any)
+const ArenaBattlesIndexRoute = ArenaBattlesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ArenaBattlesRouteRoute,
+} as any)
+const ArenaBattlesBattleNameIndexRoute =
+  ArenaBattlesBattleNameIndexRouteImport.update({
+    id: '/$battleName/',
+    path: '/$battleName/',
+    getParentRoute: () => ArenaBattlesRouteRoute,
+  } as any)
+const ArenaBattlesBattleNameLevelRoute =
+  ArenaBattlesBattleNameLevelRouteImport.update({
+    id: '/$battleName/$level',
+    path: '/$battleName/$level',
+    getParentRoute: () => ArenaBattlesRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -60,7 +86,11 @@ export interface FileRoutesByFullPath {
   '/game-settings': typeof GameSettingsRoute
   '/lobby': typeof LobbyRoute
   '/worlds': typeof WorldsRoute
-  '/arena/learn': typeof ArenaLearnRoute
+  '/arena/battles': typeof ArenaBattlesRouteRouteWithChildren
+  '/arena/battles/': typeof ArenaBattlesIndexRoute
+  '/arena/playground': typeof ArenaPlaygroundIndexRoute
+  '/arena/battles/$battleName/$level': typeof ArenaBattlesBattleNameLevelRoute
+  '/arena/battles/$battleName': typeof ArenaBattlesBattleNameIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -69,7 +99,10 @@ export interface FileRoutesByTo {
   '/game-settings': typeof GameSettingsRoute
   '/lobby': typeof LobbyRoute
   '/worlds': typeof WorldsRoute
-  '/arena/learn': typeof ArenaLearnRoute
+  '/arena/battles': typeof ArenaBattlesIndexRoute
+  '/arena/playground': typeof ArenaPlaygroundIndexRoute
+  '/arena/battles/$battleName/$level': typeof ArenaBattlesBattleNameLevelRoute
+  '/arena/battles/$battleName': typeof ArenaBattlesBattleNameIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -79,7 +112,11 @@ export interface FileRoutesById {
   '/game-settings': typeof GameSettingsRoute
   '/lobby': typeof LobbyRoute
   '/worlds': typeof WorldsRoute
-  '/arena/learn': typeof ArenaLearnRoute
+  '/arena/battles': typeof ArenaBattlesRouteRouteWithChildren
+  '/arena/battles/': typeof ArenaBattlesIndexRoute
+  '/arena/playground/': typeof ArenaPlaygroundIndexRoute
+  '/arena/battles/$battleName/$level': typeof ArenaBattlesBattleNameLevelRoute
+  '/arena/battles/$battleName/': typeof ArenaBattlesBattleNameIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -90,7 +127,11 @@ export interface FileRouteTypes {
     | '/game-settings'
     | '/lobby'
     | '/worlds'
-    | '/arena/learn'
+    | '/arena/battles'
+    | '/arena/battles/'
+    | '/arena/playground'
+    | '/arena/battles/$battleName/$level'
+    | '/arena/battles/$battleName'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -99,7 +140,10 @@ export interface FileRouteTypes {
     | '/game-settings'
     | '/lobby'
     | '/worlds'
-    | '/arena/learn'
+    | '/arena/battles'
+    | '/arena/playground'
+    | '/arena/battles/$battleName/$level'
+    | '/arena/battles/$battleName'
   id:
     | '__root__'
     | '/'
@@ -108,7 +152,11 @@ export interface FileRouteTypes {
     | '/game-settings'
     | '/lobby'
     | '/worlds'
-    | '/arena/learn'
+    | '/arena/battles'
+    | '/arena/battles/'
+    | '/arena/playground/'
+    | '/arena/battles/$battleName/$level'
+    | '/arena/battles/$battleName/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -164,22 +212,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/arena/learn': {
-      id: '/arena/learn'
-      path: '/learn'
-      fullPath: '/arena/learn'
-      preLoaderRoute: typeof ArenaLearnRouteImport
+    '/arena/battles': {
+      id: '/arena/battles'
+      path: '/battles'
+      fullPath: '/arena/battles'
+      preLoaderRoute: typeof ArenaBattlesRouteRouteImport
       parentRoute: typeof ArenaRouteRoute
+    }
+    '/arena/playground/': {
+      id: '/arena/playground/'
+      path: '/playground'
+      fullPath: '/arena/playground'
+      preLoaderRoute: typeof ArenaPlaygroundIndexRouteImport
+      parentRoute: typeof ArenaRouteRoute
+    }
+    '/arena/battles/': {
+      id: '/arena/battles/'
+      path: '/'
+      fullPath: '/arena/battles/'
+      preLoaderRoute: typeof ArenaBattlesIndexRouteImport
+      parentRoute: typeof ArenaBattlesRouteRoute
+    }
+    '/arena/battles/$battleName/': {
+      id: '/arena/battles/$battleName/'
+      path: '/$battleName'
+      fullPath: '/arena/battles/$battleName'
+      preLoaderRoute: typeof ArenaBattlesBattleNameIndexRouteImport
+      parentRoute: typeof ArenaBattlesRouteRoute
+    }
+    '/arena/battles/$battleName/$level': {
+      id: '/arena/battles/$battleName/$level'
+      path: '/$battleName/$level'
+      fullPath: '/arena/battles/$battleName/$level'
+      preLoaderRoute: typeof ArenaBattlesBattleNameLevelRouteImport
+      parentRoute: typeof ArenaBattlesRouteRoute
     }
   }
 }
 
+interface ArenaBattlesRouteRouteChildren {
+  ArenaBattlesIndexRoute: typeof ArenaBattlesIndexRoute
+  ArenaBattlesBattleNameLevelRoute: typeof ArenaBattlesBattleNameLevelRoute
+  ArenaBattlesBattleNameIndexRoute: typeof ArenaBattlesBattleNameIndexRoute
+}
+
+const ArenaBattlesRouteRouteChildren: ArenaBattlesRouteRouteChildren = {
+  ArenaBattlesIndexRoute: ArenaBattlesIndexRoute,
+  ArenaBattlesBattleNameLevelRoute: ArenaBattlesBattleNameLevelRoute,
+  ArenaBattlesBattleNameIndexRoute: ArenaBattlesBattleNameIndexRoute,
+}
+
+const ArenaBattlesRouteRouteWithChildren =
+  ArenaBattlesRouteRoute._addFileChildren(ArenaBattlesRouteRouteChildren)
+
 interface ArenaRouteRouteChildren {
-  ArenaLearnRoute: typeof ArenaLearnRoute
+  ArenaBattlesRouteRoute: typeof ArenaBattlesRouteRouteWithChildren
+  ArenaPlaygroundIndexRoute: typeof ArenaPlaygroundIndexRoute
 }
 
 const ArenaRouteRouteChildren: ArenaRouteRouteChildren = {
-  ArenaLearnRoute: ArenaLearnRoute,
+  ArenaBattlesRouteRoute: ArenaBattlesRouteRouteWithChildren,
+  ArenaPlaygroundIndexRoute: ArenaPlaygroundIndexRoute,
 }
 
 const ArenaRouteRouteWithChildren = ArenaRouteRoute._addFileChildren(

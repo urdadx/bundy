@@ -1,35 +1,45 @@
+// components/ui/side-menu.tsx
 import { Link } from '@tanstack/react-router'
 import { SideMenuItem } from './side-menu-item'
-import Logo from '@/assets/word-search-logo.png'
 import { SideMenuThemeButton } from './side-menu-theme-button'
 
 export function SideMenu() {
   return (
-    <div className="flex h-screen flex-col justify-between pt-6 w-64 border-r-2 pb-4 sm:max-lg:w-20 sm:max-lg:pb-6">
-      <nav className="flex flex-col gap-6 px-4 sm:max-lg:px-2">
-        <Link
-          to="/"
-          className="focus-visible self-start rounded-xl max-sm:ml-4 sm:max-lg:self-center lg:ml-4" >
-          <span className="hidden sm:max-lg:block">
-            <img src={Logo} alt="bundy-logo" />
-          </span>
-          <span className="sm:max-lg:hidden flex items-center gap-1">
-
-            <span className="font-display text-primary-depth text-3xl font-bold -tracking-normal">
-              Bundylearn
+    <>
+      {/* Desktop sidebar */}
+      <div className="hidden lg:flex flex-col justify-between w-64 border-r-2 pt-6 pb-4 bg-white">
+        <nav className="flex flex-col gap-6 px-4">
+          <Link
+            to="/"
+            className="focus-visible self-start rounded-xl"
+          >
+            <span className="flex items-center gap-2 px-4">
+              <span className="font-display text-primary-depth text-3xl font-bold">
+                bundy
+              </span>
             </span>
-          </span>
-        </Link>
-        <ul className="flex flex-col gap-y-2">
-          <SideMenuItem href="/arena/learn" icon="learn" label="Learn" />
-          <SideMenuItem href="/arena/leaderboard" icon="leaderboard" label="Leaderboard" />
-          <SideMenuItem href="/arena/quests" icon="quests" label="Quests" />
-          <SideMenuItem href="/arena/shop" icon="shop" label="Shop" />
-        </ul>
-      </nav>
-      <div className="space-y-2 border-t-2 px-4 pb-2 pt-2 sm:max-lg:px-2">
-        <SideMenuThemeButton />
+          </Link>
+
+          <div className="flex flex-col gap-2">
+            <SideMenuItem href="/arena/battles" icon="learn" label="home" />
+            <SideMenuItem href="/arena/leaderboard" icon="leaderboard" label="Leaderboard" />
+            <SideMenuItem href="/arena/quests" icon="quests" label="Quests" />
+            <SideMenuItem href="/arena/shop" icon="shop" label="Shop" />
+          </div>
+        </nav>
+
+        <div className="border-t-2 px-4 pt-4">
+          <SideMenuThemeButton />
+        </div>
       </div>
-    </div>
+
+      {/* Mobile bottom tabs */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t-2 py-2 flex justify-around z-50">
+        <SideMenuItem href="/arena/battles" icon="learn" label="home" hideLabel />
+        <SideMenuItem href="/arena/leaderboard" icon="leaderboard" label="Leaderboard" hideLabel />
+        <SideMenuItem href="/arena/quests" icon="quests" label="Quests" hideLabel />
+        <SideMenuItem href="/arena/shop" icon="shop" label="Shop" hideLabel />
+      </div>
+    </>
   )
 }

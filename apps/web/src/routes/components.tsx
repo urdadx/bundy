@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { createFileRoute } from '@tanstack/react-router'
 import { ActiveButton } from '../components/duolingo-buttons/active-button'
 import { HealthBar } from '../components/health-bar'
+import { XPCount } from '../components/xp-count'
 import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
@@ -53,7 +54,12 @@ function RouteComponent() {
       <div className="my-8">
         <h2 className="text-xl font-bold mb-2">HealthBar Demo</h2>
         <div className="p-8 space-y-8 max-w-md bg-white rounded-3xl border-2 border-b-8 border-slate-200">
-          <HealthBar value={playerHP} max={100} label="Bundy" />
+          <HealthBar
+            value={playerHP}
+            max={100}
+            label="Bundy"
+            avatar="https://api.dicebear.com/7.x/avataaars/svg?seed=Bundy"
+          />
 
           <div className="grid grid-cols-2 gap-4">
             <Button variant="danger" onClick={handleDamage}>Take Damage</Button>
@@ -61,6 +67,16 @@ function RouteComponent() {
           </div>
         </div>
       </div>
+
+      {/* Demo of XPCount component */}
+      <div className="my-8">
+        <h2 className="text-xl font-bold mb-2">XPCount Demo</h2>
+        <div className="flex gap-4 p-4 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 w-fit">
+          <XPCount count={1250} />
+          <XPCount count={45820} />
+        </div>
+      </div>
+
       <div className='my-8'>
         <div className="max-w-md space-y-2">
           <h2 className="text-xl font-bold mb-2">Input Component Demo</h2>
