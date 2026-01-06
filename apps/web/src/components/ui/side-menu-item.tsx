@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Link, useLocation, } from '@tanstack/react-router'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import heartIcon from '@/assets/icons/heart.svg'
 import leaderboardIcon from '@/assets/icons/leaderboard.svg'
 import learnIcon from '@/assets/icons/learn.svg'
@@ -25,9 +26,12 @@ type SideMenuItemProps = {
   icon: string
   href: any
   hideLabel?: boolean
+  isProfile?: boolean
+  profileImage?: string
+  profileInitials?: string
 }
 
-export function SideMenuItem({ href, icon, label, hideLabel }: SideMenuItemProps) {
+export function SideMenuItem({ href, icon, label, hideLabel, isProfile, profileImage, profileInitials }: SideMenuItemProps) {
   const { pathname } = useLocation()
   const isActive = pathname === href
   return (
@@ -38,13 +42,22 @@ export function SideMenuItem({ href, icon, label, hideLabel }: SideMenuItemProps
         asChild
       >
         <Link to={href} title={label} {...(hideLabel && { 'aria-label': label })}>
-          <span className="relative block size-10">
-            <img
-              className="object-cover"
-              src={iconMap[icon as keyof typeof iconMap]}
-              alt={`${label} icon`}
-            />
-          </span>
+          {isProfile ? (
+            <Avatar size="default">
+              <AvatarImage src={profileImage} alt={label} />
+              <AvatarFallback className="border-2 rounded-full">
+                {profileInitials || label.slice(0, 2).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+          ) : (
+            <span className="relative block size-10">
+              <img
+                className="object-cover"
+                src={iconMap[icon as keyof typeof iconMap]}
+                alt={`${label} icon`}
+              />
+            </span>
+          )}
           {!hideLabel && <span className="ml-5 truncate sm:max-lg:sr-only">{label}</span>}
         </Link>
       </Button>

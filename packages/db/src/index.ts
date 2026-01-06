@@ -1,5 +1,13 @@
-import { drizzle } from "drizzle-orm/node-postgres";
+import { drizzle } from "drizzle-orm/bun-sqlite";
+import { Database } from "bun:sqlite";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
 
 import * as schema from "./schema";
 
-export const db = drizzle(process.env.DATABASE_URL || "", { schema });
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const dbPath = join(__dirname, "..", "sqlite.db");
+
+const sqlite = new Database(dbPath);
+export const db = drizzle(sqlite, { schema });

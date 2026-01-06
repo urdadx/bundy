@@ -13,8 +13,12 @@ import { Route as WorldsRouteImport } from './routes/worlds'
 import { Route as LobbyRouteImport } from './routes/lobby'
 import { Route as GameSettingsRouteImport } from './routes/game-settings'
 import { Route as ComponentsRouteImport } from './routes/components'
+import { Route as ChooseRouteImport } from './routes/choose'
 import { Route as ArenaRouteRouteImport } from './routes/arena/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ArenaShopRouteImport } from './routes/arena/shop'
+import { Route as ArenaProfileRouteImport } from './routes/arena/profile'
+import { Route as ArenaLeaderboardRouteImport } from './routes/arena/leaderboard'
 import { Route as ArenaBattlesRouteRouteImport } from './routes/arena/battles/route'
 import { Route as ArenaPlaygroundIndexRouteImport } from './routes/arena/playground/index'
 import { Route as ArenaBattlesIndexRouteImport } from './routes/arena/battles/index'
@@ -41,6 +45,11 @@ const ComponentsRoute = ComponentsRouteImport.update({
   path: '/components',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ChooseRoute = ChooseRouteImport.update({
+  id: '/choose',
+  path: '/choose',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ArenaRouteRoute = ArenaRouteRouteImport.update({
   id: '/arena',
   path: '/arena',
@@ -50,6 +59,21 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ArenaShopRoute = ArenaShopRouteImport.update({
+  id: '/shop',
+  path: '/shop',
+  getParentRoute: () => ArenaRouteRoute,
+} as any)
+const ArenaProfileRoute = ArenaProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => ArenaRouteRoute,
+} as any)
+const ArenaLeaderboardRoute = ArenaLeaderboardRouteImport.update({
+  id: '/leaderboard',
+  path: '/leaderboard',
+  getParentRoute: () => ArenaRouteRoute,
 } as any)
 const ArenaBattlesRouteRoute = ArenaBattlesRouteRouteImport.update({
   id: '/battles',
@@ -82,11 +106,15 @@ const ArenaBattlesBattleNameLevelRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/arena': typeof ArenaRouteRouteWithChildren
+  '/choose': typeof ChooseRoute
   '/components': typeof ComponentsRoute
   '/game-settings': typeof GameSettingsRoute
   '/lobby': typeof LobbyRoute
   '/worlds': typeof WorldsRoute
   '/arena/battles': typeof ArenaBattlesRouteRouteWithChildren
+  '/arena/leaderboard': typeof ArenaLeaderboardRoute
+  '/arena/profile': typeof ArenaProfileRoute
+  '/arena/shop': typeof ArenaShopRoute
   '/arena/battles/': typeof ArenaBattlesIndexRoute
   '/arena/playground': typeof ArenaPlaygroundIndexRoute
   '/arena/battles/$battleName/$level': typeof ArenaBattlesBattleNameLevelRoute
@@ -95,10 +123,14 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/arena': typeof ArenaRouteRouteWithChildren
+  '/choose': typeof ChooseRoute
   '/components': typeof ComponentsRoute
   '/game-settings': typeof GameSettingsRoute
   '/lobby': typeof LobbyRoute
   '/worlds': typeof WorldsRoute
+  '/arena/leaderboard': typeof ArenaLeaderboardRoute
+  '/arena/profile': typeof ArenaProfileRoute
+  '/arena/shop': typeof ArenaShopRoute
   '/arena/battles': typeof ArenaBattlesIndexRoute
   '/arena/playground': typeof ArenaPlaygroundIndexRoute
   '/arena/battles/$battleName/$level': typeof ArenaBattlesBattleNameLevelRoute
@@ -108,11 +140,15 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/arena': typeof ArenaRouteRouteWithChildren
+  '/choose': typeof ChooseRoute
   '/components': typeof ComponentsRoute
   '/game-settings': typeof GameSettingsRoute
   '/lobby': typeof LobbyRoute
   '/worlds': typeof WorldsRoute
   '/arena/battles': typeof ArenaBattlesRouteRouteWithChildren
+  '/arena/leaderboard': typeof ArenaLeaderboardRoute
+  '/arena/profile': typeof ArenaProfileRoute
+  '/arena/shop': typeof ArenaShopRoute
   '/arena/battles/': typeof ArenaBattlesIndexRoute
   '/arena/playground/': typeof ArenaPlaygroundIndexRoute
   '/arena/battles/$battleName/$level': typeof ArenaBattlesBattleNameLevelRoute
@@ -123,11 +159,15 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/arena'
+    | '/choose'
     | '/components'
     | '/game-settings'
     | '/lobby'
     | '/worlds'
     | '/arena/battles'
+    | '/arena/leaderboard'
+    | '/arena/profile'
+    | '/arena/shop'
     | '/arena/battles/'
     | '/arena/playground'
     | '/arena/battles/$battleName/$level'
@@ -136,10 +176,14 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/arena'
+    | '/choose'
     | '/components'
     | '/game-settings'
     | '/lobby'
     | '/worlds'
+    | '/arena/leaderboard'
+    | '/arena/profile'
+    | '/arena/shop'
     | '/arena/battles'
     | '/arena/playground'
     | '/arena/battles/$battleName/$level'
@@ -148,11 +192,15 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/arena'
+    | '/choose'
     | '/components'
     | '/game-settings'
     | '/lobby'
     | '/worlds'
     | '/arena/battles'
+    | '/arena/leaderboard'
+    | '/arena/profile'
+    | '/arena/shop'
     | '/arena/battles/'
     | '/arena/playground/'
     | '/arena/battles/$battleName/$level'
@@ -162,6 +210,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ArenaRouteRoute: typeof ArenaRouteRouteWithChildren
+  ChooseRoute: typeof ChooseRoute
   ComponentsRoute: typeof ComponentsRoute
   GameSettingsRoute: typeof GameSettingsRoute
   LobbyRoute: typeof LobbyRoute
@@ -198,6 +247,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComponentsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/choose': {
+      id: '/choose'
+      path: '/choose'
+      fullPath: '/choose'
+      preLoaderRoute: typeof ChooseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/arena': {
       id: '/arena'
       path: '/arena'
@@ -211,6 +267,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/arena/shop': {
+      id: '/arena/shop'
+      path: '/shop'
+      fullPath: '/arena/shop'
+      preLoaderRoute: typeof ArenaShopRouteImport
+      parentRoute: typeof ArenaRouteRoute
+    }
+    '/arena/profile': {
+      id: '/arena/profile'
+      path: '/profile'
+      fullPath: '/arena/profile'
+      preLoaderRoute: typeof ArenaProfileRouteImport
+      parentRoute: typeof ArenaRouteRoute
+    }
+    '/arena/leaderboard': {
+      id: '/arena/leaderboard'
+      path: '/leaderboard'
+      fullPath: '/arena/leaderboard'
+      preLoaderRoute: typeof ArenaLeaderboardRouteImport
+      parentRoute: typeof ArenaRouteRoute
     }
     '/arena/battles': {
       id: '/arena/battles'
@@ -267,11 +344,17 @@ const ArenaBattlesRouteRouteWithChildren =
 
 interface ArenaRouteRouteChildren {
   ArenaBattlesRouteRoute: typeof ArenaBattlesRouteRouteWithChildren
+  ArenaLeaderboardRoute: typeof ArenaLeaderboardRoute
+  ArenaProfileRoute: typeof ArenaProfileRoute
+  ArenaShopRoute: typeof ArenaShopRoute
   ArenaPlaygroundIndexRoute: typeof ArenaPlaygroundIndexRoute
 }
 
 const ArenaRouteRouteChildren: ArenaRouteRouteChildren = {
   ArenaBattlesRouteRoute: ArenaBattlesRouteRouteWithChildren,
+  ArenaLeaderboardRoute: ArenaLeaderboardRoute,
+  ArenaProfileRoute: ArenaProfileRoute,
+  ArenaShopRoute: ArenaShopRoute,
   ArenaPlaygroundIndexRoute: ArenaPlaygroundIndexRoute,
 }
 
@@ -282,6 +365,7 @@ const ArenaRouteRouteWithChildren = ArenaRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ArenaRouteRoute: ArenaRouteRouteWithChildren,
+  ChooseRoute: ChooseRoute,
   ComponentsRoute: ComponentsRoute,
   GameSettingsRoute: GameSettingsRoute,
   LobbyRoute: LobbyRoute,

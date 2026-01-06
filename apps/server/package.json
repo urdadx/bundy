@@ -16,6 +16,7 @@
     "dotenv": "catalog:",
     "zod": "catalog:",
     "@wordsearch/api": "workspace:*",
+    "@wordsearch/auth": "workspace:*",
     "@wordsearch/db": "workspace:*"
   },
   "devDependencies": {

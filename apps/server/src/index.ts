@@ -2,6 +2,7 @@ import "dotenv/config";
 import { trpcServer } from "@hono/trpc-server";
 import { createContext } from "@wordsearch/api/context";
 import { appRouter } from "@wordsearch/api/routers/index";
+import { auth } from "@wordsearch/auth";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
@@ -14,8 +15,11 @@ app.use(
   cors({
     origin: process.env.CORS_ORIGIN || "",
     allowMethods: ["GET", "POST", "OPTIONS"],
+    credentials: true,
   }),
 );
+
+app.on(["POST", "GET"], "/api/auth/**", (c) => auth.handler(c.req.raw));
 
 app.use(
   "/trpc/*",

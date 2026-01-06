@@ -37,7 +37,7 @@ export function GameHeader({ player1, player2, timerDuration, onTimerEnd }: Game
             )}>
               <AvatarImage src={player1.avatar || jackAvatar} alt={player1.name} />
               <AvatarFallback className="bg-[#ddf4ff] text-[#1cb0f6] font-bold">
-                {player1.name.slice(0, 2).toUpperCase()}
+                {player1.name}
               </AvatarFallback>
             </Avatar>
             {player1.isCurrentTurn && (
@@ -81,7 +81,7 @@ export function GameHeader({ player1, player2, timerDuration, onTimerEnd }: Game
             )}>
               <AvatarImage src={player2.avatar || marieAvatar} alt={player2.name} />
               <AvatarFallback className="bg-[#ffdfe0] text-hp-red font-bold">
-                {player2.name.slice(0, 2).toUpperCase()}
+                {player2.name}
               </AvatarFallback>
             </Avatar>
             {player2.isCurrentTurn && (

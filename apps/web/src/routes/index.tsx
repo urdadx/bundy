@@ -1,6 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { trpc } from "@/utils/trpc";
+import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
 import { AuthForm } from "@/components/auth-form";
@@ -11,9 +9,6 @@ export const Route = createFileRoute("/")({
 });
 
 function HomeComponent() {
-  const healthCheck = useQuery(trpc.healthCheck.queryOptions());
-  const shitTest = useQuery(trpc.shitTest.queryOptions());
-
 
   return (
     <div className="flex min-h-screen items-center justify-center">

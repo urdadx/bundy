@@ -21,7 +21,7 @@ export function LockedButton({
       <PopoverTrigger >
         <ButtonBase icon={icon} variant="locked" aria-label={ariaLabel} />
       </PopoverTrigger>
-      <PopoverContent className="border-2 p-0 text-disabled-foreground shadow-none">
+      <PopoverContent className="z-50 border-2 bg-background rounded-lg p-0 text-disabled-foreground shadow-none">
         <div className="space-y-2 rounded-inherit bg-disabled/30 p-4">
           <h3 className="text-xl font-bold">{title}</h3>
           <p className="text-lg">{prompt}</p>
@@ -29,7 +29,7 @@ export function LockedButton({
             Locked
           </Button>
         </div>
-        <Arrow className="fill-border" />
+        <Arrow className="fill-background" />
       </PopoverContent>
     </Popover>
   )

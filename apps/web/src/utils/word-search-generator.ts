@@ -57,7 +57,7 @@ const DIFFICULTY_CONFIG = {
     wordCount: 5,
     minWordLength: 4,
     maxWordLength: 7,
-    directions: ['horizontal', 'vertical'] // Only right and down
+    directions: ['horizontal', 'vertical'] 
   },
   medium: {
     minSize: 8,

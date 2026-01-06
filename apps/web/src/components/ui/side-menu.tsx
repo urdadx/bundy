@@ -21,10 +21,17 @@ export function SideMenu() {
           </Link>
 
           <div className="flex flex-col gap-2">
-            <SideMenuItem href="/arena/battles" icon="learn" label="home" />
+            <SideMenuItem href="/arena/battles" icon="learn" label="learn" />
             <SideMenuItem href="/arena/leaderboard" icon="leaderboard" label="Leaderboard" />
-            <SideMenuItem href="/arena/quests" icon="quests" label="Quests" />
             <SideMenuItem href="/arena/shop" icon="shop" label="Shop" />
+            <SideMenuItem
+              label="Profile"
+              icon="profile"
+              href="/arena/profile"
+              isProfile={true}
+              profileImage="/path/to/image.jpg"
+              profileInitials="AB"
+            />
           </div>
         </nav>
 

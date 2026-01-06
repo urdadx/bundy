@@ -1,0 +1,24 @@
+{
+  "name": "@wordsearch/auth",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "default": "./src/*.ts"
+    }
+  },
+  "type": "module",
+  "scripts": {},
+  "devDependencies": {
+    "typescript": "catalog:",
+    "@wordsearch/config": "workspace:*"
+  },
+  "dependencies": {
+    "dotenv": "catalog:",
+    "zod": "catalog:",
+    "@wordsearch/env": "workspace:*",
+    "@wordsearch/db": "workspace:*",
+    "better-auth": "catalog:"
+  }
+}

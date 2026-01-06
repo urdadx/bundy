@@ -1,0 +1,3 @@
+{
+  "extends": "@wordsearch/config/tsconfig.base.json",
+}

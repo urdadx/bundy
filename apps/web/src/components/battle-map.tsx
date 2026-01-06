@@ -21,7 +21,7 @@ export function BattleMap({
 }: UnitProps) {
 
   const title = "The Great Battle of Words"
-  const description = "Master vocabulary and grammar to conquer"
+  const description = "Master vocabulary and grammar"
 
   return (
     <section className="space-y-10 pb-16">

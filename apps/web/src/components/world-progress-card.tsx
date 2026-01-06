@@ -10,9 +10,7 @@ export function WorldProgressCard() {
 
       <div className="relative z-10 flex flex-col gap-6">
         <div>
-          <span className="rounded-lg bg-black/20 px-3 py-1 text-xs font-black uppercase tracking-wider">
-            See Details
-          </span>
+
           <h2 className="mt-3 text-lg font-black uppercase tracking-tight sm:text-xl">
             World 1: Nebula
           </h2>
@@ -25,19 +23,19 @@ export function WorldProgressCard() {
 
         </div>
 
-        <div className="mt-4 w-full sm:w-64">
-          <Button
-            size="default"
-            variant="secondary"
-            className=" w-full rounded-2xl bg-white text-[#1cb0f6] hover:bg-slate-50  border-slate-200 active:border-b-0 active:translate-y-1"
-            asChild
-          >
-            <Link to="/arena/battles/$battleName" params={{ battleName: "nebula" }}>
+        <div className=" w-full sm:w-64">
+          <Link to="/arena/battles/$battleName" params={{ battleName: "nebula" }}>
+            <Button
+              size="default"
+              variant="secondary"
+              className=" w-full rounded-2xl bg-white text-[#1cb0f6] hover:bg-slate-50  border-slate-200 active:border-b-0 active:translate-y-1"
+              asChild
+            >
               <span className="text-lg font-black uppercase tracking-widest">
                 Continue
               </span>
-            </Link>
-          </Button>
+            </Button>
+          </Link>
         </div>
       </div>
 

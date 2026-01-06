@@ -1,6 +1,4 @@
-import { BattleBanner } from '@/components/battle-banner'
-import { GoBackHeader } from '@/components/go-back-header'
-import { LevelCard } from '@/components/level-card'
+import { BattleMap } from '@/components/battle-map'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/arena/battles/$battleName/')({
@@ -8,23 +6,32 @@ export const Route = createFileRoute('/arena/battles/$battleName/')({
 })
 
 function RouteComponent() {
-  const { battleName } = Route.useParams()
+  const { battleName } = Route.useParams();
+
+  const dummyUnit = {
+    id: 1,
+    title: "Introduction to Words",
+    description: "Learn basic vocabulary"
+  };
+
+  const dummyLessons = [
+    { id: 1, title: "Lesson 1", completed: true },
+    { id: 2, title: "Lesson 2", completed: true },
+    { id: 3, title: "Lesson 3", completed: false },
+    { id: 4, title: "Lesson 4", completed: false },
+    { id: 5, title: "Lesson 5", completed: false },
+  ];
 
   return (
     <div className="flex w-full gap-x-12">
       <div className="flex-1 space-y-5">
-
-        <BattleBanner title="World 1: Nebula" color="primary" description='
-          '/>
-
-        <div className="space-y-4">
-          <h2 className="text-xl font-black uppercase text-slate-700">Select a Level</h2>
-          <div className="grid grid-cols-1 gap-3">
-            <LevelCard number={1} title="Basic Greetings" status="completed" battleName={battleName} level="1" />
-            <LevelCard number={2} title="Common Animals" status="current" battleName={battleName} level="2" />
-            <LevelCard number={3} title="Household Items" status="locked" battleName={battleName} level="3" />
-          </div>
-        </div>
+        <BattleMap
+          unit={dummyUnit}
+          lessons={dummyLessons}
+          activeLessonId={3}
+          activeLessonPercentage={45}
+          variant="primary"
+        />
       </div>
     </div>
   )
