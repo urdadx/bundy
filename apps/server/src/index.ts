@@ -26,7 +26,7 @@ app.use(
   trpcServer({
     router: appRouter,
     createContext: (_opts, context) => {
-      return createContext({ context });
+      return createContext({ context, auth });
     },
   }),
 );

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 
 interface UseGameTimerProps {
-  initialTime: number; // in seconds
+  initialTime: number; 
   onTimeUp?: () => void;
 }
 
@@ -9,6 +9,12 @@ export function useGameTimer({ initialTime, onTimeUp }: UseGameTimerProps) {
   const [timeLeft, setTimeLeft] = useState(initialTime);
   const [isRunning, setIsRunning] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Update timeLeft when initialTime changes (e.g. stage loading)
+  useEffect(() => {
+    setTimeLeft(initialTime);
+    setIsRunning(false);
+  }, [initialTime]);
 
   useEffect(() => {
     if (isRunning && timeLeft > 0) {

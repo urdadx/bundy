@@ -1,4 +1,4 @@
-export type Theme = 'animals' | 'planets' | 'technology' | 'food' | 'sports' | 'general';
+export type Theme = 'animals' | 'planets' | 'technology' | 'food' | 'sports' | 'general' | 'science' | 'vocabulary' | 'countries';
 export type Difficulty = 'easy' | 'medium' | 'hard' | 'expert';
 
 export interface WordSearchConfig {
@@ -6,6 +6,7 @@ export interface WordSearchConfig {
   theme: Theme;
   difficulty: Difficulty;
   wordCount?: number;
+  words?: string[];
 }
 
 export interface WordSearchPuzzle {
@@ -47,6 +48,18 @@ const THEME_WORDS: Record<Theme, string[]> = {
   general: [
     'HELLO', 'WORLD', 'FRIEND', 'FAMILY', 'HAPPY', 'SMILE', 'LOVE',
     'PEACE', 'DREAM', 'HOPE', 'LIGHT', 'MUSIC', 'DANCE', 'PLAY'
+  ],
+  science: [
+    'ATOM', 'MOLECULE', 'GENETICS', 'PHYSICS', 'BIOLOGY', 'CHEMISTRY',
+    'ENERGY', 'LABORATORY', 'RESEARCH', 'TELESCOPE', 'MICROSCOPE', 'GRAVITY'
+  ],
+  vocabulary: [
+    'ELOQUENT', 'EPHEMERAL', 'SERENDIPITY', 'SOLITUDE', 'ETHEREAL', 'LUMINOUS',
+    'PANACEA', 'MELLIFLUOUS', 'PRISTINE', 'EVOCATIVE', 'RESONANCE', 'SURREAL'
+  ],
+  countries: [
+    'CANADA', 'BRAZIL', 'FRANCE', 'GERMANY', 'JAPAN', 'AUSTRALIA',
+    'EGYPT', 'MEXICO', 'ITALY', 'SPAIN', 'NORWAY', 'SWEDEN'
   ]
 };
 
@@ -57,7 +70,7 @@ const DIFFICULTY_CONFIG = {
     wordCount: 5,
     minWordLength: 4,
     maxWordLength: 7,
-    directions: ['horizontal', 'vertical'] 
+    directions: ['horizontal', 'vertical'] // Only right and down
   },
   medium: {
     minSize: 8,
@@ -180,18 +193,25 @@ export function generateWordSearch(config: WordSearchConfig): WordSearchPuzzle {
   // Initialize empty grid
   const grid: string[][] = Array(size).fill(null).map(() => Array(size).fill(''));
 
-  // Get available words for theme
-  const availableWords = THEME_WORDS[theme]
-    .filter(word => 
-      word.length >= diffConfig.minWordLength && 
-      word.length <= diffConfig.maxWordLength &&
-      word.length <= size
-    );
+  // Get available words for theme or use provided words
+  let availableWords = config.words && config.words.length > 0 
+    ? config.words 
+    : THEME_WORDS[theme];
+  
+  // Always filter words by grid size and difficulty constraints
+  availableWords = availableWords.filter(word => 
+    word.length >= diffConfig.minWordLength && 
+    word.length <= diffConfig.maxWordLength &&
+    word.length <= size
+  );
 
   // Shuffle and select words
-  const shuffled = [...availableWords].sort(() => Math.random() - 0.5);
-  const wordCount = config.wordCount || diffConfig.wordCount;
-  const selectedWords = shuffled.slice(0, Math.min(wordCount, shuffled.length));
+  const shuffled = config.words && config.words.length > 0 ? [...availableWords] : [...availableWords].sort(() => Math.random() - 0.5);
+  const wordCount = config.wordCount || (config.words ? config.words.length : diffConfig.wordCount);
+  let selectedWords = shuffled.slice(0, Math.min(wordCount, shuffled.length));
+  
+  // Sort words by length (longest first) to improve placement success rate
+  selectedWords = [...selectedWords].sort((a, b) => b.length - a.length);
 
   const placedWords: Array<{
     word: string;
@@ -203,7 +223,8 @@ export function generateWordSearch(config: WordSearchConfig): WordSearchPuzzle {
   for (const word of selectedWords) {
     let placed = false;
     let attempts = 0;
-    const maxAttempts = 100;
+    // More attempts for longer words or when using custom word lists
+    const maxAttempts = config.words ? 200 : 100;
 
     while (!placed && attempts < maxAttempts) {
       const direction = diffConfig.directions[
@@ -223,6 +244,11 @@ export function generateWordSearch(config: WordSearchConfig): WordSearchPuzzle {
       }
 
       attempts++;
+    }
+    
+    // Log warning if word couldn't be placed
+    if (!placed) {
+      console.warn(`Could not place word "${word}" in grid after ${maxAttempts} attempts. Grid size: ${size}x${size}`);
     }
   }
 

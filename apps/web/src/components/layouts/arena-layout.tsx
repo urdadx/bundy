@@ -16,7 +16,7 @@ export function ArenaLayout({ children, sidebar }: ArenaLayoutProps) {
 
         {sidebar && (
           <div className="hidden lg:flex w-96 pl-10 flex-col gap-5">
-            <UserStats points={134} diamonds={56} league={"Silver"} />
+            <UserStats />
             <div className="sticky top-8 w-full flex justify-center">
               {sidebar}
             </div>

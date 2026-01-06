@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/arena/battles/$battleName/$level')({
+export const Route = createFileRoute('/arena/lessons/$lessonName/$level')({
   component: RouteComponent,
 })
 

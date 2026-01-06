@@ -2,7 +2,7 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 import { ArenaLayout } from '@/components/layouts/arena-layout'
 
-export const Route = createFileRoute('/arena/battles')({
+export const Route = createFileRoute('/arena/lessons')({
   component: BattlesLayout,
 })
 

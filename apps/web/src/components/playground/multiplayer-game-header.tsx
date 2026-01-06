@@ -22,7 +22,7 @@ interface GameHeaderProps {
   onTimerEnd?: () => void;
 }
 
-export function GameHeader({ player1, player2, timerDuration, onTimerEnd }: GameHeaderProps) {
+export function MultiplayerGameHeader({ player1, player2, timerDuration, onTimerEnd }: GameHeaderProps) {
   const totalScore = player1.score + player2.score;
   const player1Percentage = totalScore === 0 ? 50 : (player1.score / totalScore) * 100;
 

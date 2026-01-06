@@ -6,6 +6,8 @@ import { user } from "./auth";
 export const world = sqliteTable("world", {
   id: text("id").primaryKey(), // meadow, relic, volcano, cyber, void, malyka
   name: text("name").notNull(),
+  description: text("description"),
+  color: text("color").notNull().default("primary"),
   requiredXp: integer("required_xp").notNull(), // XP required to unlock this world
   theme: text("theme").notNull(), // animals, food, science, vocabulary, sports, countries
   order: integer("order").notNull(), // 1-6 for ordering worlds
@@ -33,6 +35,7 @@ export const stage = sqliteTable(
     timeLimit: integer("time_limit").notNull(), // time in seconds to complete
     xpReward: integer("xp_reward").notNull(), // XP earned on completion
     diamondReward: integer("diamond_reward").notNull(), // diamonds earned on completion
+    words: text("words").notNull(), // Comma-separated words
     createdAt: integer("created_at", { mode: "timestamp_ms" })
       .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
       .notNull(),
@@ -58,7 +61,7 @@ export const userStats = sqliteTable(
       .references(() => user.id, { onDelete: "cascade" }),
     totalXp: integer("total_xp").notNull().default(10), // starts with 10 XP
     diamonds: integer("diamonds").notNull().default(0), // starts with 0 diamonds
-    currentWorldId: text("current_world_id").references(() => world.id), // current world player is in
+    currentWorldId: text("current_world_id").references(() => world.id).default("meadow"), // current world player is in, starts at meadow
     gamesPlayed: integer("games_played").notNull().default(0),
     gamesWon: integer("games_won").notNull().default(0),
     gamesLost: integer("games_lost").notNull().default(0),

@@ -2,7 +2,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { WorldProgressCard } from '@/components/world-progress-card'
 
-export const Route = createFileRoute('/arena/battles/')({
+export const Route = createFileRoute('/arena/lessons/')({
   component: BattlesIndex,
 })
 
@@ -14,8 +14,7 @@ function BattlesIndex() {
       </h1>
 
       <WorldProgressCard />
-      <WorldProgressCard />
-      <WorldProgressCard />
+
     </section>
   )
 }

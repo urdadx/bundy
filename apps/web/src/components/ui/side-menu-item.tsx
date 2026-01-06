@@ -52,6 +52,7 @@ export function SideMenuItem({ href, icon, label, hideLabel, isProfile, profileI
           ) : (
             <span className="relative block size-10">
               <img
+                loading="lazy"
                 className="object-cover"
                 src={iconMap[icon as keyof typeof iconMap]}
                 alt={`${label} icon`}

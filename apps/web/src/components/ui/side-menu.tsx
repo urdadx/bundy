@@ -15,13 +15,13 @@ export function SideMenu() {
           >
             <span className="flex items-center gap-2 px-4">
               <span className="font-display text-primary-depth text-3xl font-bold">
-                bundy
+                bundycrush
               </span>
             </span>
           </Link>
 
           <div className="flex flex-col gap-2">
-            <SideMenuItem href="/arena/battles" icon="learn" label="learn" />
+            <SideMenuItem href="/arena/lessons" icon="learn" label="learn" />
             <SideMenuItem href="/arena/leaderboard" icon="leaderboard" label="Leaderboard" />
             <SideMenuItem href="/arena/shop" icon="shop" label="Shop" />
             <SideMenuItem

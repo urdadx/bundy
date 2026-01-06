@@ -1,13 +1,14 @@
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { GameTimer } from './game-timer';
 import { cn } from '@/lib/utils';
+import { useSession } from '@/lib/auth-client';
 import jackAvatar from '@/assets/avatars/jack-avatar.png';
 import xpIcon from '@/assets/icons/xp.svg';
 import diamondIcon from '@/assets/icons/diamond.svg';
 
 interface CareerGameHeaderProps {
   user: {
-    name: string;
+    name?: string;
     avatar?: string;
     xp: number;
     diamonds: number;
@@ -18,6 +19,11 @@ interface CareerGameHeaderProps {
 }
 
 export function CareerGameHeader({ user, timerDuration, onTimerEnd, className }: CareerGameHeaderProps) {
+  const { data: session } = useSession();
+
+  const userName = user.name || session?.user?.name || "Guest";
+  const userAvatar = user.avatar || session?.user?.image || jackAvatar;
+
   return (
     <div className={cn("w-full bg-white border-2 border-b-4 border-slate-200 rounded-xl p-4", className)}>
       <div className="flex items-center justify-between gap-4">
@@ -25,14 +31,14 @@ export function CareerGameHeader({ user, timerDuration, onTimerEnd, className }:
         <div className="flex items-center gap-3">
           <div className="relative">
             <Avatar className="w-12 h-12 border-2 border-[#1cb0f6]">
-              <AvatarImage src={user.avatar || jackAvatar} alt={user.name} />
+              <AvatarImage src={userAvatar} alt={userName} />
               <AvatarFallback className="bg-[#ddf4ff] text-[#1cb0f6] font-bold">
-                {user.name.substring(0, 2).toUpperCase()}
+                {userName.substring(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
           </div>
           <div className="flex flex-col">
-            <span className="text-slate-700 font-bold text-sm">{user.name}</span>
+            <span className="text-slate-700 font-bold text-sm">{userName}</span>
             <span className="text-[#1cb0f6] font-bold text-xs uppercase tracking-wider">Career Mode</span>
           </div>
         </div>

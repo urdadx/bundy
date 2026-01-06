@@ -20,6 +20,8 @@
     "hono": "catalog:",
     "dotenv": "catalog:",
     "zod": "catalog:",
-    "@wordsearch/db": "workspace:*"
+    "drizzle-orm": "^0.45.1",
+    "@wordsearch/db": "workspace:*",
+    "@wordsearch/auth": "workspace:*"
   }
 }

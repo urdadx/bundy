@@ -15,8 +15,10 @@ interface WordSearchProps {
   theme?: Theme;
   difficulty?: Difficulty;
   size?: number;
+  words?: string[];
   onWordFound?: (word: string, remaining: number) => void;
   onPuzzleComplete?: () => void;
+  onPuzzleGenerated?: (placedWords: string[]) => void;
   colorTheme?: 'default' | 'ocean' | 'forest' | 'sunset';
 }
 
@@ -24,20 +26,30 @@ export function WordSearch({
   theme = 'animals',
   difficulty = 'medium',
   size,
+  words,
   onWordFound,
   onPuzzleComplete,
+  onPuzzleGenerated,
   colorTheme = 'default',
 }: WordSearchProps) {
   const puzzle = useMemo<WordSearchPuzzle>(() => {
-    const config: WordSearchConfig = { theme, difficulty, size: size || 0 };
+    const config: WordSearchConfig = { theme, difficulty, size: size || 0, words };
     return generateWordSearch(config);
-  }, [theme, difficulty, size]);
+  }, [theme, difficulty, size, words]);
 
   const [startCell, setStartCell] = useState<{ r: number; c: number } | null>(null);
   const [currentCell, setCurrentCell] = useState<{ r: number; c: number } | null>(null);
   const [foundWords, setFoundWords] = useState<Set<string>>(new Set());
   const [isDragging, setIsDragging] = useState(false);
   const [selectedCells, setSelectedCells] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    setFoundWords(new Set());
+    if (onPuzzleGenerated) {
+      const placedWords = puzzle.words.map(w => w.word);
+      onPuzzleGenerated(placedWords);
+    }
+  }, [puzzle]);
 
   const gridSize = puzzle.grid.length;
   const gap = gridSize <= 10 ? 4 : 2;
@@ -57,7 +69,7 @@ export function WordSearch({
     return Math.max(Math.floor(availableSpace / gridSize), 28);
   }, [gridSize, gap]);
 
-  const [cellSize, setCellSize] = useState(getCellSize);
+  const [cellSize, _setCellSize] = useState(getCellSize);
 
 
   useEffect(() => {

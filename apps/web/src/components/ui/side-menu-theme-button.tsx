@@ -1,6 +1,6 @@
 import { Button, type ButtonProps } from '@/components/ui/button'
 import { useThemeToggle } from '@/hooks/use-theme'
-export function SideMenuThemeButton({ className, ...props }: ButtonProps) {
+export function SideMenuThemeButton({ ...props }: ButtonProps) {
   const { isDark, toggle, hydrated, theme } = useThemeToggle()
 
   return (

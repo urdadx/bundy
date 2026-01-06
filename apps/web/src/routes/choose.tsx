@@ -35,7 +35,7 @@ function RouteComponent() {
               <img
                 src={maleIdle}
                 alt="Single Player"
-                className="w-32 h-32 object-contain drop-shadow-xl group-hover:scale-105 transition-transform"
+                className="w-32 h-32 object-contain group-hover:scale-105 transition-transform"
               />
             </div>
             <span className="text-lg font-black uppercase tracking-widest text-slate-700 group-hover:text-blue-500 transition-colors">
@@ -51,7 +51,7 @@ function RouteComponent() {
               <img
                 src={multiplayerImg}
                 alt="Multiplayer"
-                className="w-32 h-32 object-contain drop-shadow-xl group-hover:scale-105 transition-transform"
+                className="w-32 h-32 object-contain group-hover:scale-105 transition-transform"
               />
             </div>
             <span className="text-lg font-black uppercase tracking-widest text-slate-700 group-hover:text-purple-500 transition-colors">

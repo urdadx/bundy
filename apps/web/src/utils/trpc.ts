@@ -16,12 +16,27 @@ export const queryClient = new QueryClient({
       });
     },
   }),
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes - SWR behavior
+      refetchOnWindowFocus: true,
+      refetchOnReconnect: true,
+      retry: 1,
+    },
+  },
 });
 
 export const trpcClient = createTRPCClient<AppRouter>({
   links: [
     httpBatchLink({
       url: `${import.meta.env.VITE_SERVER_URL}/trpc`,
+      // Include credentials for auth cookies
+      fetch(url, options) {
+        return fetch(url, {
+          ...options,
+          credentials: "include",
+        });
+      },
     }),
   ],
 });
