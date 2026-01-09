@@ -4,15 +4,16 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogFooter,
-} from '@/components/ui/alert-dialog'
-import maleSad from '@/assets/characters/male-sad.png'
-import { motion } from 'motion/react'
-import { Button } from './ui/button'
+} from "@/components/ui/alert-dialog";
+import maleSad from "@/assets/characters/male-sad.png";
+import femaleSad from "@/assets/characters/female-sad.png";
+import { motion } from "motion/react";
+import { Button } from "./ui/button";
 
 interface PuzzleInCompletionDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  onReplayLevel: () => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onReplayLevel: () => void;
 }
 
 export function PuzzleInCompletionDialog({
@@ -20,11 +21,12 @@ export function PuzzleInCompletionDialog({
   onOpenChange,
   onReplayLevel,
 }: PuzzleInCompletionDialogProps) {
+  const characterGender = localStorage.getItem("characterGender") as string;
+
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent className="w-200! p-4 border-none bg-white">
         <AlertDialogHeader className="flex flex-col mx-auto items-center justify-center">
-
           <motion.div
             initial={{ scale: 0, rotate: -10 }}
             animate={{ scale: 1, rotate: 0 }}
@@ -32,15 +34,15 @@ export function PuzzleInCompletionDialog({
             className="w-48 h-48 mb-4 mx-auto"
           >
             <img
-              src={maleSad}
+              src={characterGender === "male" ? maleSad : femaleSad}
               alt="Celebration"
               className="w-full h-full object-contain "
-              loading='lazy'
+              loading="lazy"
             />
           </motion.div>
 
           <AlertDialogTitle className="text-3xl text-center font-black text-slate-700 uppercase tracking-tight">
-            OUCHH...TIME UP!
+            OOPSie...TIME UP!
           </AlertDialogTitle>
         </AlertDialogHeader>
 
@@ -51,5 +53,5 @@ export function PuzzleInCompletionDialog({
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  )
+  );
 }

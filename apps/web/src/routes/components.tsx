@@ -1,33 +1,68 @@
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { createFileRoute } from '@tanstack/react-router'
-import { ActiveButton } from '../components/duolingo-buttons/active-button'
-import { HealthBar } from '../components/health-bar'
-import { XPCount } from '../components/xp-count'
-import { Input } from '@/components/ui/input'
-import { Switch } from '@/components/ui/switch'
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from '@/components/ui/alert-dialog'
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { createFileRoute } from "@tanstack/react-router";
+import { ActiveButton } from "../components/duolingo-buttons/active-button";
+import { HealthBar } from "../components/health-bar";
+import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogAction,
+  AlertDialogCancel,
+} from "@/components/ui/alert-dialog";
+import { Cursor } from "@/components/cursor";
 
-export const Route = createFileRoute('/components')({
+export const Route = createFileRoute("/components")({
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
   const [playerHP, setPlayerHP] = useState(100);
   const [switchChecked, setSwitchChecked] = useState(false);
   const [smallSwitchChecked, setSmallSwitchChecked] = useState(false);
 
-  // Example: When an opponent hits an UPPERCUT
   const handleDamage = () => {
-    setPlayerHP(prev => Math.max(0, prev - 25));
+    setPlayerHP((prev) => Math.max(0, prev - 25));
   };
+
+  const generateRandomColor = () => `hsl(${Math.floor(Math.random() * 360)}, 100%, 70%)`;
 
   return (
     <div className="container mx-auto max-w-3xl px-4 py-2">
       {/* All Button Variants Row */}
       <div className="flex flex-wrap gap-4 mb-8">
-        {(["default", "primary", "secondary", "danger", "super", "highlight", "golden", "locked", "ghost", "immersive", "active", "correct", "incorrect"] as const).map((variant) => (
+        {(
+          [
+            "default",
+            "primary",
+            "secondary",
+            "danger",
+            "super",
+            "highlight",
+            "golden",
+            "locked",
+            "ghost",
+            "immersive",
+            "active",
+            "correct",
+            "incorrect",
+          ] as const
+        ).map((variant) => (
           <Button key={variant} variant={variant} className="min-w-30">
             {variant.charAt(0).toUpperCase() + variant.slice(1)}
           </Button>
@@ -62,22 +97,17 @@ function RouteComponent() {
           />
 
           <div className="grid grid-cols-2 gap-4">
-            <Button variant="danger" onClick={handleDamage}>Take Damage</Button>
-            <Button variant="primary" onClick={() => setPlayerHP(100)}>Heal</Button>
+            <Button variant="danger" onClick={handleDamage}>
+              Take Damage
+            </Button>
+            <Button variant="primary" onClick={() => setPlayerHP(100)}>
+              Heal
+            </Button>
           </div>
         </div>
       </div>
 
-      {/* Demo of XPCount component */}
       <div className="my-8">
-        <h2 className="text-xl font-bold mb-2">XPCount Demo</h2>
-        <div className="flex gap-4 p-4 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 w-fit">
-          <XPCount count={1250} />
-          <XPCount count={45820} />
-        </div>
-      </div>
-
-      <div className='my-8'>
         <div className="max-w-md space-y-2">
           <h2 className="text-xl font-bold mb-2">Input Component Demo</h2>
           <Input placeholder="Type something..." />
@@ -90,11 +120,15 @@ function RouteComponent() {
         <div className="space-y-4">
           <div className="flex items-center space-x-2">
             <Switch size="default" checked={switchChecked} onCheckedChange={setSwitchChecked} />
-            <span>Default Switch is {switchChecked ? 'on' : 'off'}</span>
+            <span>Default Switch is {switchChecked ? "on" : "off"}</span>
           </div>
           <div className="flex items-center space-x-2">
-            <Switch size="sm" checked={smallSwitchChecked} onCheckedChange={setSmallSwitchChecked} />
-            <span>Small Switch is {smallSwitchChecked ? 'on' : 'off'}</span>
+            <Switch
+              size="sm"
+              checked={smallSwitchChecked}
+              onCheckedChange={setSmallSwitchChecked}
+            />
+            <span>Small Switch is {smallSwitchChecked ? "on" : "off"}</span>
           </div>
         </div>
       </div>
@@ -139,7 +173,26 @@ function RouteComponent() {
         </AlertDialog>
       </div>
 
-
+      <div className="my-6">
+        <Cursor
+          style={{
+            transitionDuration: "20ms",
+            top: 0,
+            left: 0,
+          }}
+          color={generateRandomColor()}
+          name="Jack"
+        />
+        <Cursor
+          style={{
+            transitionDuration: "20ms",
+            top: 0,
+            left: 0,
+          }}
+          color={generateRandomColor()}
+          name="Jill"
+        />
+      </div>
     </div>
-  )
+  );
 }

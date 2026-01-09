@@ -14,6 +14,7 @@ interface CellProps {
   onTouchMove: (e: React.TouchEvent) => void;
   size?: number;
   theme?: 'default' | 'ocean' | 'forest' | 'sunset';
+  customColor?: string; // For multiplayer - use custom background color
 }
 
 const THEME_COLORS = {
@@ -55,9 +56,19 @@ export function Cell({
   onTouchStart,
   onTouchMove,
   size = 48,
-  theme = 'default'
+  theme = 'default',
+  customColor
 }: CellProps) {
   const colors = THEME_COLORS[theme];
+
+  // Use custom styles if customColor is provided (for multiplayer)
+  const customStyles: React.CSSProperties = customColor && isFound
+    ? {
+        backgroundColor: `${customColor}40`, // 25% opacity
+        color: customColor,
+        borderColor: `${customColor}80`, // 50% opacity
+      }
+    : {};
 
   return (
     <div
@@ -70,15 +81,21 @@ export function Cell({
       style={{
         width: size,
         height: size,
-        fontSize: Math.max(size * 0.4, 12)
+        fontSize: Math.max(size * 0.4, 12),
+        ...customStyles,
       }}
       className={cn(
         "flex items-center justify-center rounded-lg font-black transition-all cursor-pointer",
         "border-b-4 active:border-b-0 active:translate-y-1",
         "touch-none select-none",
-        isFound ? colors.found :
-          isSelected ? colors.selected :
-            colors.base,
+        !customColor && (
+          isFound ? colors.found :
+            isSelected ? colors.selected :
+              colors.base
+        ),
+        customColor && isFound && "border-2",
+        customColor && isSelected && colors.selected,
+        customColor && !isFound && !isSelected && colors.base,
         !isFound && !isSelected && colors.hover,
         isHighlighted && "ring-2 ring-blue-400 ring-opacity-50"
       )}

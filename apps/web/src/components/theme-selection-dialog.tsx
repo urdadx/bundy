@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { DialogContent, DialogHeader, DialogTitle, DialogDescription } from "./ui/dialog"
+import { DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "./ui/dialog"
 import { cn } from "@/lib/utils"
 import { Button } from './ui/button'
 import { GameCard } from './game-card'
@@ -7,10 +7,10 @@ import { GameCard } from './game-card'
 const THEMES = [
   { id: 'animals', name: 'Animals', icon: '🐾' },
   { id: 'plants', name: 'Plants', icon: '🌵' },
-  { id: 'cities', name: 'Cities', icon: '🏙️' },
   { id: 'countries', name: 'Countries', icon: '🌍' },
   { id: 'foods', name: 'Foods', icon: '🍕' },
-  { id: 'cars', name: 'Cars', icon: '🚗' },
+  { id: 'sports', name: 'Sports', icon: '⚽' },
+  { id: 'science', name: 'Science', icon: '🔬' },
 ]
 
 export const ThemeSelectionDialog = ({
@@ -24,7 +24,10 @@ export const ThemeSelectionDialog = ({
 
   const handleSelect = (id: string) => {
     setSelected(id)
-    onSelect?.(id)
+  }
+
+  const handleSave = () => {
+    onSelect?.(selected)
   }
 
   return (
@@ -73,9 +76,9 @@ export const ThemeSelectionDialog = ({
       </div>
 
       <div className="p-6 pt-2 ">
-        <Button variant="primary" className="w-full" size="lg">
-          Save
-        </Button>
+        <DialogClose
+          render={<Button variant="primary" className="w-full" size="lg" onClick={handleSave}>Save</Button>}
+        />
       </div>
     </DialogContent>
   )

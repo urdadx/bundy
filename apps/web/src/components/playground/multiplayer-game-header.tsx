@@ -3,7 +3,6 @@ import { GameTimer } from './game-timer';
 import { cn } from '@/lib/utils';
 import jackAvatar from '@/assets/avatars/jack-avatar.png';
 import marieAvatar from '@/assets/avatars/marie-avatar.png';
-import rudeusAvatar from '@/assets/avatars/rudeus-avatar.png';
 
 interface GameHeaderProps {
   player1: {

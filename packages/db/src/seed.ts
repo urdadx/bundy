@@ -30,6 +30,7 @@ async function seed() {
   await db.delete(world);
 
   // Define all 6 worlds
+  // Each world gives 100 XP total (10+15+20+25+30), so XP requirements increase by 100
   const worlds = [
     {
       id: "meadow",
@@ -54,7 +55,7 @@ async function seed() {
       name: "Volcano",
       description: "Test your knowledge amidst the heat of flowing magma.",
       color: "danger",
-      requiredXp: 300,
+      requiredXp: 200,
       theme: "science",
       order: 3,
     },
@@ -63,7 +64,7 @@ async function seed() {
       name: "Cyber",
       description: "A digital landscape where words are the building blocks of reality.",
       color: "super",
-      requiredXp: 600,
+      requiredXp: 300,
       theme: "vocabulary",
       order: 4,
     },
@@ -72,7 +73,7 @@ async function seed() {
       name: " Void",
       description: "The ultimate challenge at the edge of the universe.",
       color: "highlight",
-      requiredXp: 1000,
+      requiredXp: 400,
       theme: "sports",
       order: 5,
     },
@@ -81,7 +82,7 @@ async function seed() {
       name: "Malyka",
       description: "A journey through the cultures and languages of the world.",
       color: "golden",
-      requiredXp: 1500,
+      requiredXp: 500,
       theme: "countries",
       order: 6,
     },

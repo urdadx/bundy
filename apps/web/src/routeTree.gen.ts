@@ -10,12 +10,12 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WorldsRouteImport } from './routes/worlds'
-import { Route as LobbyRouteImport } from './routes/lobby'
-import { Route as GameSettingsRouteImport } from './routes/game-settings'
 import { Route as ComponentsRouteImport } from './routes/components'
 import { Route as ChooseRouteImport } from './routes/choose'
 import { Route as ArenaRouteRouteImport } from './routes/arena/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MultiplayerRoomIdRouteImport } from './routes/multiplayer/$roomId'
+import { Route as LobbyRoomIdRouteImport } from './routes/lobby/$roomId'
 import { Route as ArenaShopRouteImport } from './routes/arena/shop'
 import { Route as ArenaProfileRouteImport } from './routes/arena/profile'
 import { Route as ArenaLeaderboardRouteImport } from './routes/arena/leaderboard'
@@ -28,16 +28,6 @@ import { Route as ArenaLessonsLessonNameLevelRouteImport } from './routes/arena/
 const WorldsRoute = WorldsRouteImport.update({
   id: '/worlds',
   path: '/worlds',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LobbyRoute = LobbyRouteImport.update({
-  id: '/lobby',
-  path: '/lobby',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GameSettingsRoute = GameSettingsRouteImport.update({
-  id: '/game-settings',
-  path: '/game-settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ComponentsRoute = ComponentsRouteImport.update({
@@ -58,6 +48,16 @@ const ArenaRouteRoute = ArenaRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MultiplayerRoomIdRoute = MultiplayerRoomIdRouteImport.update({
+  id: '/multiplayer/$roomId',
+  path: '/multiplayer/$roomId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LobbyRoomIdRoute = LobbyRoomIdRouteImport.update({
+  id: '/lobby/$roomId',
+  path: '/lobby/$roomId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ArenaShopRoute = ArenaShopRouteImport.update({
@@ -108,13 +108,13 @@ export interface FileRoutesByFullPath {
   '/arena': typeof ArenaRouteRouteWithChildren
   '/choose': typeof ChooseRoute
   '/components': typeof ComponentsRoute
-  '/game-settings': typeof GameSettingsRoute
-  '/lobby': typeof LobbyRoute
   '/worlds': typeof WorldsRoute
   '/arena/lessons': typeof ArenaLessonsRouteRouteWithChildren
   '/arena/leaderboard': typeof ArenaLeaderboardRoute
   '/arena/profile': typeof ArenaProfileRoute
   '/arena/shop': typeof ArenaShopRoute
+  '/lobby/$roomId': typeof LobbyRoomIdRoute
+  '/multiplayer/$roomId': typeof MultiplayerRoomIdRoute
   '/arena/lessons/': typeof ArenaLessonsIndexRoute
   '/arena/playground': typeof ArenaPlaygroundIndexRoute
   '/arena/lessons/$lessonName/$level': typeof ArenaLessonsLessonNameLevelRoute
@@ -125,12 +125,12 @@ export interface FileRoutesByTo {
   '/arena': typeof ArenaRouteRouteWithChildren
   '/choose': typeof ChooseRoute
   '/components': typeof ComponentsRoute
-  '/game-settings': typeof GameSettingsRoute
-  '/lobby': typeof LobbyRoute
   '/worlds': typeof WorldsRoute
   '/arena/leaderboard': typeof ArenaLeaderboardRoute
   '/arena/profile': typeof ArenaProfileRoute
   '/arena/shop': typeof ArenaShopRoute
+  '/lobby/$roomId': typeof LobbyRoomIdRoute
+  '/multiplayer/$roomId': typeof MultiplayerRoomIdRoute
   '/arena/lessons': typeof ArenaLessonsIndexRoute
   '/arena/playground': typeof ArenaPlaygroundIndexRoute
   '/arena/lessons/$lessonName/$level': typeof ArenaLessonsLessonNameLevelRoute
@@ -142,13 +142,13 @@ export interface FileRoutesById {
   '/arena': typeof ArenaRouteRouteWithChildren
   '/choose': typeof ChooseRoute
   '/components': typeof ComponentsRoute
-  '/game-settings': typeof GameSettingsRoute
-  '/lobby': typeof LobbyRoute
   '/worlds': typeof WorldsRoute
   '/arena/lessons': typeof ArenaLessonsRouteRouteWithChildren
   '/arena/leaderboard': typeof ArenaLeaderboardRoute
   '/arena/profile': typeof ArenaProfileRoute
   '/arena/shop': typeof ArenaShopRoute
+  '/lobby/$roomId': typeof LobbyRoomIdRoute
+  '/multiplayer/$roomId': typeof MultiplayerRoomIdRoute
   '/arena/lessons/': typeof ArenaLessonsIndexRoute
   '/arena/playground/': typeof ArenaPlaygroundIndexRoute
   '/arena/lessons/$lessonName/$level': typeof ArenaLessonsLessonNameLevelRoute
@@ -161,13 +161,13 @@ export interface FileRouteTypes {
     | '/arena'
     | '/choose'
     | '/components'
-    | '/game-settings'
-    | '/lobby'
     | '/worlds'
     | '/arena/lessons'
     | '/arena/leaderboard'
     | '/arena/profile'
     | '/arena/shop'
+    | '/lobby/$roomId'
+    | '/multiplayer/$roomId'
     | '/arena/lessons/'
     | '/arena/playground'
     | '/arena/lessons/$lessonName/$level'
@@ -178,12 +178,12 @@ export interface FileRouteTypes {
     | '/arena'
     | '/choose'
     | '/components'
-    | '/game-settings'
-    | '/lobby'
     | '/worlds'
     | '/arena/leaderboard'
     | '/arena/profile'
     | '/arena/shop'
+    | '/lobby/$roomId'
+    | '/multiplayer/$roomId'
     | '/arena/lessons'
     | '/arena/playground'
     | '/arena/lessons/$lessonName/$level'
@@ -194,13 +194,13 @@ export interface FileRouteTypes {
     | '/arena'
     | '/choose'
     | '/components'
-    | '/game-settings'
-    | '/lobby'
     | '/worlds'
     | '/arena/lessons'
     | '/arena/leaderboard'
     | '/arena/profile'
     | '/arena/shop'
+    | '/lobby/$roomId'
+    | '/multiplayer/$roomId'
     | '/arena/lessons/'
     | '/arena/playground/'
     | '/arena/lessons/$lessonName/$level'
@@ -212,9 +212,9 @@ export interface RootRouteChildren {
   ArenaRouteRoute: typeof ArenaRouteRouteWithChildren
   ChooseRoute: typeof ChooseRoute
   ComponentsRoute: typeof ComponentsRoute
-  GameSettingsRoute: typeof GameSettingsRoute
-  LobbyRoute: typeof LobbyRoute
   WorldsRoute: typeof WorldsRoute
+  LobbyRoomIdRoute: typeof LobbyRoomIdRoute
+  MultiplayerRoomIdRoute: typeof MultiplayerRoomIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -224,20 +224,6 @@ declare module '@tanstack/react-router' {
       path: '/worlds'
       fullPath: '/worlds'
       preLoaderRoute: typeof WorldsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/lobby': {
-      id: '/lobby'
-      path: '/lobby'
-      fullPath: '/lobby'
-      preLoaderRoute: typeof LobbyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/game-settings': {
-      id: '/game-settings'
-      path: '/game-settings'
-      fullPath: '/game-settings'
-      preLoaderRoute: typeof GameSettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/components': {
@@ -266,6 +252,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/multiplayer/$roomId': {
+      id: '/multiplayer/$roomId'
+      path: '/multiplayer/$roomId'
+      fullPath: '/multiplayer/$roomId'
+      preLoaderRoute: typeof MultiplayerRoomIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lobby/$roomId': {
+      id: '/lobby/$roomId'
+      path: '/lobby/$roomId'
+      fullPath: '/lobby/$roomId'
+      preLoaderRoute: typeof LobbyRoomIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/arena/shop': {
@@ -367,9 +367,9 @@ const rootRouteChildren: RootRouteChildren = {
   ArenaRouteRoute: ArenaRouteRouteWithChildren,
   ChooseRoute: ChooseRoute,
   ComponentsRoute: ComponentsRoute,
-  GameSettingsRoute: GameSettingsRoute,
-  LobbyRoute: LobbyRoute,
   WorldsRoute: WorldsRoute,
+  LobbyRoomIdRoute: LobbyRoomIdRoute,
+  MultiplayerRoomIdRoute: MultiplayerRoomIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -9,6 +9,7 @@ import questsIcon from '@/assets/icons/quests.svg'
 import shopIcon from '@/assets/icons/shop.svg'
 import superIcon from '@/assets/icons/super.svg'
 import xpIcon from '@/assets/icons/xp.svg'
+import { useSession } from '@/lib/auth-client'
 
 const iconMap = {
   heart: heartIcon,
@@ -23,17 +24,27 @@ const iconMap = {
 
 type SideMenuItemProps = {
   label: string
-  icon: string
+  icon?: keyof typeof iconMap
   href: any
   hideLabel?: boolean
   isProfile?: boolean
-  profileImage?: string
-  profileInitials?: string
+
 }
 
-export function SideMenuItem({ href, icon, label, hideLabel, isProfile, profileImage, profileInitials }: SideMenuItemProps) {
+export function SideMenuItem({ href, icon, label, hideLabel, isProfile }: SideMenuItemProps) {
   const { pathname } = useLocation()
   const isActive = pathname === href
+
+  const { data: session } = useSession()
+
+  const userName = session?.user?.name || 'User'
+  const profileInitials = userName
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+    .toUpperCase()
+  const profileImage = session?.user?.image || ''
+
   return (
     <div>
       <Button
@@ -43,9 +54,9 @@ export function SideMenuItem({ href, icon, label, hideLabel, isProfile, profileI
       >
         <Link to={href} title={label} {...(hideLabel && { 'aria-label': label })}>
           {isProfile ? (
-            <Avatar size="default">
+            <Avatar size="lg">
               <AvatarImage src={profileImage} alt={label} />
-              <AvatarFallback className="border-2 rounded-full">
+              <AvatarFallback className="border-2 text-md rounded-full">
                 {profileInitials || label.slice(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
