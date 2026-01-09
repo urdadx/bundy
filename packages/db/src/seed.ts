@@ -15,7 +15,6 @@ const THEME_WORDS = {
 
 function getRandomWords(theme: string, count: number, maxLength: number): string {
   const words = THEME_WORDS[theme as keyof typeof THEME_WORDS] || THEME_WORDS.general;
-  // Filter words that can fit in the grid with room for placement (at least 2 cells shorter)
   const validWords = words.filter(word => word.length <= maxLength - 2);
   const shuffled = [...validWords].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, count).join(',');
@@ -24,7 +23,6 @@ function getRandomWords(theme: string, count: number, maxLength: number): string
 async function seed() {
   console.log("🌱 Starting database seed...");
 
-  // Clear existing data
   console.log("🧹 Clearing existing data...");
   await db.delete(stage);
   await db.delete(world);

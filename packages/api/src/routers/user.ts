@@ -5,18 +5,15 @@ import { user } from "@wordsearch/db/schema/auth";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
-// Available avatars
 const VALID_AVATARS = ["jack-avatar.png", "marie-avatar.png", "rudeus-avatar.png"] as const;
 
-// Calculate league based on XP
 function calculateLeague(xp: number): string {
-  if (xp >= 1000) return "Gold";
-  if (xp >= 500) return "Silver";
+  if (xp >= 700) return "Gold";
+  if (xp >= 400) return "Silver";
   return "Bronze";
 }
 
 export const userRouter = router({
-  // Get the current user's stats using session
   getStats: protectedProcedure.query(async ({ ctx }) => {
     const userId = ctx.userId;
 
@@ -26,7 +23,6 @@ export const userRouter = router({
       .where(eq(userStats.userId, userId))
       .limit(1);
 
-    // If stats don't exist, create them automatically
     if (!stats.length) {
       await db.insert(userStats).values({
         id: `stats-${userId}`,
@@ -54,7 +50,6 @@ export const userRouter = router({
     };
   }),
 
-  // Get user profile (including avatar)
   getProfile: protectedProcedure.query(async ({ ctx }) => {
     const userId = ctx.userId;
 
@@ -78,7 +73,6 @@ export const userRouter = router({
     return userData[0];
   }),
 
-  // Update user avatar
   updateAvatar: protectedProcedure
     .input(z.object({
       avatar: z.enum(VALID_AVATARS),
@@ -94,7 +88,6 @@ export const userRouter = router({
       return { success: true, avatar: input.avatar };
     }),
 
-  // Update user name
   updateName: protectedProcedure
     .input(z.object({
       name: z.string().min(1).max(50),

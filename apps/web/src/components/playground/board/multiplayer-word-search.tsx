@@ -170,7 +170,6 @@ export function MultiplayerWordSearch({
     [foundWords, myPlayerId, myColor, opponentColor],
   );
 
-  // Check if opponent cursor is at this cell
   const isOpponentCursorAt = useCallback(
     (r: number, c: number): boolean => {
       if (!opponentCursor) return false;
@@ -217,7 +216,7 @@ export function MultiplayerWordSearch({
                     theme={colorTheme}
                     customColor={foundInfo.foundColor}
                   />
-                  {/* Opponent cursor indicator */}
+                  {/* Realtime opponent cursor */}
                   {hasOpponentCursor && (
                     <Cursor
                       color={opponentColor}

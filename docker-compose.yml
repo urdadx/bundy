@@ -36,7 +36,10 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
-      - DATABASE_URL=${DATABASE_URL}
+      # Prefer host-provided DATABASE_URL, otherwise use local sqlite file
+      - DATABASE_URL=${DATABASE_URL:-file:/data/sqlite.db}
+      # Explicit path used by the bundled DB package
+      - SQLITE_PATH=${SQLITE_PATH:-/data/sqlite.db}
       - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
       - BETTER_AUTH_URL=${BETTER_AUTH_URL:-http://localhost:3000}
       - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost:3001}
@@ -49,6 +52,8 @@ services:
       timeout: 3s
       retries: 3
       start_period: 10s
+    volumes:
+      - ./data:/data
 
   # WebSocket Server
   websocket:
@@ -61,6 +66,7 @@ services:
       - NODE_ENV=production
       - WS_PORT=3003
       - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost:3001}
+      - SQLITE_PATH=${SQLITE_PATH:-/data/sqlite.db}
     networks:
       - wordsearch-network
     restart: unless-stopped
@@ -70,6 +76,8 @@ services:
       timeout: 3s
       retries: 3
       start_period: 10s
+    volumes:
+      - ./data:/data
 
 networks:
   wordsearch-network:

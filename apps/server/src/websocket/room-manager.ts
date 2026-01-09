@@ -10,15 +10,13 @@ const connections = new Map<string, WSConnection>();
 // Player ID to Room ID mapping for quick lookup
 const playerRooms = new Map<string, string>();
 
-// Constants
-const RECONNECT_TIMEOUT = 7000; // 7 seconds
+const RECONNECT_TIMEOUT = 10000; 
 const POINTS_PER_WORD = 2;
 const PLAYER_COLORS = {
-  host: "#1cb0f6", // Blue
-  guest: "#ff4b4b", // Red
+  host: "#1cb0f6", 
+  guest: "#ff4b4b", 
 };
 
-// Generate a random room code
 export function generateRoomCode(): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let code = "";
@@ -28,10 +26,8 @@ export function generateRoomCode(): string {
   return code;
 }
 
-// Create a new room
 export function createRoom(hostId: string, hostName: string, hostAvatar: string, settings: GameSettings): Room {
   let roomId = generateRoomCode();
-  // Ensure unique room ID
   while (rooms.has(roomId)) {
     roomId = generateRoomCode();
   }
@@ -126,7 +122,6 @@ export function setPlayerReady(roomId: string, odId: string, ready: boolean): Ro
 
   player.isReady = ready;
 
-  // Check if both players are ready
   if (room.players.size === 2) {
     const players = Array.from(room.players.values());
     if (players.every(p => p.isReady)) {
@@ -148,7 +143,6 @@ export function startGame(roomId: string, puzzle: PuzzleData): Room | null {
   room.gameStartedAt = Date.now();
   room.foundWords = [];
 
-  // Reset player scores and found words
   for (const player of room.players.values()) {
     player.score = 0;
     player.wordsFound = [];
@@ -172,12 +166,10 @@ export function claimWord(
   const player = room.players.get(odId);
   if (!player) return { success: false, reason: "Player not in room" };
 
-  // Check if word was already claimed
   if (room.foundWords.some(fw => fw.word === word)) {
     return { success: false, reason: "Word already claimed" };
   }
 
-  // Validate the word exists in the puzzle
   if (!room.puzzle) return { success: false, reason: "No puzzle data" };
   
   const puzzleWord = room.puzzle.words.find(w => w.word === word);
@@ -208,7 +200,6 @@ export function claimWord(
   player.wordsFound.push(word);
   player.score += POINTS_PER_WORD;
 
-  // Check if game is complete (all words found)
   if (room.foundWords.length === room.puzzle.words.length) {
     endGame(room);
   }
@@ -318,7 +309,6 @@ function handleReconnectTimeout(roomId: string, odId: string): void {
       }
     }
   } else {
-    // If not in game, just notify that player left
     broadcastToRoom(roomId, { type: "player_left", odId, odName }, odId);
   }
 

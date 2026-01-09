@@ -1,5 +1,5 @@
-import { useGameTimer } from '@/hooks/use-game-timer';
-import { cn } from '@/lib/utils';
+import { useGameTimer } from "@/hooks/use-game-timer";
+import { cn } from "@/lib/utils";
 
 interface GameTimerProps {
   duration?: number;
@@ -8,8 +8,13 @@ interface GameTimerProps {
   className?: string;
 }
 
-export function GameTimer({ duration = 600, onTimeUp, autoStart = true, className }: GameTimerProps) {
-  const { formattedTime, timeLeft, isRunning, start, pause, reset } = useGameTimer({
+export function GameTimer({
+  duration = 600,
+  onTimeUp,
+  autoStart = true,
+  className,
+}: GameTimerProps) {
+  const { formattedTime, timeLeft, isRunning, start } = useGameTimer({
     initialTime: duration,
     onTimeUp,
   });
@@ -27,10 +32,10 @@ export function GameTimer({ duration = 600, onTimeUp, autoStart = true, classNam
         className={cn(
           "text-2xl font-bold",
           isTimeUp
-            ? 'text-red-500'
+            ? "text-red-500"
             : isLowTime
-              ? 'text-orange-400 animate-pulse'
-              : 'text-slate-700'
+              ? "text-orange-400 animate-pulse"
+              : "text-slate-700",
         )}
       >
         {formattedTime}

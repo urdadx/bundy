@@ -1,10 +1,10 @@
-import * as React from "react"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
 interface GameCardProps extends React.HTMLAttributes<HTMLDivElement> {
-  children: React.ReactNode
+  children: React.ReactNode;
   /** The thickness of the bottom border. Defaults to '8' (32px) */
-  depth?: "2" | "4" | "8"
+  depth?: "2" | "4" | "8";
 }
 
 export const GameCard = React.forwardRef<HTMLDivElement, GameCardProps>(
@@ -13,7 +13,7 @@ export const GameCard = React.forwardRef<HTMLDivElement, GameCardProps>(
       "2": "border-b-2",
       "4": "border-b-4",
       "8": "border-b-8",
-    }
+    };
 
     return (
       <div
@@ -21,15 +21,15 @@ export const GameCard = React.forwardRef<HTMLDivElement, GameCardProps>(
         className={cn(
           "bg-white rounded-3xl border-2 border-slate-200",
           depthClasses[depth],
-          "p-4 md:p-6", // Responsive padding
-          className
+          "p-4 md:p-6",
+          className,
         )}
         {...props}
       >
         {children}
       </div>
-    )
-  }
-)
+    );
+  },
+);
 
-GameCard.displayName = "GameCard"
+GameCard.displayName = "GameCard";

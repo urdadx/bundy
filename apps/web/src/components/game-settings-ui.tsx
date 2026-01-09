@@ -10,7 +10,6 @@ import type { GameSettings } from "@/lib/multiplayer/types";
 import { Loader2 } from "lucide-react";
 import { Switch } from "./ui/switch";
 
-// Theme display info
 const THEMES: Record<string, { name: string; icon: string }> = {
   animals: { name: "Animals", icon: "🐾" },
   plants: { name: "Plants", icon: "🌵" },
@@ -23,14 +22,12 @@ const THEMES: Record<string, { name: string; icon: string }> = {
   science: { name: "Science", icon: "🔬" },
 };
 
-// Difficulty configurations for multiplayer
 const DIFFICULTY_CONFIG = {
   easy: { gridSizeRange: [8, 10], wordCountRange: [5, 7] },
   medium: { gridSizeRange: [10, 12], wordCountRange: [7, 10] },
   hard: { gridSizeRange: [12, 15], wordCountRange: [10, 15] },
 };
 
-// Generate random value within range
 function randomInRange(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }

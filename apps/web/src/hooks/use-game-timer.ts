@@ -10,7 +10,6 @@ export function useGameTimer({ initialTime, onTimeUp }: UseGameTimerProps) {
   const [isRunning, setIsRunning] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Update timeLeft when initialTime changes (e.g. stage loading)
   useEffect(() => {
     setTimeLeft(initialTime);
     setIsRunning(false);

@@ -1,10 +1,10 @@
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { GameTimer } from './game-timer';
-import { cn } from '@/lib/utils';
-import { useSession } from '@/lib/auth-client';
-import jackAvatar from '@/assets/avatars/jack-avatar.png';
-import xpIcon from '@/assets/icons/xp.svg';
-import diamondIcon from '@/assets/icons/diamond.svg';
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { GameTimer } from "./game-timer";
+import { cn } from "@/lib/utils";
+import { useSession } from "@/lib/auth-client";
+import jackAvatar from "@/assets/avatars/jack-avatar.png";
+import xpIcon from "@/assets/icons/xp.svg";
+import diamondIcon from "@/assets/icons/diamond.svg";
 
 interface CareerGameHeaderProps {
   user: {
@@ -18,14 +18,24 @@ interface CareerGameHeaderProps {
   className?: string;
 }
 
-export function CareerGameHeader({ user, timerDuration, onTimerEnd, className }: CareerGameHeaderProps) {
+export function CareerGameHeader({
+  user,
+  timerDuration,
+  onTimerEnd,
+  className,
+}: CareerGameHeaderProps) {
   const { data: session } = useSession();
 
   const userName = user.name || session?.user?.name || "Guest";
   const userAvatar = user.avatar || session?.user?.image || jackAvatar;
 
   return (
-    <div className={cn("w-full bg-white border-2 border-b-4 border-slate-200 rounded-xl p-4", className)}>
+    <div
+      className={cn(
+        "w-full bg-white border-2 border-b-4 border-slate-200 rounded-xl p-4",
+        className,
+      )}
+    >
       <div className="flex items-center justify-between gap-4">
         {/* User Info */}
         <div className="flex items-center gap-3">
@@ -39,18 +49,18 @@ export function CareerGameHeader({ user, timerDuration, onTimerEnd, className }:
           </div>
           <div className="flex flex-col">
             <span className="text-slate-700 font-bold text-sm">{userName}</span>
-            <span className="text-[#1cb0f6] font-bold text-xs uppercase tracking-wider">Career Mode</span>
+            <span className="text-[#1cb0f6] font-bold text-xs uppercase tracking-wider">
+              Career Mode
+            </span>
           </div>
         </div>
 
-        {/* Timer */}
         <div className="flex-1 flex justify-center">
           <div className="bg-slate-100 px-6 py-1 rounded-lg border-2 border-slate-200">
             <GameTimer duration={timerDuration} onTimeUp={onTimerEnd} />
           </div>
         </div>
 
-        {/* Stats */}
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
             <img src={xpIcon} alt="XP" className="w-7 h-7 object-contain" />
@@ -58,7 +68,6 @@ export function CareerGameHeader({ user, timerDuration, onTimerEnd, className }:
               <span className="text-lg font-black text-[#ffc800] leading-none">
                 {user.xp.toLocaleString()}
               </span>
-
             </div>
           </div>
 
@@ -68,7 +77,6 @@ export function CareerGameHeader({ user, timerDuration, onTimerEnd, className }:
               <span className="text-lg font-black text-[#1cb0f6] leading-none">
                 {user.diamonds.toLocaleString()}
               </span>
-
             </div>
           </div>
         </div>

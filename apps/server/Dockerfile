@@ -47,6 +47,10 @@ ENV PORT=3000
 # Expose port
 EXPOSE 3000
 
+# Create data directory for SQLite and make it writable
+RUN mkdir -p /data && chmod 0777 /data
+VOLUME ["/data"]
+
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD curl -f http://localhost:3000/ || exit 1

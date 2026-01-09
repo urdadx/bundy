@@ -8,10 +8,6 @@ export const appRouter = router({
     return "OK";
   }),
 
-  shitTest: publicProcedure.query(() => {
-    return "SHITTT";
-  }),
-
   worlds: worldsRouter,
   user: userRouter,
   stages: stagesRouter,

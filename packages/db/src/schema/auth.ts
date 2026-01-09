@@ -9,7 +9,7 @@ export const user = sqliteTable("user", {
     .default(false)
     .notNull(),
   image: text("image"),
-  avatar: text("avatar").default("jack-avatar.png"), // Default avatar for multiplayer
+  avatar: text("avatar").default("jack-avatar.png"), 
   isAnonymous: integer("is_anonymous", { mode: "boolean" })
     .default(false)
     .notNull(),

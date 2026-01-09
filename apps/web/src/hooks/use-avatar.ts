@@ -12,14 +12,12 @@ export function useAvatar(options: UseAvatarOptions = {}) {
   const { onSuccess, onError } = options;
   const queryClient = useQueryClient();
 
-  // Get user profile
   const {
     data: profile,
     isLoading: isLoadingProfile,
     refetch: refetchProfile,
   } = useQuery(trpc.user.getProfile.queryOptions());
 
-  // Update avatar mutation
   const updateAvatarMutation = useMutation(
     trpc.user.updateAvatar.mutationOptions({
       onSuccess: (data: { success: boolean; avatar: AvatarId }) => {
@@ -33,10 +31,8 @@ export function useAvatar(options: UseAvatarOptions = {}) {
     })
   );
 
-  // Current avatar from profile or default
   const currentAvatar = (profile?.avatar ?? "jack-avatar.png") as AvatarId;
 
-  // Update avatar
   const updateAvatar = useCallback(
     (avatar: AvatarId) => {
       updateAvatarMutation.mutate({ avatar });
@@ -54,13 +50,11 @@ export function useAvatar(options: UseAvatarOptions = {}) {
   };
 }
 
-// Hook for local avatar state (for lobby/game settings before saving)
 export function useLocalAvatar(initialAvatar?: AvatarId) {
   const [localAvatar, setLocalAvatar] = useState<AvatarId>(
     initialAvatar ?? "jack-avatar.png"
   );
 
-  // Sync with initial avatar if it changes
   useEffect(() => {
     if (initialAvatar) {
       setLocalAvatar(initialAvatar);

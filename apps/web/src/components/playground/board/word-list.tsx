@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils'
+import { cn } from "@/lib/utils";
 
 interface WordListProps {
   words: string[];
@@ -7,14 +7,13 @@ interface WordListProps {
 }
 
 export function WordList({ words, foundWords, className }: WordListProps) {
-  const remainingCount = words.length - foundWords.size;
-
   return (
-    <div className={cn(
-      "bg-white rounded-xl border-2 border-slate-200 shadow-md p-4 w-full max-w-5xl",
-      className
-    )}>
-
+    <div
+      className={cn(
+        "bg-white rounded-xl border-2 border-slate-200 shadow-md p-4 w-full max-w-5xl",
+        className,
+      )}
+    >
       <div className="flex flex-wrap gap-2 justify-center">
         {words.map((word) => (
           <span
@@ -23,7 +22,7 @@ export function WordList({ words, foundWords, className }: WordListProps) {
               "px-3 py-1.5 rounded-lg text-sm font-medium transition-all",
               foundWords.has(word)
                 ? "bg-green-100 text-green-700 line-through opacity-60"
-                : "bg-slate-100 text-slate-700"
+                : "bg-slate-100 text-slate-700",
             )}
           >
             {word}
@@ -31,5 +30,5 @@ export function WordList({ words, foundWords, className }: WordListProps) {
         ))}
       </div>
     </div>
-  )
+  );
 }

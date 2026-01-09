@@ -5,7 +5,6 @@ import { eq, asc, and, sql } from "drizzle-orm";
 import { z } from "zod";
 
 export const stagesRouter = router({
-  // Get all stages for a world
   getByWorldId: publicProcedure
     .input(z.object({ worldId: z.string() }))
     .query(async ({ input }) => {
@@ -18,7 +17,6 @@ export const stagesRouter = router({
       return stages;
     }),
 
-  // Get a single stage by ID
   getById: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input }) => {
@@ -69,7 +67,6 @@ export const stagesRouter = router({
       }));
     }),
 
-  // Complete a stage and award rewards - uses session to get userId
   completeStage: protectedProcedure
     .input(z.object({
       stageId: z.string(),
@@ -79,7 +76,6 @@ export const stagesRouter = router({
     .mutation(async ({ input, ctx }) => {
       const userId = ctx.userId;
 
-      // Get the stage details
       const stageData = await db
         .select()
         .from(stage)
@@ -92,14 +88,12 @@ export const stagesRouter = router({
 
       const currentStage = stageData[0]!;
 
-      // Get or create the user's stats
       let userStatsData = await db
         .select()
         .from(userStats)
         .where(eq(userStats.userId, userId))
         .limit(1);
 
-      // If user stats don't exist, create them
       if (!userStatsData.length) {
         await db.insert(userStats).values({
           id: `stats-${userId}`,

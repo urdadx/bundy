@@ -8,7 +8,6 @@ export const router = t.router;
 
 export const publicProcedure = t.procedure;
 
-// Protected procedure that requires authentication
 export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
   if (!ctx.session || !ctx.user || !ctx.userId) {
     throw new TRPCError({

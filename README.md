@@ -1,4 +1,4 @@
-# bundy
+# bundycrush
 A turn based word search puzzle game.
 
 ## Stack
@@ -11,7 +11,7 @@ A turn based word search puzzle game.
 - **tRPC** - End-to-end type-safe APIs
 - **Bun** - Runtime environment
 - **Drizzle** - TypeScript-first ORM
-- **PostgreSQL** - Database engine
+- **SQLite** - Database engine
 - **Oxlint** - Oxlint + Oxfmt (linting & formatting)
 
 ## Getting Started
@@ -23,12 +23,10 @@ pnpm install
 ```
 ## Database Setup
 
-This project uses PostgreSQL with Drizzle ORM.
+This project uses SQLite with Drizzle ORM.
 
-1. Make sure you have a PostgreSQL database set up.
-2. Update your `apps/server/.env` file with your PostgreSQL connection details.
-
-3. Apply the schema to your database:
+1. Make sure you have a SQLite database set up.
+2. Apply the schema to your database:
 ```bash
 pnpm run db:push
 ```
@@ -44,21 +42,17 @@ Open [http://localhost:3001](http://localhost:3001) in your browser to see the w
 The API is running at [http://localhost:3000](http://localhost:3000).
 
 
-
-
-
-
-
 ## Project Structure
 
 ```
 wordsearch/
 ├── apps/
 │   ├── web/         # Frontend application (React + TanStack Router)
-│   └── server/      # Backend API (Hono, TRPC)
+│   └── server/      # Backend API (Hono, TRPC, Bun)
 ├── packages/
 │   ├── api/         # API layer / business logic
 │   └── db/          # Database schema & queries
+│   └── auth          # Authentication
 ```
 
 ## Available Scripts
@@ -71,4 +65,3 @@ wordsearch/
 - `pnpm run db:push`: Push schema changes to database
 - `pnpm run db:studio`: Open database studio UI
 - `pnpm run check`: Run Oxlint and Oxfmt
-# bundy

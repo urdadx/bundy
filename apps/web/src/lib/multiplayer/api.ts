@@ -1,10 +1,8 @@
 import { env } from "@wordsearch/env/web";
 import type { GameSettings, SerializedRoom } from "./types";
 
-// Use WebSocket server URL for multiplayer API, fallback to main server
 const getApiBase = () => {
   if (env.VITE_WS_URL) {
-    // Convert ws:// or wss:// to http:// or https://
     return env.VITE_WS_URL.replace(/^ws/, 'http');
   }
   return env.VITE_SERVER_URL;

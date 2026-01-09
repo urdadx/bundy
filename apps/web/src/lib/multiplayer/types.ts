@@ -1,7 +1,6 @@
 // Shared types for multiplayer WebSocket communication
 // These types are used by both client and server
 
-// Player info
 export interface Player {
   id: string;
   name: string;
@@ -15,7 +14,6 @@ export interface Player {
   color: string;
 }
 
-// Game settings
 export interface GameSettings {
   theme: string;
   difficulty: string;
@@ -24,7 +22,6 @@ export interface GameSettings {
   timeLimit: number; // in seconds (default 600 = 10 min)
 }
 
-// Puzzle data
 export interface PuzzleData {
   grid: string[][];
   words: Array<{
@@ -34,7 +31,6 @@ export interface PuzzleData {
   }>;
 }
 
-// Found word info
 export interface FoundWord {
   word: string;
   foundBy: string;
@@ -42,15 +38,12 @@ export interface FoundWord {
   end: { r: number; c: number };
 }
 
-// Room status
 export type RoomStatus = "waiting" | "ready" | "playing" | "finished";
 
 // Serialized room for client
 export interface SerializedRoom {
   id: string;
   hostId: string;
-  guestId: string | null;
-  players: Player[];
   settings: GameSettings;
   status: RoomStatus;
   puzzle: PuzzleData | null;
@@ -110,7 +103,6 @@ export const AVATAR_OPTIONS = [
 
 export type AvatarOption = typeof AVATAR_OPTIONS[number];
 
-// Player colors
 export const PLAYER_COLORS = {
   host: "#1cb0f6", 
   guest: "#ff4b4b",

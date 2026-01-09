@@ -11,7 +11,6 @@ import { ChatPanel } from "@/components/playground/chat/chat-panel";
 import { WordListPanel, GameActionsPanelMultiplayer } from "@/components/layouts/playground-layout";
 import { CountdownOverlay } from "@/components/playground/countdown-overlay";
 import { GameConnectionError } from "@/components/playground/game-connection-error";
-import { sleep } from "@/lib/utils";
 
 export const Route = createFileRoute("/multiplayer/$roomId")({
   component: MultiplayerGamePage,

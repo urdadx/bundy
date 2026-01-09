@@ -1,13 +1,13 @@
 # Docker Deployment Guide
 
-This guide explains how to deploy the WordSearch application using Docker on Dokploy or any VPS.
+This guide explains how to deploy the Bundycrush application using Docker on Dokploy or any VPS.
 
 ## Architecture
 
 The application is split into 3 services:
 
 1. **Web Client** (`apps/web`) - React + Vite SPA served by nginx
-2. **API Server** (`apps/server`) - Hono + tRPC + Better Auth
+2. **API Server** (`apps/server`) - Hono + tRPC + Bun
 3. **WebSocket Server** (`apps/server/src/ws-server.ts`) - Multiplayer game logic
 
 ## Dockerfiles
@@ -99,15 +99,41 @@ When you set a domain in Dokploy, it automatically:
 
 ### Step 3: Database Setup
 
-Make sure you have a PostgreSQL database. Options:
-- **Dokploy Database**: Create a PostgreSQL service in Dokploy
-- **External**: Use Supabase, Neon, Railway, or any managed PostgreSQL
+This project uses SQLite for database (the repo contains a `sqlite.db`). 
 
-After deployment, run migrations:
-```bash
-# SSH into your server or use Dokploy's terminal
-pnpm db:migrate
+### SQLite 
+
+- The codebase includes SQLite support via `packages/db` and a `sqlite.db` file can be used as the single-file database for development or small-scale deployments.
+- For Docker development we recommend mounting a host folder into the container so the DB file persists across restarts.
+
+Example `docker-compose.yml` service (local):
+
+```yaml
+services:
+  server:
+    environment:
+      - DATABASE_URL=file:/data/sqlite.db
+      - SQLITE_PATH=/data/sqlite.db
+    volumes:
+      - ./data:/data
 ```
+
+- `DATABASE_URL`: set to `file:/data/sqlite.db` so libs that read `file:` URLs work out of the box.
+- `SQLITE_PATH`: an explicit path the bundled DB package also reads; set it to `/data/sqlite.db` to ensure the runtime code finds the file.
+- The container images now expose `/data` as a volume; bind-mount `./data` from the host to persist the DB file across container restarts.
+
+Notes & caveats:
+
+- SQLite is single-file and best for local development or very low-traffic deployments. It is not recommended for multi-replica production setups.
+- If you must use SQLite in production, keep a single writer instance and consider read replicas using exported snapshots.
+- Enable WAL mode for better concurrency. From inside a running container you can run:
+
+```bash
+sqlite3 /data/sqlite.db "PRAGMA journal_mode=WAL;"
+```
+
+- Ensure the container can write to `/data`. Dockerfiles create `/data` and set permissive permissions, and `docker-compose.yml` mounts `./data` by default for local setups.
+- Backup the `./data/sqlite.db` file regularly (copy while the app is stopped or use `sqlite3` to create a consistent dump).
 
 ### Step 4: Deploy
 
@@ -164,10 +190,6 @@ All services have health check endpoints:
 - Traefik handles upgrades automatically, but check Dokploy logs if issues persist
 - Test with: `wscat -c wss://ws.yourdomain.com/ws/multiplayer`
 
-### Database Connection Issues
-- Verify DATABASE_URL is accessible from Dokploy's network
-- If using Dokploy's PostgreSQL, use the internal network hostname
-- Check connection string format
 
 ### CORS Errors
 - Ensure `CORS_ORIGIN` exactly matches your frontend URL (protocol + domain)
