@@ -64,6 +64,15 @@ export function useMultiplayerSocket(
   }, []);
 
   const getWsUrl = useCallback(() => {
+    // Use dedicated WS URL if available, otherwise derive from server URL
+    if (env.VITE_WS_URL) {
+      const wsUrl = env.VITE_WS_URL;
+      // Ensure we use ws:// or wss:// protocol
+      const normalizedUrl = wsUrl.replace(/^http/, 'ws');
+      return `${normalizedUrl}/ws/multiplayer`;
+    }
+    
+    // Fallback: derive from server URL (for local dev or combined server)
     const serverUrl = env.VITE_SERVER_URL;
     const wsProtocol = serverUrl.startsWith("https") ? "wss" : "ws";
     const wsHost = serverUrl.replace(/^https?:\/\//, "");

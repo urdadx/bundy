@@ -61,6 +61,14 @@ export function handleMessage(ws: WSConnection, rawMessage: string): void {
         handleRematchRequest(ws);
         break;
 
+      case "chat_message":
+        handleChatMessage(ws, message.content);
+        break;
+
+      case "typing":
+        handleTyping(ws, message.isTyping);
+        break;
+
       case "ping":
         send(ws, { type: "pong" });
         break;
@@ -125,8 +133,10 @@ function handleLeaveRoom(ws: WSConnection): void {
   const room = getRoom(roomId);
   if (!room) return;
 
-  // Notify other players before removing
-  broadcastToRoom(roomId, { type: "player_left", odId }, odId);
+  const player = room.players.get(odId);
+  const odName = player?.name || ws.data.odName || "Player";
+
+  broadcastToRoom(roomId, { type: "player_left", odId, odName }, odId);
 
   // If game was in progress, end it with opponent as winner
   if (room.status === "playing") {
@@ -148,6 +158,11 @@ function handleLeaveRoom(ws: WSConnection): void {
 
   removePlayerFromRoom(roomId, odId);
   removeConnection(odId);
+
+  const updatedRoom = getRoom(roomId);
+  if (updatedRoom) {
+    broadcastToAll(roomId, { type: "room_state", room: serializeRoom(updatedRoom) });
+  }
 }
 
 function handlePlayerReady(ws: WSConnection, ready: boolean): void {
@@ -157,7 +172,6 @@ function handlePlayerReady(ws: WSConnection, ready: boolean): void {
   const room = setPlayerReady(roomId, odId, ready);
   if (!room) return;
 
-  // Broadcast ready state change
   broadcastToAll(roomId, { type: "player_ready_changed", odId, ready });
 
   if (room.status === "ready") {
@@ -350,6 +364,49 @@ export function handleOpen(_ws: WSConnection): void {
   console.log("WebSocket connection opened");
 }
 
+function handleChatMessage(ws: WSConnection, content: string): void {
+  const { odId, odName, roomId, odAvatar } = ws.data;
+  if (!roomId || !odId) return;
+
+  const room = getRoom(roomId);
+  if (!room) return;
+
+  // Validate message content
+  const trimmedContent = content.trim();
+  if (!trimmedContent || trimmedContent.length > 500) {
+    send(ws, { type: "error", message: "Invalid message" });
+    return;
+  }
+
+  // Generate unique message ID
+  const messageId = `${odId}-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+
+  broadcastToAll(roomId, {
+    type: "chat_message",
+    id: messageId,
+    senderId: odId,
+    senderName: odName,
+    senderAvatar: odAvatar,
+    content: trimmedContent,
+    timestamp: Date.now(),
+  });
+}
+
+function handleTyping(ws: WSConnection, isTyping: boolean): void {
+  const { odId, roomId } = ws.data;
+  if (!roomId || !odId) return;
+
+  broadcastToRoom(
+    roomId,
+    {
+      type: "player_typing",
+      odId,
+      isTyping,
+    },
+    odId
+  );
+}
+
 export function handleClose(ws: WSConnection): void {
   const odId = ws.data?.odId;
   const roomId = ws.data?.roomId;
@@ -357,12 +414,6 @@ export function handleClose(ws: WSConnection): void {
 
   if (odId && roomId) {
     handleDisconnect(roomId, odId);
-    
-    broadcastToRoom(roomId, {
-      type: "player_disconnected",
-      odId,
-      reconnectTimeout: 7000,
-    }, odId);
   }
 }
 

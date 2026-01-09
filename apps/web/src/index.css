@@ -131,7 +131,7 @@
   /* Incorrect (Error) */
   --color-incorrect: #ea2b2b;
   --color-incorrect-depth: #c21d1d;
-  
+
   /* Active (Selection) */
   --color-active-blue: #84d8ff;
   --color-active-blue-depth: #1cb0f6;
@@ -140,7 +140,7 @@
   --color-input-focus: #1cb0f6; /* Duolingo Blue */
 
   --color-dialog-overlay: rgba(31, 41, 55, 0.4); /* Tinted Slate */
-  
+
   /* Adding the "Push" animation timing */
   --transition-timing-function-duo: cubic-bezier(0, 0, 0.2, 1);
   --font-sans: "DIN Round Pro", sans-serif;
@@ -249,4 +249,13 @@
 }
 .hide-scrollbar::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }

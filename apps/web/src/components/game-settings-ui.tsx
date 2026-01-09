@@ -8,6 +8,7 @@ import { useSession } from "@/lib/auth-client";
 import { createRoom } from "@/lib/multiplayer/api";
 import type { GameSettings } from "@/lib/multiplayer/types";
 import { Loader2 } from "lucide-react";
+import { Switch } from "./ui/switch";
 
 // Theme display info
 const THEMES: Record<string, { name: string; icon: string }> = {
@@ -46,7 +47,6 @@ export function GameSettingsUI({ onRoomCreated, onNavigateToLobby }: GameSetting
   const [isCreatingRoom, setIsCreatingRoom] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Generate game settings based on difficulty
   const generateSettings = useCallback((): GameSettings => {
     const config = DIFFICULTY_CONFIG[difficulty];
     return {
@@ -54,7 +54,7 @@ export function GameSettingsUI({ onRoomCreated, onNavigateToLobby }: GameSetting
       difficulty,
       gridSize: randomInRange(config.gridSizeRange[0], config.gridSizeRange[1]),
       wordCount: randomInRange(config.wordCountRange[0], config.wordCountRange[1]),
-      timeLimit: 600, // 10 minutes
+      timeLimit: 600,
     };
   }, [difficulty, theme]);
 
@@ -77,7 +77,6 @@ export function GameSettingsUI({ onRoomCreated, onNavigateToLobby }: GameSetting
       });
 
       onRoomCreated?.(result.roomId);
-      // Navigate to lobby with the room ID
       onNavigateToLobby?.(result.roomId);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to create room");
@@ -94,10 +93,7 @@ export function GameSettingsUI({ onRoomCreated, onNavigateToLobby }: GameSetting
 
   return (
     <DialogContent className="border-none p-6 max-w-none! w-auto">
-      <div
-        className="flex flex-col items-center justify-center"
-        style={{ width: 400 }}
-      >
+      <div className="flex flex-col items-center justify-center" style={{ width: 400 }}>
         <DialogHeader className="pb-3">
           <h2 className="text-xl text-center font-black text-slate-700 uppercase tracking-widest">
             Game Settings
@@ -131,34 +127,21 @@ export function GameSettingsUI({ onRoomCreated, onNavigateToLobby }: GameSetting
             </div>
 
             <div className="flex items-center justify-between">
-              <p className="font-black text-slate-700 uppercase text-sm tracking-wide">
-                Theme
-              </p>
+              <p className="font-black text-slate-700 uppercase text-sm tracking-wide">Theme</p>
               <Dialog>
                 <DialogTrigger
                   render={
-                    <Button
-                      variant="ghost"
-                      className="font-bold text-slate-500 hover:text-primary"
-                    >
+                    <Button variant="ghost" className="font-bold text-slate-500 hover:text-primary">
                       {currentTheme.icon} {currentTheme.name}
                     </Button>
                   }
                 />
-                <ThemeSelectionDialog
-                  currentTheme={theme}
-                  onSelect={handleThemeSelect}
-                />
+                <ThemeSelectionDialog currentTheme={theme} onSelect={handleThemeSelect} />
               </Dialog>
             </div>
-
-            {/* Difficulty description */}
-            <div className="bg-slate-50 rounded-xl p-4 border-2 border-slate-100">
-              <p className="text-sm text-slate-600 font-medium">
-                {difficulty === "easy" && "Smaller grid (8-10), fewer words (5-7). Great for beginners!"}
-                {difficulty === "medium" && "Medium grid (10-12), moderate words (7-10). A balanced challenge."}
-                {difficulty === "hard" && "Large grid (12-15), many words (10-15). For word search masters!"}
-              </p>
+            <div className="flex items-center justify-between">
+              <p className="font-black text-slate-700 uppercase text-sm tracking-wide">Music</p>
+              <Switch defaultChecked />
             </div>
 
             {error && (
@@ -170,17 +153,17 @@ export function GameSettingsUI({ onRoomCreated, onNavigateToLobby }: GameSetting
             <div className="pt-2">
               <Button
                 variant="primary"
-                className="w-full text-xl"
+                className="w-full text-base"
                 onClick={handleContinue}
                 disabled={isCreatingRoom}
               >
                 {isCreatingRoom ? (
                   <>
                     <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                    Creating Room...
+                    Creating Game...
                   </>
                 ) : (
-                  "Create Room"
+                  "Create Game"
                 )}
               </Button>
             </div>

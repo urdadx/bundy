@@ -27,6 +27,8 @@ export function useMultiplayerGame(options: UseMultiplayerGameOptions = {}) {
     reconnectTimeout,
     rematchRequestedBy,
     isRematch,
+    chatMessages,
+    isOpponentTyping,
     connectionState,
     setConnectionState,
     handleServerMessage,
@@ -49,14 +51,12 @@ export function useMultiplayerGame(options: UseMultiplayerGameOptions = {}) {
     getSettings,
   } = store;
 
-  // Sync session user with store
   useEffect(() => {
     if (session?.user && (!odId || !odName)) {
       setUser(session.user.id, session.user.name || "Player", "jack-avatar.png");
     }
   }, [session?.user, odId, odName, setUser]);
 
-  // WebSocket connection
   const { connect, disconnect, send, isConnected } = useMultiplayerSocket({
     onMessage: handleServerMessage,
     onConnect: () => setConnectionState("connected"),
@@ -65,7 +65,6 @@ export function useMultiplayerGame(options: UseMultiplayerGameOptions = {}) {
     autoReconnect: true,
   });
 
-  // Join room callback
   const joinRoom = useCallback(() => {
     if (!odId || !odName || !store.roomId) {
       console.error("Cannot join room: missing user info or room ID");
@@ -81,27 +80,23 @@ export function useMultiplayerGame(options: UseMultiplayerGameOptions = {}) {
     });
   }, [odId, odName, odAvatar, store.roomId, send]);
 
-  // Set room ID if provided
   useEffect(() => {
     if (roomId) {
       setRoomId(roomId);
     }
   }, [roomId, setRoomId]);
 
-  // Auto join if enabled or when required data is ready
   useEffect(() => {
     if ((autoConnect || roomId) && isConnected && odId && odName && store.roomId) {
       joinRoom();
     }
   }, [autoConnect, roomId, isConnected, odId, odName, store.roomId, joinRoom]);
 
-  // Leave room
   const leaveRoom = useCallback(() => {
     send({ type: "leave_room" });
     reset();
   }, [send, reset]);
 
-  // Set ready status
   const setReady = useCallback(
     (ready: boolean) => {
       send({ type: "player_ready", ready });
@@ -109,7 +104,6 @@ export function useMultiplayerGame(options: UseMultiplayerGameOptions = {}) {
     [send]
   );
 
-  // Update avatar
   const updateAvatar = useCallback(
     (avatar: string) => {
       send({ type: "update_avatar", avatar });
@@ -117,7 +111,6 @@ export function useMultiplayerGame(options: UseMultiplayerGameOptions = {}) {
     [send]
   );
 
-  // Move cursor
   const moveCursor = useCallback(
     (x: number, y: number) => {
       send({ type: "cursor_move", x, y });
@@ -125,12 +118,10 @@ export function useMultiplayerGame(options: UseMultiplayerGameOptions = {}) {
     [send]
   );
 
-  // Leave cursor
   const leaveCursor = useCallback(() => {
     send({ type: "cursor_leave" });
   }, [send]);
 
-  // Claim word
   const claimWord = useCallback(
     (word: string, start: { r: number; c: number }, end: { r: number; c: number }) => {
       send({ type: "claim_word", word, start, end });
@@ -138,12 +129,26 @@ export function useMultiplayerGame(options: UseMultiplayerGameOptions = {}) {
     [send]
   );
 
-  // Request rematch
   const requestRematch = useCallback(() => {
     send({ type: "request_rematch" });
   }, [send]);
 
-  // Send raw message (for advanced usage)
+  const sendChatMessage = useCallback(
+    (content: string) => {
+      if (content.trim()) {
+        send({ type: "chat_message", content: content.trim() });
+      }
+    },
+    [send]
+  );
+
+  const sendTyping = useCallback(
+    (isTyping: boolean) => {
+      send({ type: "typing", isTyping });
+    },
+    [send]
+  );
+
   const sendMessage = useCallback(
     (message: ClientMessage) => {
       send(message);
@@ -152,23 +157,19 @@ export function useMultiplayerGame(options: UseMultiplayerGameOptions = {}) {
   );
 
   return {
-    // Connection
     connect,
     disconnect,
     isConnected,
     connectionState,
     isConnecting: connectionState === "connecting" || connectionState === "reconnecting",
 
-    // Room state
     room,
     roomId: store.roomId,
 
-    // User info
     odId,
     odName,
     odAvatar,
 
-    // Game state
     countdown,
     gameStartTime,
     opponentCursor,
@@ -177,8 +178,9 @@ export function useMultiplayerGame(options: UseMultiplayerGameOptions = {}) {
     reconnectTimeout,
     rematchRequestedBy,
     isRematch,
+    chatMessages,
+    isOpponentTyping,
 
-    // Derived state
     currentPlayer: getCurrentPlayer(),
     opponent: getOpponent(),
     isHost: isHost(),
@@ -196,7 +198,6 @@ export function useMultiplayerGame(options: UseMultiplayerGameOptions = {}) {
     players: room?.players || [],
     myPlayerId: odId,
 
-    // Actions
     joinRoom,
     leaveRoom,
     setReady,
@@ -205,6 +206,8 @@ export function useMultiplayerGame(options: UseMultiplayerGameOptions = {}) {
     leaveCursor,
     claimWord,
     requestRematch,
+    sendChatMessage,
+    sendTyping,
     sendMessage,
     clearError,
     reset,

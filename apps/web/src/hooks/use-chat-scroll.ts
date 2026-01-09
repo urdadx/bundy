@@ -1,17 +1,23 @@
-import { useCallback, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
-export function useChatScroll() {
+export function useChatScroll(deps: any[]) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const isInitialRef = useRef(true)
 
-  const scrollToBottom = useCallback(() => {
-    if (!containerRef.current) return
-
+  useEffect(() => {
     const container = containerRef.current
-    container.scrollTo({
-      top: container.scrollHeight,
-      behavior: 'smooth',
-    })
-  }, [])
+    if (!container) return
 
-  return { containerRef, scrollToBottom }
+    const isAtBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 100
+
+    if (isInitialRef.current || isAtBottom) {
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior: isInitialRef.current ? 'auto' : 'smooth',
+      })
+      isInitialRef.current = false
+    }
+  }, deps)
+
+  return containerRef
 }

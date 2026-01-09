@@ -4,10 +4,13 @@
   "main": "src/index.ts",
   "scripts": {
     "build": "tsdown",
+    "build:ws": "bun build --target=bun --outdir=./dist-ws ./src/ws-server.ts",
     "check-types": "tsc -b",
     "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server",
     "dev": "bun run --hot src/index.ts",
-    "start": "bun run dist/index.js"
+    "dev:ws": "bun run --hot src/ws-server.ts",
+    "start": "bun run dist/index.js",
+    "start:ws": "bun run dist-ws/ws-server.js"
   },
   "dependencies": {
     "hono": "catalog:",

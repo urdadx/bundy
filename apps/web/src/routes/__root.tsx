@@ -1,15 +1,9 @@
 import type { QueryClient } from "@tanstack/react-query";
-
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { HeadContent, Outlet, createRootRouteWithContext } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-
+import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 import type { trpc } from "@/utils/trpc";
-
-import Header from "@/components/header";
 import { useTheme } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
-
 import "../index.css";
 
 export interface RouterAppContext {
@@ -26,7 +20,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
       },
       {
         name: "description",
-        content: "wordsearch is a web application",
+        content: "Multiplayer word search game for learning and fun!",
       },
     ],
     links: [

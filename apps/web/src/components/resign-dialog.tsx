@@ -1,0 +1,64 @@
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogFooter,
+} from "@/components/ui/alert-dialog";
+import maleSad from "@/assets/characters/male-sad.png";
+import femaleSad from "@/assets/characters/female-sad.png";
+import { motion } from "motion/react";
+import { Button } from "./ui/button";
+
+interface ResignDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onConfirm: () => void;
+}
+
+export function ResignDialog({ open, onOpenChange, onConfirm }: ResignDialogProps) {
+  const characterGender = localStorage.getItem("characterGender") as string;
+
+  return (
+    <AlertDialog open={open} onOpenChange={onOpenChange}>
+      <AlertDialogContent className="w-200! p-4 border-none bg-white">
+        <AlertDialogHeader className="flex flex-col mx-auto items-center justify-center">
+          <motion.div
+            initial={{ scale: 0, rotate: -10 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ type: "spring", damping: 12, stiffness: 100 }}
+            className="w-48 h-48 mb-4 mx-auto"
+          >
+            <img
+              src={characterGender === "male" ? maleSad : femaleSad}
+              alt="Sad Character"
+              className="w-full h-full object-contain"
+              loading="lazy"
+            />
+          </motion.div>
+
+          <AlertDialogTitle className="text-3xl text-center font-black text-slate-700 uppercase tracking-tight">
+            ARE YOU SURE?
+          </AlertDialogTitle>
+        </AlertDialogHeader>
+
+        <div className="mt-2 text-center text-slate-500 font-medium">
+          Resigning will end the game and count as a loss.
+        </div>
+
+        <AlertDialogFooter className="mt-4 flex flex-col gap-2 sm:flex-col">
+          <Button variant="primary" className="w-full" onClick={onConfirm}>
+            Yes, Resign
+          </Button>
+          <Button
+            variant="ghost"
+            className="w-full text-slate-400 hover:text-slate-600"
+            onClick={() => onOpenChange(false)}
+          >
+            Cancel
+          </Button>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}

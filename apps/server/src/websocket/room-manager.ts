@@ -1,4 +1,5 @@
 import type { Room, Player, GameSettings, PuzzleData, WSConnection, FoundWord } from "./types";
+import { serializeRoom } from "./types";
 
 // In-memory room storage
 const rooms = new Map<string, Room>();
@@ -268,6 +269,13 @@ export function handleDisconnect(roomId: string, odId: string): void {
   player.isConnected = false;
   player.cursor = null;
 
+  broadcastToRoom(roomId, { 
+    type: "player_disconnected", 
+    odId, 
+    odName: player.name,
+    reconnectTimeout: RECONNECT_TIMEOUT 
+  }, odId);
+
   // Set reconnection timer
   const timer = setTimeout(() => {
     handleReconnectTimeout(roomId, odId);
@@ -282,6 +290,8 @@ function handleReconnectTimeout(roomId: string, odId: string): void {
 
   const player = room.players.get(odId);
   if (!player || player.isConnected) return;
+
+  const odName = player.name;
 
   // Player failed to reconnect - opponent wins if game was in progress
   if (room.status === "playing") {
@@ -307,9 +317,17 @@ function handleReconnectTimeout(roomId: string, odId: string): void {
         }));
       }
     }
+  } else {
+    // If not in game, just notify that player left
+    broadcastToRoom(roomId, { type: "player_left", odId, odName }, odId);
   }
 
   removePlayerFromRoom(roomId, odId);
+
+  // Broadcast updated room state to remaining players if they are in lobby
+  if (room.status !== "playing" && room.status !== "finished") {
+    broadcastToRoom(roomId, { type: "room_state", room: serializeRoom(room) }, odId);
+  }
 }
 
 function clearDisconnectTimer(room: Room, odId: string): void {

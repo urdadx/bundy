@@ -5,11 +5,13 @@ import { AvatarDisplay } from "@/components/avatar-selector";
 import { Button } from "@/components/ui/button";
 import { Loader } from "@/components/loader";
 import { useSession } from "@/lib/auth-client";
-import { Swords, ArrowLeft, CircleCheck } from "lucide-react";
+import { Swords, LogOutIcon } from "lucide-react";
 import { getInviteLink } from "@/lib/multiplayer/api";
 import { cn } from "@/lib/utils";
 import type { AvatarId } from "@/lib/avatars";
 import backgroundImage from "@/assets/background/backgroundCastles.png";
+import { CountdownOverlay } from "@/components/playground/countdown-overlay";
+import { GameConnectionError } from "@/components/playground/game-connection-error";
 
 export const Route = createFileRoute("/lobby/$roomId")({
   component: LobbyPage,
@@ -23,6 +25,7 @@ function LobbyPage() {
   const {
     connect,
     disconnect,
+    leaveRoom,
     setReady,
     updateAvatar,
     isConnecting,
@@ -75,9 +78,10 @@ function LobbyPage() {
   }, [setReady]);
 
   const handleBack = useCallback(() => {
+    leaveRoom();
     disconnect();
     navigate({ to: "/choose" });
-  }, [disconnect, navigate]);
+  }, [leaveRoom, disconnect, navigate]);
 
   const myPlayer = players.find((p: { id: string }) => p.id === myPlayerId);
   const opponent = players.find((p: { id: string }) => p.id !== myPlayerId);
@@ -94,35 +98,11 @@ function LobbyPage() {
   }
 
   if (error) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-50">
-        <div className="flex flex-col items-center gap-4 text-center px-4">
-          <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center">
-            <span className="text-3xl">😵</span>
-          </div>
-          <h2 className="text-xl font-black text-slate-700">Connection Error</h2>
-          <p className="text-slate-500">{error}</p>
-          <Button variant="primary" onClick={handleBack}>
-            Go Back
-          </Button>
-        </div>
-      </div>
-    );
+    return <GameConnectionError error={error} onBack={handleBack} />;
   }
 
-  // Show countdown overlay when game is about to start
   if (countdown !== null && countdown > 0) {
-    return (
-      <div className="flex items-center justify-center min-h-screen backdrop-blur-xs bg-slate-900">
-        <div className="flex flex-col items-center gap-6">
-          <p className="text-white text-xl font-bold uppercase tracking-wide">Game Starting In</p>
-          <div className="w-40 h-40 rounded-full bg-linear-to-br from-green-400 to-green-600 border-8 border-white shadow-2xl flex items-center justify-center animate-pulse">
-            <span className="text-white text-7xl font-black">{countdown}</span>
-          </div>
-          <p className="text-slate-400 text-base">Get ready!</p>
-        </div>
-      </div>
-    );
+    return <CountdownOverlay countdown={countdown} />;
   }
 
   return (
@@ -137,7 +117,7 @@ function LobbyPage() {
     >
       <header className="flex items-center justify-between p-4">
         <Button variant="incorrect" onClick={handleBack} className="gap-2">
-          <ArrowLeft className="w-4 h-4" />
+          <LogOutIcon className="w-4 h-4  scale-x-[-1]" />
           Leave
         </Button>
         <h1 className="font-black text-slate-500 uppercase text-3xl tracking-wide">LOBBY</h1>
@@ -182,7 +162,7 @@ function LobbyPage() {
                   showBorder={false}
                 />
               ) : (
-                <div className="text-blue-500 text-5xl font-black">?</div>
+                <div className="text-blue-500 text-6xl font-black">?</div>
               )}
             </div>
             <div className="text-center">
@@ -202,13 +182,13 @@ function LobbyPage() {
           <div className="w-full space-y-4">
             <div className="space-y-2">
               <div className="flex gap-2">
-                <div className="flex-1 flex items-center bg-white border-2 border-slate-200 rounded-xl px-4 py-2 overflow-hidden">
+                <div className="flex-1 flex items-center bg-white border-2 border-green-500 rounded-xl px-4 py-2 overflow-hidden">
                   <span className="text-base font-medium text-slate-500 truncate">
                     {getInviteLink(roomId)}
                   </span>
                 </div>
-                <Button variant="primary" size="default" onClick={handleCopyLink} className="">
-                  {copiedLink ? "Copied" : "Copy Link"}
+                <Button variant="primary" size="default" onClick={handleCopyLink}>
+                  {copiedLink ? "Link Copied" : "Copy Invite Link"}
                 </Button>
               </div>
             </div>
@@ -219,7 +199,6 @@ function LobbyPage() {
           {myPlayer?.isReady ? (
             <div className="flex flex-col items-center gap-2">
               <div className="flex items-center gap-2 text-green-600">
-                <CircleCheck className="w-5 h-5" />
                 <span className="font-bold uppercase text-2xl">You're Ready!</span>
               </div>
               <p className="text-lg font-semibold text-slate-500">
@@ -229,11 +208,11 @@ function LobbyPage() {
           ) : (
             <Button
               variant="primary"
-              className="w-full text-xl h-14"
+              className="w-full text-lg h-14"
               onClick={handleReady}
               disabled={!opponent}
             >
-              {opponent ? "Ready!" : "Waiting for Opponent..."}
+              {opponent ? "Click to start!" : "Waiting for Opponent..."}
             </Button>
           )}
         </div>

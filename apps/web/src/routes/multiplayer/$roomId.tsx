@@ -1,24 +1,21 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback, useState, useRef } from "react";
 import { useMultiplayerGame } from "@/hooks/use-multiplayer-game";
 import { MultiplayerWordSearch } from "@/components/playground/board/multiplayer-word-search";
 import { MultiplayerResultDialog } from "@/components/multiplayer-result-dialog";
 import { MultiplayerGameHeader } from "@/components/playground/multiplayer-game-header";
-import { Button } from "@/components/ui/button";
 import { Loader } from "@/components/loader";
-import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 import { SideMenu } from "@/components/ui/side-menu";
 import { ChatPanel } from "@/components/playground/chat/chat-panel";
-import { WordListPanel, GameActionsPanel } from "@/components/layouts/playground-layout";
+import { WordListPanel, GameActionsPanelMultiplayer } from "@/components/layouts/playground-layout";
+import { CountdownOverlay } from "@/components/playground/countdown-overlay";
+import { GameConnectionError } from "@/components/playground/game-connection-error";
+import { sleep } from "@/lib/utils";
 
 export const Route = createFileRoute("/multiplayer/$roomId")({
   component: MultiplayerGamePage,
 });
-
-const PLAYER_COLORS = {
-  host: "#1cb0f6",
-  guest: "#ff4b4b",
-};
 
 function MultiplayerGamePage() {
   const { roomId } = Route.useParams();
@@ -48,24 +45,20 @@ function MultiplayerGamePage() {
     isHost,
     rematchRequestedBy,
     requestRematch,
+    leaveRoom,
     gameStartTime,
     countdown,
     isRematch,
+    chatMessages,
+    sendChatMessage,
+    sendTyping,
+    isOpponentTyping,
   } = useMultiplayerGame({ roomId });
 
   const [showResultDialog, setShowResultDialog] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState<number>(settings?.timeLimit || 600);
-  const [chatMessages, setChatMessages] = useState<
-    Array<{
-      id: string;
-      content: string;
-      senderId: string;
-      senderName: string;
-      timestamp: Date;
-    }>
-  >([]);
+  const isResigningRef = useRef(false);
 
-  // Connect to WebSocket on mount
   useEffect(() => {
     if (roomId) {
       connect();
@@ -75,7 +68,6 @@ function MultiplayerGamePage() {
     };
   }, [roomId, connect, disconnect]);
 
-  // Show result dialog when game finishes
   useEffect(() => {
     if (phase === "finished") {
       setShowResultDialog(true);
@@ -84,14 +76,12 @@ function MultiplayerGamePage() {
     }
   }, [phase]);
 
-  // Navigate back to lobby if game resets (e.g. rematch), but not if countdown is active or during rematch
   useEffect(() => {
     if ((phase === "waiting" || phase === "ready") && countdown === null && !isRematch) {
       navigate({ to: "/lobby/$roomId", params: { roomId } });
     }
   }, [phase, roomId, navigate, countdown, isRematch]);
 
-  // Game timer countdown
   useEffect(() => {
     if (phase !== "playing" || !gameStartTime || !settings?.timeLimit) {
       return;
@@ -142,20 +132,12 @@ function MultiplayerGamePage() {
     navigate({ to: "/choose" });
   }, [disconnect, navigate]);
 
-  const handleSendMessage = useCallback(
-    (message: string) => {
-      // TODO: Implement chat message sending via WebSocket
-      const newMessage = {
-        id: Date.now().toString(),
-        content: message,
-        senderId: myPlayerId || "",
-        senderName: currentPlayer?.name || "Player",
-        timestamp: new Date(),
-      };
-      setChatMessages((prev) => [...prev, newMessage]);
-    },
-    [myPlayerId, currentPlayer?.name],
-  );
+  const handleResign = useCallback(() => {
+    isResigningRef.current = true;
+    leaveRoom();
+    toast.success("You resigned from the game");
+    navigate({ to: "/arena/lessons" });
+  }, [leaveRoom, navigate]);
 
   if (isConnecting) {
     return (
@@ -168,21 +150,8 @@ function MultiplayerGamePage() {
     );
   }
 
-  if (error) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-50">
-        <div className="flex flex-col items-center gap-4 text-center px-4">
-          <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center">
-            <span className="text-3xl">😵</span>
-          </div>
-          <h2 className="text-xl font-black text-slate-700">Connection Error</h2>
-          <p className="text-slate-500">{error}</p>
-          <Button variant="primary" onClick={handleBack}>
-            Go Back
-          </Button>
-        </div>
-      </div>
-    );
+  if (error && !isResigningRef.current) {
+    return <GameConnectionError error={error} onBack={handleBack} />;
   }
 
   if (!puzzle) {
@@ -198,19 +167,8 @@ function MultiplayerGamePage() {
 
   const foundWordsSet = new Set(foundWords.map((f) => f.word));
 
-  // Show countdown overlay when game is about to start (e.g., rematch)
   if (countdown !== null && countdown > 0) {
-    return (
-      <div className="flex items-center justify-center min-h-screen backdrop-blur-xs bg-slate-900">
-        <div className="flex flex-col items-center gap-6">
-          <p className="text-white text-xl font-bold uppercase tracking-wide">Game Starting In</p>
-          <div className="w-40 h-40 rounded-full bg-linear-to-br from-green-400 to-green-600 border-8 border-white shadow-2xl flex items-center justify-center animate-pulse">
-            <span className="text-white text-7xl font-black">{countdown}</span>
-          </div>
-          <p className="text-slate-400 text-base">Get ready!</p>
-        </div>
-      </div>
-    );
+    return <CountdownOverlay countdown={countdown} />;
   }
 
   return (
@@ -256,11 +214,13 @@ function MultiplayerGamePage() {
               <ChatPanel
                 messages={chatMessages.map((msg) => ({
                   id: msg.id,
-                  content: msg.content,
-                  senderId: msg.senderId,
-                  senderName: msg.senderName,
-                  timestamp: msg.timestamp,
+                  message: msg.content,
+                  sender: {
+                    name: msg.senderName,
+                    avatar: msg.senderAvatar,
+                  },
                   isOwn: msg.senderId === myPlayerId,
+                  timestamp: new Date(msg.timestamp),
                 }))}
                 currentUser={{
                   name: currentPlayer?.name || "Player",
@@ -271,11 +231,13 @@ function MultiplayerGamePage() {
                   avatar: opponent?.avatar,
                   isOnline: true,
                 }}
-                onSendMessage={handleSendMessage}
+                isOpponentTyping={isOpponentTyping}
+                onSendMessage={sendChatMessage}
+                onTyping={sendTyping}
                 disabled={phase !== "playing"}
               />
 
-              <GameActionsPanel />
+              <GameActionsPanelMultiplayer onResign={handleResign} />
             </div>
           </div>
         </div>

@@ -1,0 +1,48 @@
+# ============================================
+# Docker Compose for Production Reference
+# ============================================
+#
+# This file is a reference for production deployment.
+# For Dokploy, you'll configure each service separately.
+#
+# Environment variables should be set in Dokploy UI.
+# ============================================
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      args:
+        VITE_SERVER_URL: ${VITE_SERVER_URL}
+        VITE_WS_URL: ${VITE_WS_URL}
+    ports:
+      - "80:80"
+    restart: always
+
+  server:
+    build:
+      context: .
+      dockerfile: apps/server/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_URL=${DATABASE_URL}
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+      - BETTER_AUTH_URL=${BETTER_AUTH_URL}
+      - CORS_ORIGIN=${CORS_ORIGIN}
+    restart: always
+
+  websocket:
+    build:
+      context: .
+      dockerfile: apps/server/Dockerfile.websocket
+    ports:
+      - "3003:3003"
+    environment:
+      - NODE_ENV=production
+      - WS_PORT=3003
+      - CORS_ORIGIN=${CORS_ORIGIN}
+    restart: always

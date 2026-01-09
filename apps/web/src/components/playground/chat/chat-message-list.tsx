@@ -1,34 +1,39 @@
-import { cn } from "@/lib/utils"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { ChatMessage, type ChatMessageProps } from "./chat-message"
-import { Message } from "@/components/ai-elements/message"
-import { MessageBubbleIcon } from "@/components/message-bubble-icon"
+import { cn } from "@/lib/utils";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { ChatMessage } from "./chat-message";
+import { Message } from "@/components/ai-elements/message";
+import { MessageBubbleIcon } from "@/components/message-bubble-icon";
+import { useChatScroll } from "@/hooks/use-chat-scroll";
 
 export interface Message {
-  id: string
-  message: string
+  id: string;
+  message: string;
   sender: {
-    name: string
-    avatar?: string
-  }
-  isOwn: boolean
-  timestamp: Date
+    name: string;
+    avatar?: string;
+  };
+  isOwn: boolean;
+  timestamp: Date;
 }
 
 interface ChatMessageListProps {
-  messages: Message[]
-  className?: string
+  messages: Message[];
+  opponentTyping?: {
+    name: string;
+    avatar?: string;
+  };
+  className?: string;
 }
 
-export function ChatMessageList({ messages, className }: ChatMessageListProps) {
-  if (messages.length === 0) {
-    return (
-      <ChatEmptyState />
-    )
+export function ChatMessageList({ messages, opponentTyping, className }: ChatMessageListProps) {
+  const scrollRef = useChatScroll([messages, !!opponentTyping]);
+
+  if (messages.length === 0 && !opponentTyping) {
+    return <ChatEmptyState />;
   }
 
   return (
-    <ScrollArea className={cn("h-full", className)}>
+    <ScrollArea className={cn("h-full", className)} ref={scrollRef}>
       <div className="flex flex-col gap-3 p-3">
         {messages.map((msg) => (
           <ChatMessage
@@ -39,9 +44,10 @@ export function ChatMessageList({ messages, className }: ChatMessageListProps) {
             timestamp={msg.timestamp}
           />
         ))}
+        {opponentTyping && <ChatMessage sender={opponentTyping} isOwn={false} isTyping={true} />}
       </div>
     </ScrollArea>
-  )
+  );
 }
 
 function ChatEmptyState() {
@@ -52,10 +58,8 @@ function ChatEmptyState() {
       </div>
       <div className="space-y-1">
         <h3 className="text-sm font-bold text-slate-600">No messages yet</h3>
-        <p className="text-xs text-slate-400">
-          Send a message to chat with your opponent
-        </p>
+        <p className="text-xs text-slate-400">Send a message to chat with your opponent</p>
       </div>
     </div>
-  )
+  );
 }

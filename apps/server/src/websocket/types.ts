@@ -10,7 +10,7 @@ export interface Player {
   score: number;
   wordsFound: string[];
   cursor: { x: number; y: number } | null;
-  color: string; // Player's color for cursor and found words
+  color: string;
 }
 
 export interface Room {
@@ -77,13 +77,15 @@ export type ClientMessage =
   | { type: "cursor_leave" }
   | { type: "claim_word"; word: string; start: { r: number; c: number }; end: { r: number; c: number } }
   | { type: "request_rematch" }
+  | { type: "chat_message"; content: string }
+  | { type: "typing"; isTyping: boolean }
   | { type: "ping" };
 
 // Server -> Client messages
 export type ServerMessage =
   | { type: "room_state"; room: SerializedRoom }
   | { type: "player_joined"; player: Player }
-  | { type: "player_left"; odId: string }
+  | { type: "player_left"; odId: string; odName: string }
   | { type: "player_ready_changed"; odId: string; ready: boolean }
   | { type: "player_avatar_changed"; odId: string; avatar: string }
   | { type: "game_starting"; countdown: number }
@@ -93,11 +95,13 @@ export type ServerMessage =
   | { type: "word_claimed"; word: string; odId: string; playerName: string; start: { r: number; c: number }; end: { r: number; c: number }; hostScore: number; guestScore: number }
   | { type: "word_claim_rejected"; word: string; reason: string }
   | { type: "game_ended"; winnerId: string | null; isDraw: boolean; hostScore: number; guestScore: number }
-  | { type: "player_disconnected"; odId: string; reconnectTimeout: number }
+  | { type: "player_disconnected"; odId: string; odName: string; reconnectTimeout: number }
   | { type: "player_reconnected"; odId: string }
   | { type: "opponent_left"; reason: string }
   | { type: "rematch_requested"; odId: string }
   | { type: "rematch_starting"; countdown: number }
+  | { type: "chat_message"; id: string; senderId: string; senderName: string; senderAvatar: string; content: string; timestamp: number }
+  | { type: "player_typing"; odId: string; isTyping: boolean }
   | { type: "error"; message: string }
   | { type: "pong" };
 

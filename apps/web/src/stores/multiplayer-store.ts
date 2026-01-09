@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
+import { toast } from "sonner";
 import type {
   SerializedRoom,
   Player,
@@ -11,7 +12,6 @@ import type {
   ConnectionState,
 } from "@/lib/multiplayer/types";
 
-// Opponent cursor position
 interface OpponentCursor {
   odId: string;
   x: number;
@@ -20,107 +20,88 @@ interface OpponentCursor {
   name: string;
 }
 
-// Store state
+export interface ChatMessage {
+  id: string;
+  senderId: string;
+  senderName: string;
+  senderAvatar: string;
+  content: string;
+  timestamp: number;
+}
+
 interface MultiplayerState {
-  // Connection
   connectionState: ConnectionState;
   
-  // User info
   odId: string | null;
   odName: string | null;
   odAvatar: string | null;
   
-  // Room state
   room: SerializedRoom | null;
   roomId: string | null;
   
-  // Game state
   countdown: number | null;
   gameStartTime: number | null;
   
-  // Opponent cursor
   opponentCursor: OpponentCursor | null;
   
-  // Rematch
   rematchRequestedBy: string | null;
   isRematch: boolean;
   
-  // Error
   error: string | null;
   
-  // Disconnection
   disconnectedPlayerId: string | null;
   reconnectTimeout: number | null;
+  
+  chatMessages: ChatMessage[];
+  isOpponentTyping: boolean;
 }
 
-// Store actions
 interface MultiplayerActions {
-  // User setup
   setUser: (odId: string, odName: string, odAvatar: string) => void;
   
-  // Connection
   setConnectionState: (state: ConnectionState) => void;
   
-  // Room
   setRoom: (room: SerializedRoom | null) => void;
   setRoomId: (roomId: string | null) => void;
   
-  // Handle server messages
   handleServerMessage: (message: ServerMessage) => void;
   
-  // Game actions
   setCountdown: (countdown: number | null) => void;
   
-  // Clear state
   reset: () => void;
   clearError: () => void;
 }
 
-// Derived getters
 interface MultiplayerGetters {
-  // Get current player
   getCurrentPlayer: () => Player | null;
   
-  // Get opponent player
   getOpponent: () => Player | null;
   
-  // Get if current user is host
   isHost: () => boolean;
   
-  // Get current player's score
   getMyScore: () => number;
   
-  // Get opponent's score
   getOpponentScore: () => number;
   
-  // Get all found words
   getFoundWords: () => FoundWord[];
   
-  // Get words found by current player
   getMyFoundWords: () => FoundWord[];
   
-  // Get words found by opponent
   getOpponentFoundWords: () => FoundWord[];
   
-  // Get remaining words count
   getRemainingWordsCount: () => number;
   
-  // Get game status
   getGameStatus: () => RoomStatus | null;
   
-  // Get winner info
   getWinner: () => { player: Player; isDraw: boolean } | null;
   
-  // Get puzzle
   getPuzzle: () => PuzzleData | null;
   
-  // Get settings
   getSettings: () => GameSettings | null;
 }
 
 type MultiplayerStore = MultiplayerState & MultiplayerActions & MultiplayerGetters;
 
-// Initial state
 const initialState: MultiplayerState = {
   connectionState: "disconnected",
   odId: null,
@@ -136,6 +117,8 @@ const initialState: MultiplayerState = {
   error: null,
   disconnectedPlayerId: null,
   reconnectTimeout: null,
+  chatMessages: [],
+  isOpponentTyping: false,
 };
 
 export const useMultiplayerStore = create<MultiplayerStore>()(
@@ -172,7 +155,6 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
       set(initialState);
     },
 
-    // Handle incoming server messages
     handleServerMessage: (message) => {
       const state = get();
 
@@ -184,6 +166,10 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
         case "player_joined": {
           const room = state.room;
           if (!room) break;
+          
+          if (message.player.id !== state.odId) {
+            toast.success(`${message.player.name} has joined the game`);
+          }
           
           // Check if player already exists
           const existingIndex = room.players.findIndex(p => p.id === message.player.id);
@@ -204,6 +190,10 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
         case "player_left": {
           const room = state.room;
           if (!room) break;
+          
+          toast.info(`${message.odName} has left the game`, {
+            duration: 4000,
+          });
           
           set({
             room: {
@@ -324,7 +314,6 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
         }
 
         case "word_claim_rejected":
-          // Could show a toast or visual feedback
           console.warn(`Word claim rejected: ${message.word} - ${message.reason}`);
           break;
 
@@ -354,6 +343,7 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
         }
 
         case "player_disconnected":
+          toast.info(`${message.odName} disconnected`);
           set({
             disconnectedPlayerId: message.odId,
             reconnectTimeout: message.reconnectTimeout,
@@ -363,6 +353,11 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
         case "player_reconnected": {
           const room = state.room;
           if (!room) break;
+          
+          const player = room.players.find(p => p.id === message.odId);
+          if (player) {
+            toast.success(`${player.name} reconnected`);
+          }
           
           set({
             room: {
@@ -415,12 +410,31 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
           break;
         }
 
+        case "chat_message": {
+          const newMessage: ChatMessage = {
+            id: message.id,
+            senderId: message.senderId,
+            senderName: message.senderName,
+            senderAvatar: message.senderAvatar,
+            content: message.content,
+            timestamp: message.timestamp,
+          };
+          set({ chatMessages: [...state.chatMessages, newMessage] });
+          break;
+        }
+
+        case "player_typing": {
+          if (message.odId !== state.odId) {
+            set({ isOpponentTyping: message.isTyping });
+          }
+          break;
+        }
+
         case "error":
           set({ error: message.message });
           break;
 
         case "pong":
-          // Connection is alive, no action needed
           break;
       }
     },

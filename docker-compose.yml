@@ -1,0 +1,76 @@
+# ============================================
+# Docker Compose for Local Development/Testing
+# ============================================
+#
+# Usage:
+#   docker-compose up --build
+#
+# For production, use individual Dockerfiles with Dokploy
+# ============================================
+
+services:
+  # Web Client (React + Vite)
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      args:
+        VITE_SERVER_URL: ${VITE_SERVER_URL:-http://localhost:3000}
+        VITE_WS_URL: ${VITE_WS_URL:-ws://localhost:3003}
+    ports:
+      - "3001:80"
+    depends_on:
+      - server
+      - websocket
+    networks:
+      - wordsearch-network
+    restart: unless-stopped
+
+  # API Server (Hono + tRPC + Bun)
+  server:
+    build:
+      context: .
+      dockerfile: apps/server/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_URL=${DATABASE_URL}
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+      - BETTER_AUTH_URL=${BETTER_AUTH_URL:-http://localhost:3000}
+      - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost:3001}
+    networks:
+      - wordsearch-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+  # WebSocket Server
+  websocket:
+    build:
+      context: .
+      dockerfile: apps/server/Dockerfile.websocket
+    ports:
+      - "3003:3003"
+    environment:
+      - NODE_ENV=production
+      - WS_PORT=3003
+      - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost:3001}
+    networks:
+      - wordsearch-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3003/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+networks:
+  wordsearch-network:
+    driver: bridge
