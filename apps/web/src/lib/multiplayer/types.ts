@@ -19,7 +19,7 @@ export interface GameSettings {
   difficulty: string;
   gridSize: number;
   wordCount: number;
-  timeLimit: number; // in seconds (default 600 = 10 min)
+  timeLimit: number; 
 }
 
 export interface PuzzleData {
@@ -44,6 +44,8 @@ export type RoomStatus = "waiting" | "ready" | "playing" | "finished";
 export interface SerializedRoom {
   id: string;
   hostId: string;
+  guestId: string | null;
+  players: Player[];
   settings: GameSettings;
   status: RoomStatus;
   puzzle: PuzzleData | null;
