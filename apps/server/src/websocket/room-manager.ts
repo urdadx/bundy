@@ -71,18 +71,15 @@ export function createRoom(hostId: string, hostName: string, hostAvatar: string,
   return room;
 }
 
-// Get a room by ID
 export function getRoom(roomId: string): Room | undefined {
   return rooms.get(roomId);
 }
 
-// Get room by player ID
 export function getRoomByPlayerId(playerId: string): Room | undefined {
   const roomId = playerRooms.get(playerId);
   return roomId ? rooms.get(roomId) : undefined;
 }
 
-// Join a room as guest
 export function joinRoom(roomId: string, odId: string, odName: string, odAvatar: string): { room: Room; isReconnection: boolean } | null {
   const room = rooms.get(roomId);
   if (!room) return null;
@@ -119,7 +116,6 @@ export function joinRoom(roomId: string, odId: string, odName: string, odAvatar:
   return { room, isReconnection: false };
 }
 
-// Set player ready status
 export function setPlayerReady(roomId: string, odId: string, ready: boolean): Room | null {
   const room = rooms.get(roomId);
   if (!room) return null;
@@ -142,7 +138,6 @@ export function setPlayerReady(roomId: string, odId: string, ready: boolean): Ro
   return room;
 }
 
-// Start the game
 export function startGame(roomId: string, puzzle: PuzzleData): Room | null {
   const room = rooms.get(roomId);
   if (!room || room.status !== "ready") return null;
@@ -162,7 +157,6 @@ export function startGame(roomId: string, puzzle: PuzzleData): Room | null {
   return room;
 }
 
-// Claim a word
 export function claimWord(
   roomId: string,
   odId: string,
@@ -202,7 +196,6 @@ export function claimWord(
     return { success: false, reason: "Invalid word position" };
   }
 
-  // Claim the word
   const foundWord: FoundWord = {
     word,
     foundBy: odId,
@@ -222,7 +215,6 @@ export function claimWord(
   return { success: true, room };
 }
 
-// Update player cursor position
 export function updateCursor(roomId: string, odId: string, x: number, y: number): Player | null {
   const room = rooms.get(roomId);
   if (!room) return null;
@@ -234,7 +226,6 @@ export function updateCursor(roomId: string, odId: string, x: number, y: number)
   return player;
 }
 
-// Clear player cursor
 export function clearCursor(roomId: string, odId: string): void {
   const room = rooms.get(roomId);
   if (!room) return;
@@ -245,7 +236,6 @@ export function clearCursor(roomId: string, odId: string): void {
   }
 }
 
-// End the game
 export function endGame(room: Room): void {
   room.status = "finished";
   room.gameEndedAt = Date.now();
@@ -268,7 +258,6 @@ export function endGame(room: Room): void {
   }
 }
 
-// Handle player disconnection
 export function handleDisconnect(roomId: string, odId: string): void {
   const room = rooms.get(roomId);
   if (!room) return;
@@ -287,7 +276,6 @@ export function handleDisconnect(roomId: string, odId: string): void {
   room.disconnectTimers.set(odId, timer);
 }
 
-// Handle reconnection timeout
 function handleReconnectTimeout(roomId: string, odId: string): void {
   const room = rooms.get(roomId);
   if (!room) return;
@@ -304,7 +292,6 @@ function handleReconnectTimeout(roomId: string, odId: string): void {
       room.status = "finished";
       room.gameEndedAt = Date.now();
 
-      // Broadcast to opponent
       const opponentWs = connections.get(opponent.id);
       if (opponentWs) {
         opponentWs.send(JSON.stringify({
@@ -322,11 +309,9 @@ function handleReconnectTimeout(roomId: string, odId: string): void {
     }
   }
 
-  // Remove player from room
   removePlayerFromRoom(roomId, odId);
 }
 
-// Clear disconnect timer
 function clearDisconnectTimer(room: Room, odId: string): void {
   const timer = room.disconnectTimers.get(odId);
   if (timer) {
@@ -335,7 +320,6 @@ function clearDisconnectTimer(room: Room, odId: string): void {
   }
 }
 
-// Handle player reconnection
 export function handleReconnect(roomId: string, odId: string): Room | null {
   const room = rooms.get(roomId);
   if (!room) return null;
@@ -349,7 +333,6 @@ export function handleReconnect(roomId: string, odId: string): Room | null {
   return room;
 }
 
-// Remove player from room
 export function removePlayerFromRoom(roomId: string, odId: string): void {
   const room = rooms.get(roomId);
   if (!room) return;
@@ -386,7 +369,6 @@ export function removePlayerFromRoom(roomId: string, odId: string): void {
   }
 }
 
-// Set up rematch
 export function setupRematch(roomId: string): Room | null {
   const room = rooms.get(roomId);
   if (!room || room.status !== "finished") return null;
@@ -410,7 +392,6 @@ export function setupRematch(roomId: string): Room | null {
   return room;
 }
 
-// Vote for rematch
 export function voteForRematch(roomId: string, odId: string): { room: Room | null, totalVotes: number } {
   const room = rooms.get(roomId);
   if (!room || room.status !== "finished") return { room: null, totalVotes: 0 };
@@ -425,22 +406,18 @@ export function voteForRematch(roomId: string, odId: string): { room: Room | nul
   return { room: null, totalVotes: room.rematchVotes.size };
 }
 
-// Store connection
 export function setConnection(odId: string, ws: WSConnection): void {
   connections.set(odId, ws);
 }
 
-// Get connection
 export function getConnection(odId: string): WSConnection | undefined {
   return connections.get(odId);
 }
 
-// Remove connection
 export function removeConnection(odId: string): void {
   connections.delete(odId);
 }
 
-// Broadcast to all players in a room except sender
 export function broadcastToRoom(roomId: string, message: object, excludeId?: string): void {
   const room = rooms.get(roomId);
   if (!room) return;
@@ -457,12 +434,10 @@ export function broadcastToRoom(roomId: string, message: object, excludeId?: str
   }
 }
 
-// Broadcast to all players in a room
 export function broadcastToAll(roomId: string, message: object): void {
   broadcastToRoom(roomId, message, undefined);
 }
 
-// Get scores for a room
 export function getScores(room: Room): { hostScore: number; guestScore: number } {
   const host = room.players.get(room.hostId);
   const guest = room.guestId ? room.players.get(room.guestId) : null;
@@ -473,7 +448,6 @@ export function getScores(room: Room): { hostScore: number; guestScore: number }
   };
 }
 
-// Export rooms for debugging
 export function getAllRooms(): Map<string, Room> {
   return rooms;
 }

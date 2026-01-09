@@ -90,7 +90,7 @@ export type ServerMessage =
   | { type: "player_reconnected"; odId: string }
   | { type: "opponent_left"; reason: string }
   | { type: "rematch_requested"; odId: string }
-  | { type: "rematch_starting" }
+  | { type: "rematch_starting"; countdown: number }
   | { type: "error"; message: string }
   | { type: "pong" };
 

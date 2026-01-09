@@ -3,11 +3,13 @@ import { useEffect, useCallback, useState } from "react";
 import { useMultiplayerGame } from "@/hooks/use-multiplayer-game";
 import { MultiplayerWordSearch } from "@/components/playground/board/multiplayer-word-search";
 import { MultiplayerResultDialog } from "@/components/multiplayer-result-dialog";
-import { AvatarDisplay } from "@/components/avatar-selector";
+import { MultiplayerGameHeader } from "@/components/playground/multiplayer-game-header";
 import { Button } from "@/components/ui/button";
 import { Loader } from "@/components/loader";
-import { ArrowLeft, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SideMenu } from "@/components/ui/side-menu";
+import { ChatPanel } from "@/components/playground/chat/chat-panel";
+import { WordListPanel, GameActionsPanel } from "@/components/layouts/playground-layout";
 
 export const Route = createFileRoute("/multiplayer/$roomId")({
   component: MultiplayerGamePage,
@@ -47,10 +49,21 @@ function MultiplayerGamePage() {
     rematchRequestedBy,
     requestRematch,
     gameStartTime,
+    countdown,
+    isRematch,
   } = useMultiplayerGame({ roomId });
 
   const [showResultDialog, setShowResultDialog] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState<number>(settings?.timeLimit || 600);
+  const [chatMessages, setChatMessages] = useState<
+    Array<{
+      id: string;
+      content: string;
+      senderId: string;
+      senderName: string;
+      timestamp: Date;
+    }>
+  >([]);
 
   // Connect to WebSocket on mount
   useEffect(() => {
@@ -66,15 +79,17 @@ function MultiplayerGamePage() {
   useEffect(() => {
     if (phase === "finished") {
       setShowResultDialog(true);
+    } else {
+      setShowResultDialog(false);
     }
   }, [phase]);
 
-  // Navigate back to lobby if game resets (e.g. rematch)
+  // Navigate back to lobby if game resets (e.g. rematch), but not if countdown is active or during rematch
   useEffect(() => {
-    if (phase === "waiting" || phase === "ready") {
+    if ((phase === "waiting" || phase === "ready") && countdown === null && !isRematch) {
       navigate({ to: "/lobby/$roomId", params: { roomId } });
     }
-  }, [phase, roomId, navigate]);
+  }, [phase, roomId, navigate, countdown, isRematch]);
 
   // Game timer countdown
   useEffect(() => {
@@ -93,12 +108,6 @@ function MultiplayerGamePage() {
 
     return () => clearInterval(interval);
   }, [phase, gameStartTime, settings?.timeLimit]);
-
-  const formatTime = useCallback((seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, "0")}`;
-  }, []);
 
   const getGameResult = useCallback(() => {
     if (room?.isDraw) return "draw";
@@ -132,6 +141,21 @@ function MultiplayerGamePage() {
     disconnect();
     navigate({ to: "/choose" });
   }, [disconnect, navigate]);
+
+  const handleSendMessage = useCallback(
+    (message: string) => {
+      // TODO: Implement chat message sending via WebSocket
+      const newMessage = {
+        id: Date.now().toString(),
+        content: message,
+        senderId: myPlayerId || "",
+        senderName: currentPlayer?.name || "Player",
+        timestamp: new Date(),
+      };
+      setChatMessages((prev) => [...prev, newMessage]);
+    },
+    [myPlayerId, currentPlayer?.name],
+  );
 
   if (isConnecting) {
     return (
@@ -172,131 +196,91 @@ function MultiplayerGamePage() {
     );
   }
 
-  const myColor = currentPlayer?.isHost ? PLAYER_COLORS.host : PLAYER_COLORS.guest;
-  const opponentColor = currentPlayer?.isHost ? PLAYER_COLORS.guest : PLAYER_COLORS.host;
+  const foundWordsSet = new Set(foundWords.map((f) => f.word));
+
+  // Show countdown overlay when game is about to start (e.g., rematch)
+  if (countdown !== null && countdown > 0) {
+    return (
+      <div className="flex items-center justify-center min-h-screen backdrop-blur-xs bg-slate-900">
+        <div className="flex flex-col items-center gap-6">
+          <p className="text-white text-xl font-bold uppercase tracking-wide">Game Starting In</p>
+          <div className="w-40 h-40 rounded-full bg-linear-to-br from-green-400 to-green-600 border-8 border-white shadow-2xl flex items-center justify-center animate-pulse">
+            <span className="text-white text-7xl font-black">{countdown}</span>
+          </div>
+          <p className="text-slate-400 text-base">Get ready!</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
-      <header className="flex items-center justify-between p-4 bg-white border-b-2 border-slate-100">
-        <Button variant="ghost" onClick={handleBack} className="gap-2">
-          <ArrowLeft className="w-4 h-4" />
-          Leave
-        </Button>
+    <div className="flex">
+      <SideMenu />
+      <div className="min-h-screen w-full bg-slate-50">
+        <div className="flex justify-center items-start w-full min-h-screen py-6 px-4">
+          <div className="flex gap-6 max-w-7xl w-full">
+            <div className="flex-3 flex flex-col items-center gap-4">
+              <div className="w-full">
+                <MultiplayerGameHeader
+                  player1={{
+                    score: myScore,
+                    name: currentPlayer?.name || "Player",
+                    avatar: currentPlayer?.avatar,
+                  }}
+                  player2={{
+                    score: opponentScore,
+                    name: opponent?.name || "Guest",
+                    avatar: opponent?.avatar,
+                  }}
+                  timeRemaining={timeRemaining}
+                />
+              </div>
 
-        <div
-          className={cn(
-            "flex items-center gap-2",
-            timeRemaining <= 60 ? "text-red-500" : "text-slate-700",
-          )}
-        >
-          <Clock className="w-5 h-5" />
-          <span className="font-bold text-lg">{formatTime(timeRemaining)}</span>
-        </div>
+              <div className="shrink-0">
+                <MultiplayerWordSearch
+                  puzzle={puzzle}
+                  players={players}
+                  myPlayerId={myPlayerId || ""}
+                  foundWords={foundWords}
+                  opponentCursor={opponentCursor}
+                  onWordFound={handleWordFound}
+                  onCursorMove={handleCursorMove}
+                  onCursorLeave={handleCursorLeave}
+                />
+              </div>
+            </div>
 
-        {/* Theme indicator */}
-        <div className="text-sm text-slate-500">{settings?.theme || "Word Search"}</div>
-      </header>
+            <div className="hidden lg:flex flex-2 flex-col gap-3">
+              <WordListPanel words={puzzle.words.map((w) => w.word)} foundWords={foundWordsSet} />
 
-      {/* Score bar */}
-      <div className="flex items-center justify-center gap-8 p-4 bg-white border-b border-slate-100">
-        {/* My score */}
-        <div className="flex items-center gap-3 min-w-[140px] justify-end">
-          <div className="text-right">
-            <p className="text-sm font-black text-slate-700 leading-[1.1] truncate max-w-[100px]">
-              {currentPlayer?.name || "Player"}
-            </p>
+              <ChatPanel
+                messages={chatMessages.map((msg) => ({
+                  id: msg.id,
+                  content: msg.content,
+                  senderId: msg.senderId,
+                  senderName: msg.senderName,
+                  timestamp: msg.timestamp,
+                  isOwn: msg.senderId === myPlayerId,
+                }))}
+                currentUser={{
+                  name: currentPlayer?.name || "Player",
+                  avatar: currentPlayer?.avatar,
+                }}
+                opponent={{
+                  name: opponent?.name || "Guest",
+                  avatar: opponent?.avatar,
+                  isOnline: true,
+                }}
+                onSendMessage={handleSendMessage}
+                disabled={phase !== "playing"}
+              />
 
-            <p className="text-2xl font-black leading-none" style={{ color: myColor }}>
-              {myScore}
-            </p>
-          </div>
-          <div
-            className="w-12 h-12 rounded-xl shrink-0 flex items-center justify-center p-1 border-2"
-            style={{ backgroundColor: `${myColor}20`, borderColor: myColor }}
-          >
-            <AvatarDisplay
-              avatarId={currentPlayer?.avatar || "jack-avatar.png"}
-              size="sm"
-              showBorder={false}
-            />
-          </div>
-        </div>
-
-        {/* VS */}
-        <div className="text-slate-400 font-bold text-sm shrink-0">VS</div>
-
-        {/* Opponent score */}
-        <div className="flex items-center gap-3 min-w-[140px] justify-start">
-          <div
-            className="w-12 h-12 rounded-xl shrink-0 flex items-center justify-center p-1 border-2"
-            style={{
-              backgroundColor: `${opponentColor}20`,
-              borderColor: opponentColor,
-            }}
-          >
-            <AvatarDisplay
-              avatarId={opponent?.avatar || "jack-avatar.png"}
-              size="sm"
-              showBorder={false}
-            />
-          </div>
-          <div className="text-left">
-            <p className="text-sm font-black text-slate-700 leading-[1.1] truncate max-w-[100px]">
-              {opponent?.name || "Guest"}
-            </p>
-
-            <p className="text-2xl font-black leading-none" style={{ color: opponentColor }}>
-              {opponentScore}
-            </p>
+              <GameActionsPanel />
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="flex-1 flex items-center justify-center p-4">
-        <MultiplayerWordSearch
-          puzzle={puzzle}
-          players={players}
-          myPlayerId={myPlayerId || ""}
-          foundWords={foundWords}
-          opponentCursor={opponentCursor}
-          onWordFound={handleWordFound}
-          onCursorMove={handleCursorMove}
-          onCursorLeave={handleCursorLeave}
-        />
-      </div>
-
-      {/* Word list */}
-      <div className="p-4 bg-white border-t border-slate-100">
-        <div className="flex flex-wrap gap-2 justify-center">
-          {puzzle.words.map(({ word }) => {
-            const found = foundWords.find((f) => f.word === word);
-            const foundByMe = found?.foundBy === myPlayerId;
-            const wordColor = found ? (foundByMe ? myColor : opponentColor) : undefined;
-
-            return (
-              <span
-                key={word}
-                className={cn(
-                  "px-3 py-1 rounded-full text-sm font-bold transition-all",
-                  found ? "line-through opacity-75" : "bg-slate-100 text-slate-600",
-                )}
-                style={
-                  found
-                    ? {
-                        backgroundColor: `${wordColor}20`,
-                        color: wordColor,
-                      }
-                    : undefined
-                }
-              >
-                {word}
-              </span>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Game Result Dialog */}
       <MultiplayerResultDialog
         open={showResultDialog}
         onOpenChange={setShowResultDialog}

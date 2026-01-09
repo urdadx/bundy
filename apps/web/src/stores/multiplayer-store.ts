@@ -43,6 +43,7 @@ interface MultiplayerState {
   
   // Rematch
   rematchRequestedBy: string | null;
+  isRematch: boolean;
   
   // Error
   error: string | null;
@@ -131,6 +132,7 @@ const initialState: MultiplayerState = {
   gameStartTime: null,
   opponentCursor: null,
   rematchRequestedBy: null,
+  isRematch: false,
   error: null,
   disconnectedPlayerId: null,
   reconnectTimeout: null,
@@ -262,6 +264,7 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
             },
             gameStartTime: message.startTime,
             countdown: null,
+            isRematch: false,
           });
           break;
         }
@@ -389,7 +392,7 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
           set({
             room: {
               ...room,
-              status: "waiting",
+              status: "ready",
               puzzle: null,
               foundWords: [],
               gameStartedAt: null,
@@ -399,14 +402,15 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
                 ...p,
                 score: 0,
                 wordsFound: [],
-                isReady: false,
+                isReady: true,
                 cursor: null,
               })),
             },
             gameStartTime: null,
-            countdown: null,
+            countdown: message.countdown,
             rematchRequestedBy: null,
             opponentCursor: null,
+            isRematch: true,
           });
           break;
         }

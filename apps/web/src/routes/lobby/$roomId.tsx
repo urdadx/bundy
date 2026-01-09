@@ -5,7 +5,7 @@ import { AvatarDisplay } from "@/components/avatar-selector";
 import { Button } from "@/components/ui/button";
 import { Loader } from "@/components/loader";
 import { useSession } from "@/lib/auth-client";
-import { Swords, Check, ArrowLeft } from "lucide-react";
+import { Swords, ArrowLeft, CircleCheck } from "lucide-react";
 import { getInviteLink } from "@/lib/multiplayer/api";
 import { cn } from "@/lib/utils";
 import type { AvatarId } from "@/lib/avatars";
@@ -46,7 +46,6 @@ function LobbyPage() {
     };
   }, [roomId, session?.user?.id, connect, disconnect]);
 
-  // Navigate to game when it starts
   useEffect(() => {
     if (phase === "playing") {
       navigate({ to: "/multiplayer/$roomId", params: { roomId } });
@@ -63,7 +62,7 @@ function LobbyPage() {
     }
   }, [roomId]);
 
-  const handleAvatarChange = useCallback(
+  const _handleAvatarChange = useCallback(
     (avatarId: AvatarId) => {
       setSelectedAvatar(avatarId);
       updateAvatar(avatarId);
@@ -120,7 +119,7 @@ function LobbyPage() {
           <div className="w-40 h-40 rounded-full bg-linear-to-br from-green-400 to-green-600 border-8 border-white shadow-2xl flex items-center justify-center animate-pulse">
             <span className="text-white text-7xl font-black">{countdown}</span>
           </div>
-          <p className="text-slate-400 text-sm">Get ready!</p>
+          <p className="text-slate-400 text-base">Get ready!</p>
         </div>
       </div>
     );
@@ -220,15 +219,20 @@ function LobbyPage() {
           {myPlayer?.isReady ? (
             <div className="flex flex-col items-center gap-2">
               <div className="flex items-center gap-2 text-green-600">
-                <Check className="w-5 h-5" />
-                <span className="font-bold text-xl">You're Ready!</span>
+                <CircleCheck className="w-5 h-5" />
+                <span className="font-bold uppercase text-2xl">You're Ready!</span>
               </div>
               <p className="text-lg font-semibold text-slate-500">
                 {opponent?.isReady ? "Starting game..." : "Waiting for opponent to ready up..."}
               </p>
             </div>
           ) : (
-            <Button variant="primary" className="w-full" onClick={handleReady} disabled={!opponent}>
+            <Button
+              variant="primary"
+              className="w-full text-xl h-14"
+              onClick={handleReady}
+              disabled={!opponent}
+            >
               {opponent ? "Ready!" : "Waiting for Opponent..."}
             </Button>
           )}

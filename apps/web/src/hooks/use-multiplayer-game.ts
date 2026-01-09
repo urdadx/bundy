@@ -26,6 +26,7 @@ export function useMultiplayerGame(options: UseMultiplayerGameOptions = {}) {
     disconnectedPlayerId,
     reconnectTimeout,
     rematchRequestedBy,
+    isRematch,
     connectionState,
     setConnectionState,
     handleServerMessage,
@@ -175,6 +176,7 @@ export function useMultiplayerGame(options: UseMultiplayerGameOptions = {}) {
     disconnectedPlayerId,
     reconnectTimeout,
     rematchRequestedBy,
+    isRematch,
 
     // Derived state
     currentPlayer: getCurrentPlayer(),

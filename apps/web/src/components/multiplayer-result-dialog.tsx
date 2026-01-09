@@ -3,13 +3,13 @@ import {
   AlertDialogContent,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogDescription,
   AlertDialogFooter,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { AvatarDisplay } from "@/components/avatar-selector";
 import { motion } from "motion/react";
-import { Trophy, Swords, HandshakeIcon, Crown, RotateCcw, LogOut, Loader2 } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
+import { RotateCcw, LogOut, Loader2 } from "lucide-react";
 import type { Player } from "@/lib/multiplayer/types";
 
 const PLAYER_COLORS = {
@@ -42,10 +42,10 @@ export function MultiplayerResultDialog({
   opponent,
   isHost,
   onRematch,
-  onExit,
   rematchRequestedBy,
   myPlayerId,
 }: MultiplayerResultDialogProps) {
+  const navigate = useNavigate();
   const myColor = isHost ? PLAYER_COLORS.host : PLAYER_COLORS.guest;
   const opponentColor = isHost ? PLAYER_COLORS.guest : PLAYER_COLORS.host;
 
@@ -56,25 +56,19 @@ export function MultiplayerResultDialog({
     switch (result) {
       case "win":
         return {
-          icon: <Crown className="w-12 h-12 text-yellow-500" />,
-          title: "Victory!",
-          subtitle: "You crushed it! 🎉",
+          title: "YOU WON 🏆",
           bgColor: "bg-yellow-100",
           borderColor: "border-yellow-300",
         };
       case "lose":
         return {
-          icon: <Swords className="w-12 h-12 text-slate-400" />,
-          title: "Defeat",
-          subtitle: "Better luck next time!",
+          title: "YOU LOST 😞",
           bgColor: "bg-slate-100",
           borderColor: "border-slate-300",
         };
       case "draw":
         return {
-          icon: <HandshakeIcon className="w-12 h-12 text-blue-500" />,
-          title: "It's a Draw 🤝",
-          subtitle: "Evenly matched! ",
+          title: "IT'S A DRAW 🤝",
           bgColor: "bg-blue-100",
           borderColor: "border-blue-300",
         };
@@ -85,7 +79,7 @@ export function MultiplayerResultDialog({
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="w-full! max-w-lg! p-6 border-none bg-white overflow-hidden">
+      <AlertDialogContent className="w-full! max-w-md! p-6 border-none bg-white overflow-hidden">
         <AlertDialogHeader className="w-full justify-center">
           <AlertDialogTitle className="text-3xl uppercase text-center font-black text-slate-800 tracking-tight">
             {config.title}
@@ -112,9 +106,7 @@ export function MultiplayerResultDialog({
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.5, type: "spring" }}
                     className="absolute -top-2 -right-2"
-                  >
-                    <Trophy className="w-6 h-6 text-yellow-500 fill-yellow-200" />
-                  </motion.div>
+                  ></motion.div>
                 )}
               </div>
               <p className="mt-2 text-center font-bold text-slate-700 truncate max-w-24 mx-auto">
@@ -155,9 +147,7 @@ export function MultiplayerResultDialog({
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.5, type: "spring" }}
                     className="absolute -top-2 -right-2"
-                  >
-                    <Trophy className="w-6 h-6 text-yellow-500 fill-yellow-200" />
-                  </motion.div>
+                  ></motion.div>
                 )}
               </div>
               <p className="mt-2 text-center font-bold text-slate-700 truncate max-w-24 mx-auto">
@@ -189,7 +179,16 @@ export function MultiplayerResultDialog({
         )}
 
         <AlertDialogFooter className="p-6 pt-4 flex gap-2">
-          <Button variant="default" className="w-full" onClick={onExit}>
+          <Button
+            variant="default"
+            className="w-full"
+            onClick={() => {
+              onOpenChange(false);
+              navigate({
+                to: "/arena/lessons",
+              });
+            }}
+          >
             <LogOut className="w-4 h-4 mr-2" />
             Exit
           </Button>

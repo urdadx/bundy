@@ -57,7 +57,7 @@ export function MultiplayerWordSearch({
 
     const isLargeScreen = window.innerWidth >= 1024;
     const maxWidth = isLargeScreen ? 700 : Math.min(window.innerWidth - 32, 800);
-    const maxHeight = window.innerHeight - 200;
+    const maxHeight = window.innerHeight - 100;
     const maxSize = Math.min(maxWidth, maxHeight);
 
     const totalGaps = gap * (gridSize - 1);

@@ -11,7 +11,6 @@ import {
   clearCursor,
   handleDisconnect,
   removePlayerFromRoom,
-  setupRematch,
   voteForRematch,
   setConnection,
   removeConnection,
@@ -21,12 +20,10 @@ import {
 } from "./room-manager";
 import { generatePuzzle } from "./puzzle-generator";
 
-// Send message to a specific connection
 function send(ws: WSConnection, message: ServerMessage): void {
   ws.send(JSON.stringify(message));
 }
 
-// Handle incoming WebSocket message
 export function handleMessage(ws: WSConnection, rawMessage: string): void {
   try {
     const message = JSON.parse(rawMessage) as ClientMessage;
@@ -77,7 +74,6 @@ export function handleMessage(ws: WSConnection, rawMessage: string): void {
   }
 }
 
-// Handle join room
 function handleJoinRoom(
   ws: WSConnection,
   roomId: string,
@@ -85,16 +81,13 @@ function handleJoinRoom(
   odName: string,
   avatar: string
 ): void {
-  // Update WebSocket data
   ws.data.odId = odId;
   ws.data.odName = odName;
   ws.data.roomId = roomId;
   ws.data.odAvatar = avatar;
 
-  // Store connection
   setConnection(odId, ws);
 
-  // Try to join room
   const result = joinRoom(roomId, odId, odName, avatar);
 
   if (!result) {
@@ -106,10 +99,8 @@ function handleJoinRoom(
   const player = room.players.get(odId);
   if (!player) return;
 
-  // Send current room state to joining player
   send(ws, { type: "room_state", room: serializeRoom(room) });
 
-  // Notify other players - use appropriate message type
   if (isReconnection) {
     broadcastToRoom(roomId, { type: "player_reconnected", odId }, odId);
   } else {
@@ -159,7 +150,6 @@ function handleLeaveRoom(ws: WSConnection): void {
   removeConnection(odId);
 }
 
-// Handle player ready
 function handlePlayerReady(ws: WSConnection, ready: boolean): void {
   const { odId, roomId } = ws.data;
   if (!roomId || !odId) return;
@@ -170,13 +160,11 @@ function handlePlayerReady(ws: WSConnection, ready: boolean): void {
   // Broadcast ready state change
   broadcastToAll(roomId, { type: "player_ready_changed", odId, ready });
 
-  // If both players are ready, start countdown and game
   if (room.status === "ready") {
     startGameCountdown(roomId);
   }
 }
 
-// Handle avatar update
 function handleUpdateAvatar(ws: WSConnection, avatar: string): void {
   const { odId, roomId } = ws.data;
   if (!roomId || !odId) return;
@@ -187,49 +175,39 @@ function handleUpdateAvatar(ws: WSConnection, avatar: string): void {
   const player = room.players.get(odId);
   if (!player) return;
 
-  // Update player avatar
   player.avatar = avatar;
 
-  // Broadcast avatar change to all players in the room
   broadcastToAll(roomId, { type: "player_avatar_changed", odId, avatar });
 }
 
-// Start game countdown
 async function startGameCountdown(roomId: string): Promise<void> {
   const room = getRoom(roomId);
   if (!room || room.status !== "ready") return;
 
-  // 3-second countdown
   for (let i = 3; i > 0; i--) {
     broadcastToAll(roomId, { type: "game_starting", countdown: i });
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    // Check if room still exists and both players still ready
     const currentRoom = getRoom(roomId);
     if (!currentRoom || currentRoom.status !== "ready") return;
   }
 
-  // Generate puzzle
   const puzzle = generatePuzzle(room.settings);
 
-  // Start the game
   const updatedRoom = startGame(roomId, puzzle);
   if (!updatedRoom) return;
 
-  // Broadcast game started
   broadcastToAll(roomId, {
     type: "game_started",
     puzzle,
     startTime: updatedRoom.gameStartedAt!,
   });
 
-  // Set up game end timer (10 minutes)
   setTimeout(() => {
     handleGameTimeout(roomId);
   }, room.settings.timeLimit * 1000);
 }
 
-// Handle game timeout
 function handleGameTimeout(roomId: string): void {
   const room = getRoom(roomId);
   if (!room || room.status !== "playing") return;
@@ -263,7 +241,6 @@ function handleGameTimeout(roomId: string): void {
   });
 }
 
-// Handle cursor move
 function handleCursorMove(ws: WSConnection, x: number, y: number): void {
   const { odId, roomId } = ws.data;
   if (!roomId || !odId) return;
@@ -271,11 +248,9 @@ function handleCursorMove(ws: WSConnection, x: number, y: number): void {
   const player = updateCursor(roomId, odId, x, y);
   if (!player) return;
 
-  // Broadcast cursor position to other player
   broadcastToRoom(roomId, { type: "cursor_update", odId, x, y }, odId);
 }
 
-// Handle cursor leave
 function handleCursorLeave(ws: WSConnection): void {
   const { odId, roomId } = ws.data;
   if (!roomId || !odId) return;
@@ -284,7 +259,6 @@ function handleCursorLeave(ws: WSConnection): void {
   broadcastToRoom(roomId, { type: "cursor_left", odId }, odId);
 }
 
-// Handle word claim
 function handleClaimWord(
   ws: WSConnection,
   word: string,
@@ -315,7 +289,6 @@ function handleClaimWord(
     ...getScores(room),
   });
 
-  // Check if game ended
   if (room.status === "finished") {
     broadcastToAll(roomId, {
       type: "game_ended",
@@ -326,7 +299,6 @@ function handleClaimWord(
   }
 }
 
-// Handle rematch request
 function handleRematchRequest(ws: WSConnection): void {
   const { odId, roomId } = ws.data;
   if (!roomId || !odId) return;
@@ -334,25 +306,50 @@ function handleRematchRequest(ws: WSConnection): void {
   const room = getRoom(roomId);
   if (!room) return;
 
-  // Use the new voting system
   const { room: updatedRoom } = voteForRematch(roomId, odId);
 
-  // Notify other players about rematch request if game hasn't restarted yet
   if (!updatedRoom) {
     broadcastToAll(roomId, { type: "rematch_requested", odId });
   } else {
-    // If both players agreed, restart
-    broadcastToAll(roomId, { type: "rematch_starting" });
-    broadcastToAll(roomId, { type: "room_state", room: serializeRoom(updatedRoom) });
+    // If both players agreed, start the rematch countdown immediately
+    startRematchCountdown(roomId);
   }
 }
 
-// Handle WebSocket open
+async function startRematchCountdown(roomId: string): Promise<void> {
+  const room = getRoom(roomId);
+  if (!room || room.status !== "waiting") return;
+
+  room.status = "ready";
+
+  for (let i = 3; i > 0; i--) {
+    broadcastToAll(roomId, { type: "rematch_starting", countdown: i });
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    const currentRoom = getRoom(roomId);
+    if (!currentRoom || currentRoom.status !== "ready") return;
+  }
+
+  const puzzle = generatePuzzle(room.settings);
+
+  const updatedRoom = startGame(roomId, puzzle);
+  if (!updatedRoom) return;
+
+  broadcastToAll(roomId, {
+    type: "game_started",
+    puzzle,
+    startTime: updatedRoom.gameStartedAt!,
+  });
+
+  setTimeout(() => {
+    handleGameTimeout(roomId);
+  }, room.settings.timeLimit * 1000);
+}
+
 export function handleOpen(_ws: WSConnection): void {
   console.log("WebSocket connection opened");
 }
 
-// Handle WebSocket close
 export function handleClose(ws: WSConnection): void {
   const odId = ws.data?.odId;
   const roomId = ws.data?.roomId;
@@ -361,7 +358,6 @@ export function handleClose(ws: WSConnection): void {
   if (odId && roomId) {
     handleDisconnect(roomId, odId);
     
-    // Notify other players
     broadcastToRoom(roomId, {
       type: "player_disconnected",
       odId,
@@ -370,7 +366,6 @@ export function handleClose(ws: WSConnection): void {
   }
 }
 
-// Handle WebSocket error
 export function handleError(_ws: WSConnection, error: Error): void {
   console.error("WebSocket error:", error);
 }
