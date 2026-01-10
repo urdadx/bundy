@@ -100,7 +100,7 @@ export function ActiveButton({
       <DrawerTrigger asChild>
         {renderTrigger({ variant, current, completed, percentage, ariaLabel })}
       </DrawerTrigger>
-      <DrawerContent>
+      <DrawerContent className="p-4 space-y-2 h-55">
         <ActiveButtonContent
           variant={variant}
           title={title}

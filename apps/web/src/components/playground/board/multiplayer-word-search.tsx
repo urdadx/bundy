@@ -181,7 +181,7 @@ export function MultiplayerWordSearch({
   return (
     <div className="flex items-center justify-center w-full h-full min-h-100 relative">
       <div
-        className="bg-white rounded-3xl border-4 border-slate-200 shadow-xl select-none touch-none relative"
+        className="bg-white rounded-3xl border-4 border-slate-200 shadow-sm sm:shadow-xl select-none touch-none relative"
         style={{ padding }}
         onMouseLeave={handleMouseLeave}
         onMouseUp={handleSelectionEnd}

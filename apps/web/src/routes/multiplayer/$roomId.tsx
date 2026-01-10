@@ -11,6 +11,10 @@ import { ChatPanel } from "@/components/playground/chat/chat-panel";
 import { WordListPanel, GameActionsPanelMultiplayer } from "@/components/layouts/playground-layout";
 import { CountdownOverlay } from "@/components/playground/countdown-overlay";
 import { GameConnectionError } from "@/components/playground/game-connection-error";
+import { Drawer, DrawerTrigger, DrawerContent } from "@/components/ui/drawer";
+import { Button } from "@/components/ui/button";
+import { ChatPanelMobile } from "@/components/playground/chat/chat-panel-mobile";
+import { sleep } from "@/lib/utils";
 
 export const Route = createFileRoute("/multiplayer/$roomId")({
   component: MultiplayerGamePage,
@@ -133,9 +137,10 @@ function MultiplayerGamePage() {
 
   const handleResign = useCallback(() => {
     isResigningRef.current = true;
-    leaveRoom();
     toast.success("You resigned from the game");
     navigate({ to: "/arena/lessons" });
+    sleep(1);
+    leaveRoom();
   }, [leaveRoom, navigate]);
 
   if (isConnecting) {
@@ -171,72 +176,116 @@ function MultiplayerGamePage() {
   }
 
   return (
-    <div className="flex">
-      <SideMenu />
-      <div className="min-h-screen w-full bg-slate-50">
-        <div className="flex justify-center items-start w-full min-h-screen py-6 px-4">
-          <div className="flex gap-6 max-w-7xl w-full">
-            <div className="flex-3 flex flex-col items-center gap-4">
-              <div className="w-full">
-                <MultiplayerGameHeader
-                  player1={{
-                    score: myScore,
+    <>
+      <div className="flex">
+        <SideMenu />
+        <div className="min-h-screen w-full bg-slate-50 overflow-x-hidden">
+          <div className="flex justify-center items-start w-full min-h-screen py-6 px-4">
+            <div className="flex gap-6 max-w-7xl w-full">
+              <div className="flex-3 flex flex-col items-center gap-4">
+                <div className="w-full">
+                  <MultiplayerGameHeader
+                    player1={{
+                      score: myScore,
+                      name: currentPlayer?.name || "Player",
+                      avatar: currentPlayer?.avatar,
+                    }}
+                    player2={{
+                      score: opponentScore,
+                      name: opponent?.name || "Guest",
+                      avatar: opponent?.avatar,
+                    }}
+                    timeRemaining={timeRemaining}
+                  />
+                </div>
+
+                <div className="shrink-0">
+                  <MultiplayerWordSearch
+                    puzzle={puzzle}
+                    players={players}
+                    myPlayerId={myPlayerId || ""}
+                    foundWords={foundWords}
+                    opponentCursor={opponentCursor}
+                    onWordFound={handleWordFound}
+                    onCursorMove={handleCursorMove}
+                    onCursorLeave={handleCursorLeave}
+                  />
+                </div>
+
+                <div className="lg:hidden w-full flex flex-col gap-3 mb-4">
+                  <WordListPanel
+                    words={puzzle.words.map((w) => w.word)}
+                    foundWords={foundWordsSet}
+                  />
+                  <GameActionsPanelMultiplayer onResign={handleResign} />
+                  <Drawer>
+                    <DrawerTrigger asChild>
+                      <Button variant="default" className="w-full">
+                        <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse mr-2" />
+                        Live Chat
+                      </Button>
+                    </DrawerTrigger>
+                    <DrawerContent className="h-[95%] ">
+                      <ChatPanelMobile
+                        messages={chatMessages.map((msg) => ({
+                          id: msg.id,
+                          message: msg.content,
+                          sender: {
+                            name: msg.senderName,
+                            avatar: msg.senderAvatar,
+                          },
+                          isOwn: msg.senderId === myPlayerId,
+                          timestamp: new Date(msg.timestamp),
+                        }))}
+                        currentUser={{
+                          name: currentPlayer?.name || "Player",
+                          avatar: currentPlayer?.avatar,
+                        }}
+                        opponent={{
+                          name: opponent?.name || "Guest",
+                          avatar: opponent?.avatar,
+                        }}
+                        isOpponentTyping={isOpponentTyping}
+                        onSendMessage={sendChatMessage}
+                        onTyping={sendTyping}
+                        disabled={phase !== "playing"}
+                      />
+                    </DrawerContent>
+                  </Drawer>
+                </div>
+              </div>
+
+              <div className="hidden lg:flex flex-2 flex-col gap-3">
+                <WordListPanel words={puzzle.words.map((w) => w.word)} foundWords={foundWordsSet} />
+
+                <ChatPanel
+                  messages={chatMessages.map((msg) => ({
+                    id: msg.id,
+                    message: msg.content,
+                    sender: {
+                      name: msg.senderName,
+                      avatar: msg.senderAvatar,
+                    },
+                    isOwn: msg.senderId === myPlayerId,
+                    timestamp: new Date(msg.timestamp),
+                  }))}
+                  currentUser={{
                     name: currentPlayer?.name || "Player",
                     avatar: currentPlayer?.avatar,
                   }}
-                  player2={{
-                    score: opponentScore,
+                  opponent={{
                     name: opponent?.name || "Guest",
                     avatar: opponent?.avatar,
+                    isOnline: true,
                   }}
-                  timeRemaining={timeRemaining}
+                  isOpponentTyping={isOpponentTyping}
+                  onSendMessage={sendChatMessage}
+                  onTyping={sendTyping}
+                  disabled={phase !== "playing"}
                 />
+
+                <GameActionsPanelMultiplayer onResign={handleResign} />
               </div>
-
-              <div className="shrink-0">
-                <MultiplayerWordSearch
-                  puzzle={puzzle}
-                  players={players}
-                  myPlayerId={myPlayerId || ""}
-                  foundWords={foundWords}
-                  opponentCursor={opponentCursor}
-                  onWordFound={handleWordFound}
-                  onCursorMove={handleCursorMove}
-                  onCursorLeave={handleCursorLeave}
-                />
-              </div>
-            </div>
-
-            <div className="hidden lg:flex flex-2 flex-col gap-3">
-              <WordListPanel words={puzzle.words.map((w) => w.word)} foundWords={foundWordsSet} />
-
-              <ChatPanel
-                messages={chatMessages.map((msg) => ({
-                  id: msg.id,
-                  message: msg.content,
-                  sender: {
-                    name: msg.senderName,
-                    avatar: msg.senderAvatar,
-                  },
-                  isOwn: msg.senderId === myPlayerId,
-                  timestamp: new Date(msg.timestamp),
-                }))}
-                currentUser={{
-                  name: currentPlayer?.name || "Player",
-                  avatar: currentPlayer?.avatar,
-                }}
-                opponent={{
-                  name: opponent?.name || "Guest",
-                  avatar: opponent?.avatar,
-                  isOnline: true,
-                }}
-                isOpponentTyping={isOpponentTyping}
-                onSendMessage={sendChatMessage}
-                onTyping={sendTyping}
-                disabled={phase !== "playing"}
-              />
-
-              <GameActionsPanelMultiplayer onResign={handleResign} />
             </div>
           </div>
         </div>
@@ -256,6 +305,6 @@ function MultiplayerGamePage() {
         rematchRequestedBy={rematchRequestedBy}
         myPlayerId={myPlayerId}
       />
-    </div>
+    </>
   );
 }

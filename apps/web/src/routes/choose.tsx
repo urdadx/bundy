@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { GameCard } from "@/components/game-card";
-import { GameSettingsUI } from "@/components/game-settings-ui";
+import { LobbyGameSettingsUI } from "@/components/lobby-game-settings-ui";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import maleIdle from "@/assets/characters/male-idle.png";
 import multiplayerImg from "@/assets/characters/multiplayer.png";
@@ -23,12 +23,15 @@ function RouteComponent() {
     } as any);
   };
 
-  const handleNavigateToLobby = useCallback((roomId: string) => {
-    navigate({
-      to: "/lobby/$roomId",
-      params: { roomId },
-    });
-  }, [navigate]);
+  const handleNavigateToLobby = useCallback(
+    (roomId: string) => {
+      navigate({
+        to: "/lobby/$roomId",
+        params: { roomId },
+      });
+    },
+    [navigate],
+  );
 
   return (
     <div
@@ -77,7 +80,7 @@ function RouteComponent() {
                 </span>
               </GameCard>
             </DialogTrigger>
-            <GameSettingsUI onNavigateToLobby={handleNavigateToLobby} />
+            <LobbyGameSettingsUI onNavigateToLobby={handleNavigateToLobby} />
           </Dialog>
         </div>
       </div>

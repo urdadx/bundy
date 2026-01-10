@@ -41,7 +41,7 @@ export function LearnButton({
   const nextCycleIndex = (index + 1) % cycleLength;
   const nextIndentationLevel = pattern[nextCycleIndex];
   const deltaX = (nextIndentationLevel - indentationLevel) * 50;
-  const deltaY = 110; // fixed vertical distance between centers
+  const deltaY = 110;
 
   const angle = Math.atan2(deltaX, deltaY) * (180 / Math.PI);
   const lineLength = Math.sqrt(deltaX * deltaX + deltaY * deltaY);

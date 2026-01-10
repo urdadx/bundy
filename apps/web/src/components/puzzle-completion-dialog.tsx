@@ -38,7 +38,7 @@ export function PuzzleCompletionDialog({
             initial={{ scale: 0, rotate: -10 }}
             animate={{ scale: 1, rotate: 0 }}
             transition={{ type: "spring", damping: 12, stiffness: 100 }}
-            className="w-48 h-48 mb-4 mx-auto"
+            className="w-44 h-44 mb-4 mx-auto"
           >
             <img
               src={characterGender === "male" ? maleCheerImg : femaleCheerImg}
@@ -58,28 +58,26 @@ export function PuzzleCompletionDialog({
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="flex flex-col items-center justify-center gap-1 bg-amber-50 rounded-2xl p-3 border-b-4 border-amber-200"
+                className="flex flex-row items-center justify-center gap-1 "
               >
                 <img src={XpIcon} alt="XP" className="w-8 h-8 mb-1" />
                 <div className="flex items-baseline gap-1">
                   <span className="text-xl font-black text-amber-600">+</span>
                   <span className="text-2xl font-black text-amber-600">{xpEarned}</span>
                 </div>
-                <span className="text-xs font-black uppercase text-amber-400">Total XP</span>
               </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className="flex flex-col items-center justify-center gap-1 bg-sky-50 rounded-2xl p-3 border-b-4 border-sky-200"
+                className="flex flex-row items-center justify-center gap-1 "
               >
                 <img src={diamondIcon} alt="Diamond" className="w-8 h-8 mb-1" />
                 <div className="flex items-baseline gap-1">
                   <span className="text-xl font-black text-sky-600">+</span>
                   <span className="text-2xl font-black text-sky-600">{diamondsEarned}</span>
                 </div>
-                <span className="text-xs font-black uppercase text-sky-400">Diamonds</span>
               </motion.div>
             </div>
           </AlertDialogDescription>

@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
-import { getValidEndCell } from '@/utils/valid-search'
-import { Cell } from './cell'
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { getValidEndCell } from "@/utils/valid-search";
+import { Cell } from "./cell";
 import {
   generateWordSearch,
   getCellsInPath,
@@ -8,8 +8,8 @@ import {
   type WordSearchConfig,
   type WordSearchPuzzle,
   type Theme,
-  type Difficulty
-} from '@/utils/word-search-generator'
+  type Difficulty,
+} from "@/utils/word-search-generator";
 
 interface WordSearchProps {
   theme?: Theme;
@@ -19,18 +19,18 @@ interface WordSearchProps {
   onWordFound?: (word: string, remaining: number) => void;
   onPuzzleComplete?: () => void;
   onPuzzleGenerated?: (placedWords: string[]) => void;
-  colorTheme?: 'default' | 'ocean' | 'forest' | 'sunset';
+  colorTheme?: "default" | "ocean" | "forest" | "sunset";
 }
 
 export function WordSearch({
-  theme = 'animals',
-  difficulty = 'medium',
+  theme = "animals",
+  difficulty = "medium",
   size,
   words,
   onWordFound,
   onPuzzleComplete,
   onPuzzleGenerated,
-  colorTheme = 'default',
+  colorTheme = "default",
 }: WordSearchProps) {
   const puzzle = useMemo<WordSearchPuzzle>(() => {
     const config: WordSearchConfig = { theme, difficulty, size: size || 0, words };
@@ -46,7 +46,7 @@ export function WordSearch({
   useEffect(() => {
     setFoundWords(new Set());
     if (onPuzzleGenerated) {
-      const placedWords = puzzle.words.map(w => w.word);
+      const placedWords = puzzle.words.map((w) => w.word);
       onPuzzleGenerated(placedWords);
     }
   }, [puzzle]);
@@ -56,7 +56,7 @@ export function WordSearch({
   const padding = 40;
 
   const getCellSize = useCallback(() => {
-    if (typeof window === 'undefined') return 48;
+    if (typeof window === "undefined") return 48;
 
     const isLargeScreen = window.innerWidth >= 1024;
     const maxWidth = isLargeScreen ? 700 : Math.min(window.innerWidth - 32, 800);
@@ -64,18 +64,17 @@ export function WordSearch({
     const maxSize = Math.min(maxWidth, maxHeight);
 
     const totalGaps = gap * (gridSize - 1);
-    const availableSpace = maxSize - (padding * 2) - totalGaps;
+    const availableSpace = maxSize - padding * 2 - totalGaps;
 
     return Math.max(Math.floor(availableSpace / gridSize), 28);
   }, [gridSize, gap]);
 
   const [cellSize, _setCellSize] = useState(getCellSize);
 
-
   useEffect(() => {
     if (startCell && currentCell && isDragging) {
       const cells = getCellsInPath(startCell, currentCell);
-      setSelectedCells(new Set(cells.map(c => `${c.r}-${c.c}`)));
+      setSelectedCells(new Set(cells.map((c) => `${c.r}-${c.c}`)));
     } else {
       setSelectedCells(new Set());
     }
@@ -87,11 +86,14 @@ export function WordSearch({
     setIsDragging(true);
   }, []);
 
-  const handleMouseEnter = useCallback((r: number, c: number) => {
-    if (isDragging && startCell) {
-      setCurrentCell(getValidEndCell(startCell, { r, c }));
-    }
-  }, [isDragging, startCell]);
+  const handleMouseEnter = useCallback(
+    (r: number, c: number) => {
+      if (isDragging && startCell) {
+        setCurrentCell(getValidEndCell(startCell, { r, c }));
+      }
+    },
+    [isDragging, startCell],
+  );
 
   const handleTouchStart = useCallback((r: number, c: number) => {
     setStartCell({ r, c });
@@ -99,23 +101,26 @@ export function WordSearch({
     setIsDragging(true);
   }, []);
 
-  const handleTouchMove = useCallback((e: React.TouchEvent) => {
-    if (!isDragging || !startCell) return;
+  const handleTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!isDragging || !startCell) return;
 
-    const touch = e.touches[0];
-    const element = document.elementFromPoint(touch.clientX, touch.clientY);
-    const row = element?.getAttribute('data-row');
-    const col = element?.getAttribute('data-col');
+      const touch = e.touches[0];
+      const element = document.elementFromPoint(touch.clientX, touch.clientY);
+      const row = element?.getAttribute("data-row");
+      const col = element?.getAttribute("data-col");
 
-    if (row && col) {
-      setCurrentCell(getValidEndCell(startCell, { r: parseInt(row), c: parseInt(col) }));
-    }
-  }, [isDragging, startCell]);
+      if (row && col) {
+        setCurrentCell(getValidEndCell(startCell, { r: parseInt(row), c: parseInt(col) }));
+      }
+    },
+    [isDragging, startCell],
+  );
 
   const handleSelectionEnd = useCallback(() => {
     if (!isDragging || !startCell || !currentCell) return;
 
-    const remainingWords = puzzle.words.filter(w => !foundWords.has(w.word));
+    const remainingWords = puzzle.words.filter((w) => !foundWords.has(w.word));
     const match = checkWordMatch(puzzle.grid, startCell, currentCell, remainingWords);
 
     if (match) {
@@ -135,18 +140,21 @@ export function WordSearch({
     setCurrentCell(null);
   }, [isDragging, startCell, currentCell, puzzle, foundWords, onWordFound, onPuzzleComplete]);
 
-  const isCellInFoundWord = useCallback((r: number, c: number): boolean => {
-    return puzzle.words.some(word => {
-      if (!foundWords.has(word.word)) return false;
-      const cells = getCellsInPath(word.start, word.end);
-      return cells.some(cell => cell.r === r && cell.c === c);
-    });
-  }, [puzzle.words, foundWords]);
+  const isCellInFoundWord = useCallback(
+    (r: number, c: number): boolean => {
+      return puzzle.words.some((word) => {
+        if (!foundWords.has(word.word)) return false;
+        const cells = getCellsInPath(word.start, word.end);
+        return cells.some((cell) => cell.r === r && cell.c === c);
+      });
+    },
+    [puzzle.words, foundWords],
+  );
 
   return (
     <div className="flex items-center justify-center w-full h-full min-h-100">
       <div
-        className="bg-white rounded-3xl border-4 border-slate-200 shadow-xl select-none touch-none"
+        className="bg-white rounded-3xl border-4 border-slate-200 shadow-sm sm:shadow-xl  select-none touch-none"
         style={{ padding }}
         onMouseLeave={handleSelectionEnd}
         onMouseUp={handleSelectionEnd}
@@ -156,7 +164,7 @@ export function WordSearch({
           className="grid"
           style={{
             gridTemplateColumns: `repeat(${gridSize}, ${cellSize}px)`,
-            gap: `${gap}px`
+            gap: `${gap}px`,
           }}
         >
           {puzzle.grid.map((row, r) =>
@@ -176,7 +184,7 @@ export function WordSearch({
                 size={cellSize}
                 theme={colorTheme}
               />
-            ))
+            )),
           )}
         </div>
       </div>

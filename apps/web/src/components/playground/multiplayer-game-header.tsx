@@ -47,8 +47,12 @@ export function MultiplayerGameHeader({ player1, player2, timeRemaining }: GameH
             />
           </div>
           <div className="flex flex-col">
-            <p className="text-xs font-bold text-slate-600 leading-tight">{player1.name}</p>
-            <p className="text-2xl font-black text-[#1cb0f6] leading-none">{player1.score}</p>
+            <p className="text-xs uppercase font-bold text-slate-600 leading-tight">
+              {player1.name}
+            </p>
+            <p className="text-2xl font-black text-[#1cb0f6] leading-none text-center">
+              {player1.score}
+            </p>
           </div>
         </div>
         <div className="flex flex-col items-center gap-1">
@@ -73,8 +77,12 @@ export function MultiplayerGameHeader({ player1, player2, timeRemaining }: GameH
 
         <div className="flex items-center gap-2">
           <div className="flex flex-col items-end">
-            <p className="text-xs font-bold text-slate-600 leading-tight">{player2.name}</p>
-            <p className="text-2xl font-black text-hp-red leading-none">{player2.score}</p>
+            <p className="text-xs uppercase font-bold text-slate-600 leading-tight">
+              {player2.name}
+            </p>
+            <p className="text-2xl font-black text-hp-red leading-none text-center self-center">
+              {player2.score}
+            </p>
           </div>
           <div className="w-12 h-12 rounded-full overflow-hidden border-3 border-hp-red bg-[#ffdfe0] p-1 shrink-0">
             <img

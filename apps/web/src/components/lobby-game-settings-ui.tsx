@@ -7,6 +7,7 @@ import { ThemeSelectionDialog } from "./theme-selection-dialog";
 import { useSession } from "@/lib/auth-client";
 import { createRoom } from "@/lib/multiplayer/api";
 import type { GameSettings } from "@/lib/multiplayer/types";
+import { Loader2 } from "lucide-react";
 import { Switch } from "./ui/switch";
 
 const THEMES: Record<string, { name: string; icon: string }> = {
@@ -31,12 +32,15 @@ function randomInRange(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-interface GameSettingsUIProps {
+interface LobbyGameSettingsUIProps {
   onRoomCreated?: (roomId: string) => void;
   onNavigateToLobby?: (roomId: string) => void;
 }
 
-export function GameSettingsUI({ onRoomCreated, onNavigateToLobby }: GameSettingsUIProps) {
+export function LobbyGameSettingsUI({
+  onRoomCreated,
+  onNavigateToLobby,
+}: LobbyGameSettingsUIProps) {
   const { data: session } = useSession();
   const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard">("medium");
   const [theme, setTheme] = useState("animals");
@@ -153,7 +157,14 @@ export function GameSettingsUI({ onRoomCreated, onNavigateToLobby }: GameSetting
                 onClick={handleContinue}
                 disabled={isCreatingRoom}
               >
-                Save
+                {isCreatingRoom ? (
+                  <>
+                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                    Creating Game...
+                  </>
+                ) : (
+                  "Create Game"
+                )}
               </Button>
             </div>
           </div>

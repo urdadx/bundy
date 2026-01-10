@@ -21,13 +21,13 @@ export function ResignDialog({ open, onOpenChange, onConfirm }: ResignDialogProp
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="w-200! p-4 border-none bg-white">
+      <AlertDialogContent className="max-w-sm! sm:max-w-md! w-full p-3 sm:p-4 border-none bg-white">
         <AlertDialogHeader className="flex flex-col mx-auto items-center justify-center">
           <motion.div
             initial={{ scale: 0, rotate: -10 }}
             animate={{ scale: 1, rotate: 0 }}
             transition={{ type: "spring", damping: 12, stiffness: 100 }}
-            className="w-48 h-48 mb-4 mx-auto"
+            className="w-32 h-32 sm:w-48 sm:h-48 mb-4 mx-auto"
           >
             <img
               src={characterGender === "male" ? maleSad : femaleSad}
@@ -37,14 +37,10 @@ export function ResignDialog({ open, onOpenChange, onConfirm }: ResignDialogProp
             />
           </motion.div>
 
-          <AlertDialogTitle className="text-3xl text-center font-black text-slate-700 uppercase tracking-tight">
+          <AlertDialogTitle className="text-2xl sm:text-3xl text-center font-black text-slate-700 uppercase tracking-tight">
             ARE YOU SURE?
           </AlertDialogTitle>
         </AlertDialogHeader>
-
-        <div className="mt-2 text-center text-slate-500 font-medium">
-          Resigning will end the game and count as a loss.
-        </div>
 
         <AlertDialogFooter className="mt-4 flex flex-col gap-2 sm:flex-col">
           <Button variant="primary" className="w-full" onClick={onConfirm}>

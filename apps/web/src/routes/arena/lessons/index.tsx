@@ -1,4 +1,3 @@
-// routes/arena/battles.index.tsx
 import { createFileRoute } from "@tanstack/react-router";
 import { WorldProgressCard } from "@/components/world-progress-card";
 
@@ -11,6 +10,7 @@ function BattlesIndex() {
     <section className="space-y-6">
       <h1 className="text-2xl font-black text-slate-700 uppercase tracking-tight">Learn</h1>
       <WorldProgressCard />
+      <div className="h-24" />
     </section>
   );
 }

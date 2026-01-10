@@ -86,10 +86,10 @@ export function MultiplayerResultDialog({
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="w-full! max-w-md! p-6 border-none bg-white overflow-hidden ">
+      <AlertDialogContent className="w-full max-w-sm! sm:max-w-md! p-4 sm:p-6 border-none bg-white ">
         <div className="">
           <AlertDialogHeader className="w-full justify-center">
-            <AlertDialogTitle className="text-3xl uppercase text-center font-black text-slate-800 tracking-tight">
+            <AlertDialogTitle className="text-2xl sm:text-3xl uppercase text-center font-black text-slate-800 tracking-tight">
               {config.title}
             </AlertDialogTitle>
           </AlertDialogHeader>
@@ -98,7 +98,7 @@ export function MultiplayerResultDialog({
             <motion.img
               src={config.icon}
               alt="Trophy"
-              className="w-44 h-44 "
+              className="w-32 h-32 sm:w-44 sm:h-44 "
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{
@@ -112,7 +112,7 @@ export function MultiplayerResultDialog({
         </div>
 
         <div className=" bg-white">
-          <div className="flex items-center justify-center gap-12">
+          <div className="flex items-center justify-center gap-6 sm:gap-12">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -125,7 +125,7 @@ export function MultiplayerResultDialog({
                 showBorder={false}
               />
 
-              <p className="text-2xl font-black" style={{ color: myColor }}>
+              <p className="text-xl sm:text-2xl font-black" style={{ color: myColor }}>
                 {myScore}
               </p>
             </motion.div>
@@ -134,7 +134,7 @@ export function MultiplayerResultDialog({
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.5 }}
-              className="text-2xl font-black text-slate-300"
+              className="text-xl sm:text-2xl font-black text-slate-300"
             >
               VS
             </motion.div>
@@ -151,7 +151,7 @@ export function MultiplayerResultDialog({
                 showBorder={false}
               />
 
-              <p className="text-2xl font-black" style={{ color: opponentColor }}>
+              <p className="text-xl sm:text-2xl font-black" style={{ color: opponentColor }}>
                 {opponentScore}
               </p>
             </motion.div>
@@ -162,10 +162,10 @@ export function MultiplayerResultDialog({
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
-            className="mx-8 mb-4"
+            className="mx-6 sm:mx-8"
           >
-            <div className="p-4 bg-linear-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-2xl text-center">
-              <p className="text-base font-bold text-green-700">
+            <div className="p-3 sm:p-4 bg-linear-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-2xl text-center">
+              <p className="text-sm sm:text-base font-bold text-green-700">
                 {opponent?.name || "Opponent"} wants a rematch! 🔥
               </p>
             </div>

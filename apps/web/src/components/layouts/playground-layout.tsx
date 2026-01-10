@@ -4,6 +4,8 @@ import { cn } from "@/lib/utils";
 import { Lightbulb, Flag, Settings } from "lucide-react";
 import { toast } from "sonner";
 import { ResignDialog } from "@/components/resign-dialog";
+import { GameSettingsUI } from "../game-settings-ui";
+import { Dialog, DialogTrigger } from "../ui/dialog";
 
 interface Player {
   name: string;
@@ -141,9 +143,14 @@ export function GameActionsPanelMultiplayer({ onResign }: { onResign?: () => voi
         >
           Resign <Flag className="h-5 w-5 ml-1" />
         </Button>
-        <Button variant="super" size="icon" className="w-full">
-          Settings <Settings className="h-5 w-5 ml-1" />
-        </Button>
+        <Dialog>
+          <DialogTrigger>
+            <Button variant="super" className="w-full">
+              Settings <Settings className="h-5 w-5 ml-1" />
+            </Button>
+          </DialogTrigger>
+          <GameSettingsUI />
+        </Dialog>
       </div>
 
       <ResignDialog

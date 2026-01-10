@@ -34,6 +34,15 @@ function LobbyPage() {
 
   const currentSession = session || initialSession;
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   const {
     connect,
     disconnect,
@@ -112,7 +121,7 @@ function LobbyPage() {
         }}
         className="flex items-center justify-center min-h-screen "
       >
-        <div className="flex flex-col items-center gap-4">
+        <div className="flex flex-col items-center gap-2 sm:gap-4">
           <Loader />
           <p className="text-slate-500 font-medium">Connecting to room...</p>
         </div>
@@ -154,22 +163,28 @@ function LobbyPage() {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <header className="flex items-center justify-between p-4">
+      <header className="flex items-center justify-between p-2 sm:p-4">
         <Button variant="incorrect" onClick={handleBack} className="gap-2">
           <LogOutIcon className="w-4 h-4  scale-x-[-1]" />
           Leave
         </Button>
-        <h1 className="font-black text-slate-500 uppercase text-3xl tracking-wide">LOBBY</h1>
-        <div className="w-20" />
+        <h1 className="font-black text-slate-500 uppercase text-xl sm:text-3xl tracking-wide">
+          LOBBY
+        </h1>
+        <div className="w-10 sm:w-20" />
       </header>
 
-      <div className="flex-1 flex flex-col items-center justify-center p-6 gap-8 max-w-2xl mx-auto w-full">
-        <div className="flex items-center justify-between gap-6 w-full">
-          <div className="flex-1 flex flex-col items-center gap-4">
-            <div className={cn("w-32 h-32 flex items-center justify-center p-2 transition-all")}>
+      <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 gap-8 max-w-2xl mx-auto w-full">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 w-full">
+          <div className="flex-1 flex flex-col items-center gap-2 sm:gap-4">
+            <div
+              className={cn(
+                "w-20 h-20 sm:w-40 sm:h-40 flex items-center justify-center p-2 transition-all",
+              )}
+            >
               <AvatarDisplay
                 avatarId={normalizeAvatar(selectedAvatar || myPlayer?.avatar)}
-                size="xl"
+                size={isMobile ? "lg" : "xl"}
                 showBorder={false}
               />
             </div>
@@ -184,24 +199,28 @@ function LobbyPage() {
           </div>
 
           <div className="flex flex-col items-center gap-2">
-            <div className="w-14 h-14 rounded-full bg-linear-to-br from-green-500 to-green-600 border-4 border-white shadow-xl flex items-center justify-center">
-              <Swords className="w-7 h-7 text-white" />
+            <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-linear-to-br from-green-500 to-green-600 border-4 border-white shadow-xl flex items-center justify-center">
+              <Swords className="w-5 h-5 sm:w-7 sm:h-7 text-white" />
             </div>
-            <p className="font-black text-xl text-transparent bg-clip-text bg-linear-to-r from-green-500 to-green-600">
+            <p className="font-black text-lg sm:text-xl text-transparent bg-clip-text bg-linear-to-r from-green-500 to-green-600">
               VS
             </p>
           </div>
 
-          <div className="flex-1 flex flex-col items-center gap-4">
-            <div className={cn("w-32 h-32 flex items-center justify-center transition-all")}>
+          <div className="flex-1 flex flex-col items-center gap-2 sm:gap-4">
+            <div
+              className={cn(
+                "w-24 h-24 sm:w-40 sm:h-40 flex items-center justify-center transition-all overflow-hidden",
+              )}
+            >
               {opponent ? (
                 <AvatarDisplay
                   avatarId={normalizeAvatar(opponent.avatar)}
-                  size="xl"
+                  size={isMobile ? "lg" : "xl"}
                   showBorder={false}
                 />
               ) : (
-                <div className="text-blue-500 text-6xl font-black">?</div>
+                <div className="text-blue-500 text-2xl sm:text-6xl font-black">?</div>
               )}
             </div>
             <div className="text-center">
@@ -220,7 +239,7 @@ function LobbyPage() {
         {isHost && !opponent && (
           <div className="w-full space-y-4">
             <div className="space-y-2">
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <div className="flex-1 flex items-center bg-white border-2 border-green-500 rounded-xl px-4 py-2 overflow-hidden">
                   <span className="text-base font-medium text-slate-500 truncate">
                     {getInviteLink(roomId)}
@@ -238,16 +257,16 @@ function LobbyPage() {
           {myPlayer?.isReady ? (
             <div className="flex flex-col items-center gap-2">
               <div className="flex items-center gap-2 text-green-600">
-                <span className="font-bold uppercase text-2xl">You're Ready!</span>
+                <span className="font-bold uppercase text-lg sm:text-2xl">You're Ready!</span>
               </div>
-              <p className="text-lg font-semibold text-slate-500">
+              <p className="text-base sm:text-lg font-semibold text-slate-500">
                 {opponent?.isReady ? "Starting game..." : "Waiting for opponent to ready up..."}
               </p>
             </div>
           ) : (
             <Button
               variant="primary"
-              className="w-full text-lg h-14"
+              className="w-full text-base sm:text-lg h-12 sm:h-14"
               onClick={handleReady}
               disabled={!opponent}
             >

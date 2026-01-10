@@ -1,158 +1,157 @@
-import { WordSearch } from '@/components/playground/board/word-search'
-import { WordListPanel, GameActionsPanel } from '@/components/layouts/playground-layout'
-import { ChatPanel, type Message } from '@/components/playground/chat'
-import { createFileRoute } from '@tanstack/react-router'
-import { useState, useMemo } from 'react'
-import { z } from 'zod'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { trpc, trpcClient } from '@/utils/trpc'
-import { useSession } from '@/lib/auth-client'
-import { Loader } from '@/components/loader'
-import { PuzzleCompletionDialog } from '@/components/puzzle-completion-dialog'
-import { PuzzleInCompletionDialog } from '@/components/puzzle-incomplete-dialog'
-import { useGameTimer } from '@/hooks/use-game-timer'
-import { useUnmount } from '@/hooks/use-unmount'
+import { WordSearch } from "@/components/playground/board/word-search";
+import { WordListPanel, GameActionsPanel } from "@/components/layouts/playground-layout";
+import { ChatPanel, type Message } from "@/components/playground/chat";
+import { createFileRoute } from "@tanstack/react-router";
+import { useState, useMemo } from "react";
+import { z } from "zod";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { trpc, trpcClient } from "@/utils/trpc";
+import { useSession } from "@/lib/auth-client";
+import { Loader } from "@/components/loader";
+import { PuzzleCompletionDialog } from "@/components/puzzle-completion-dialog";
+import { PuzzleInCompletionDialog } from "@/components/puzzle-incomplete-dialog";
+import { useGameTimer } from "@/hooks/use-game-timer";
+import { useUnmount } from "@/hooks/use-unmount";
 
-import jackAvatar from '@/assets/avatars/jack-avatar.png'
-import marieAvatar from '@/assets/avatars/marie-avatar.png'
-import { CareerGameHeader } from '@/components/playground/career-game-header'
+import jackAvatar from "@/assets/avatars/jack-avatar.png";
+import marieAvatar from "@/assets/avatars/marie-avatar.png";
+import { CareerGameHeader } from "@/components/playground/career-game-header";
 
 const playgroundSearchSchema = z.object({
   stageId: z.string().optional(),
-})
+});
 
-export const Route = createFileRoute('/arena/playground/')({
+export const Route = createFileRoute("/arena/playground/")({
   validateSearch: (search) => playgroundSearchSchema.parse(search),
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
-  const { stageId } = Route.useSearch()
-  const { data: session } = useSession()
-  const queryClient = useQueryClient()
-  const [gameKey, setGameKey] = useState(0)
-  const [foundWords, setFoundWords] = useState<Set<string>>(new Set())
-  const [messages, setMessages] = useState<Message[]>([])
-  const [placedWords, setPlacedWords] = useState<string[]>([])
-  const [completionDialogOpen, setCompletionDialogOpen] = useState(false)
-  const [incompleteDialogOpen, setIncompleteDialogOpen] = useState(false)
+  const { stageId } = Route.useSearch();
+  const { data: session } = useSession();
+  const queryClient = useQueryClient();
+  const [gameKey, setGameKey] = useState(0);
+  const [foundWords, setFoundWords] = useState<Set<string>>(new Set());
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [placedWords, setPlacedWords] = useState<string[]>([]);
+  const [completionDialogOpen, setCompletionDialogOpen] = useState(false);
+  const [incompleteDialogOpen, setIncompleteDialogOpen] = useState(false);
   const [completionData, setCompletionData] = useState<{
-    xpEarned: number
-    diamondsEarned: number
-    nextStage: any
-  } | null>(null)
+    xpEarned: number;
+    diamondsEarned: number;
+    nextStage: any;
+  } | null>(null);
 
-  const navigate = Route.useNavigate()
+  const navigate = Route.useNavigate();
 
   const { data: stage, isLoading: stageLoading } = useQuery({
     ...trpc.stages.getById.queryOptions({ id: stageId || "" }),
     enabled: !!stageId,
-  })
+  });
 
   const { data: stats, isLoading: statsLoading } = useQuery({
     ...trpc.user.getStats.queryOptions(),
     enabled: !!session?.user,
-  })
+  });
 
   const completeStage = useMutation({
     mutationFn: async (params: { stageId: string; completionTime: number; stars: number }) => {
-      return trpcClient.stages.completeStage.mutate(params)
+      return trpcClient.stages.completeStage.mutate(params);
     },
     onSuccess: (data) => {
+      setCompletionData(data);
+      setCompletionDialogOpen(true);
 
-      setCompletionData(data)
-      setCompletionDialogOpen(true)
-
-      queryClient.invalidateQueries({ queryKey: trpc.user.getStats.queryKey() })
-      queryClient.invalidateQueries({ queryKey: trpc.stages.getProgress.queryKey() })
-      queryClient.invalidateQueries({ queryKey: trpc.worlds.getAll.queryKey() })
+      queryClient.invalidateQueries({ queryKey: trpc.user.getStats.queryKey() });
+      queryClient.invalidateQueries({ queryKey: trpc.stages.getProgress.queryKey() });
+      queryClient.invalidateQueries({ queryKey: trpc.worlds.getAll.queryKey() });
     },
     onError: (error) => {
-      console.error('Failed to complete stage:', error)
-      if (typeof window !== 'undefined') {
-        alert(`Failed to complete stage: ${error.message || 'Unknown error'}`)
+      console.error("Failed to complete stage:", error);
+      if (typeof window !== "undefined") {
+        alert(`Failed to complete stage: ${error.message || "Unknown error"}`);
       }
     },
-  })
+  });
 
   const handleTimeUp = () => {
     if (foundWords.size < placedWords.length) {
-      setIncompleteDialogOpen(true)
+      setIncompleteDialogOpen(true);
     }
-  }
+  };
 
   const { timeLeft, start, pause, reset } = useGameTimer({
     initialTime: stage?.timeLimit || 300,
     onTimeUp: handleTimeUp,
-  })
+  });
 
   const stageWords = useMemo(() => {
-    return stage?.words ? stage.words.split(',') : []
-  }, [stage?.words])
+    return stage?.words ? stage.words.split(",") : [];
+  }, [stage?.words]);
 
   const player1 = {
-    name: session?.user?.name || 'You',
+    name: session?.user?.name || "You",
     avatar: session?.user?.image || jackAvatar,
     score: foundWords.size,
     isCurrentTurn: true,
-  }
+  };
 
   const player2 = {
-    name: 'Opponent',
+    name: "Opponent",
     avatar: marieAvatar,
     score: 3,
     isCurrentTurn: false,
-  }
+  };
 
   const handleWordFound = (word: string) => {
-    setFoundWords(prev => new Set([...prev, word]))
-  }
+    setFoundWords((prev) => new Set([...prev, word]));
+  };
 
   const handlePuzzleGenerated = (words: string[]) => {
-    setPlacedWords(words)
-    start()
-  }
+    setPlacedWords(words);
+    start();
+  };
 
   const handlePuzzleComplete = () => {
-    console.log('Puzzle completed!')
-    pause()
+    console.log("Puzzle completed!");
+    pause();
 
     if (stageId && stage) {
-      const elapsedTime = (stage.timeLimit || 300) - timeLeft
-      console.log(`Completing stage ${stageId} with time ${elapsedTime}s`)
-      completeStage.mutate({ stageId, completionTime: elapsedTime, stars: 3 })
+      const elapsedTime = (stage.timeLimit || 300) - timeLeft;
+      console.log(`Completing stage ${stageId} with time ${elapsedTime}s`);
+      completeStage.mutate({ stageId, completionTime: elapsedTime, stars: 3 });
     } else {
-      console.error('Cannot complete stage: missing stageId or stage data')
+      console.error("Cannot complete stage: missing stageId or stage data");
     }
-  }
+  };
 
   const handleReplayLevel = () => {
-    setGameKey(prev => prev + 1)
-    setFoundWords(new Set())
-    setMessages([])
-    setIncompleteDialogOpen(false)
-    reset()
-  }
+    setGameKey((prev) => prev + 1);
+    setFoundWords(new Set());
+    setMessages([]);
+    setIncompleteDialogOpen(false);
+    reset();
+  };
 
   useUnmount(() => {
-    pause()
-  })
+    pause();
+  });
 
   const handleNextStage = () => {
-    setCompletionDialogOpen(false)
-    setGameKey(prev => prev + 1)
+    setCompletionDialogOpen(false);
+    setGameKey((prev) => prev + 1);
 
     if (completionData?.nextStage) {
       navigate({
-        to: '/arena/playground',
+        to: "/arena/playground",
         search: { stageId: completionData.nextStage.id },
-      })
-      reset()
-      setFoundWords(new Set())
+      });
+      reset();
+      setFoundWords(new Set());
     } else {
-      navigate({ to: '/arena/lessons' })
+      navigate({ to: "/arena/lessons" });
     }
-  }
+  };
 
   const handleSendMessage = (message: string) => {
     const newMessage: Message = {
@@ -164,16 +163,16 @@ function RouteComponent() {
       },
       isOwn: true,
       timestamp: new Date(),
-    }
-    setMessages(prev => [...prev, newMessage])
-  }
+    };
+    setMessages((prev) => [...prev, newMessage]);
+  };
 
   if (stageLoading || statsLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen w-full">
         <Loader />
       </div>
-    )
+    );
   }
 
   if (!session?.user) {
@@ -182,14 +181,14 @@ function RouteComponent() {
         <div className="text-center space-y-4">
           <p className="text-lg">Please log in to play</p>
           <button
-            onClick={() => navigate({ to: '/' })}
+            onClick={() => navigate({ to: "/" })}
             className="px-4 py-2 bg-primary text-white rounded-lg"
           >
             Go to Home
           </button>
         </div>
       </div>
-    )
+    );
   }
 
   if (!stageId || !stage) {
@@ -198,14 +197,14 @@ function RouteComponent() {
         <div className="text-center space-y-4">
           <p className="text-lg">No stage selected</p>
           <button
-            onClick={() => navigate({ to: '/worlds', search: { world: 'meadow' } })}
+            onClick={() => navigate({ to: "/worlds", search: { world: "meadow" } })}
             className="px-4 py-2 bg-primary text-white rounded-lg"
           >
             Select a Stage
           </button>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -219,7 +218,7 @@ function RouteComponent() {
                   name: player1.name,
                   avatar: player1.avatar,
                   xp: stats?.totalXp ?? 10,
-                  diamonds: stats?.diamonds ?? 0
+                  diamonds: stats?.diamonds ?? 0,
                 }}
                 timerDuration={stage?.timeLimit || 300}
                 onTimerEnd={handleTimeUp}
@@ -236,10 +235,21 @@ function RouteComponent() {
                 onPuzzleComplete={handlePuzzleComplete}
               />
             </div>
+
+            <div className="lg:hidden flex flex-col gap-3 max-w-md">
+              <WordListPanel
+                words={placedWords.length > 0 ? placedWords : stageWords}
+                foundWords={foundWords}
+              />
+              <GameActionsPanel />
+            </div>
           </div>
 
           <div className="hidden lg:flex w-full  flex-col gap-3">
-            <WordListPanel words={placedWords.length > 0 ? placedWords : stageWords} foundWords={foundWords} />
+            <WordListPanel
+              words={placedWords.length > 0 ? placedWords : stageWords}
+              foundWords={foundWords}
+            />
             <ChatPanel
               messages={messages}
               currentUser={{
@@ -272,5 +282,5 @@ function RouteComponent() {
         onReplayLevel={handleReplayLevel}
       />
     </div>
-  )
+  );
 }

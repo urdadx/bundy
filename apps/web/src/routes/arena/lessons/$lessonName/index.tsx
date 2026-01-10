@@ -1,23 +1,23 @@
-import { BattleBanner } from '@/components/lesson-banner';
-import { BattleMap } from '@/components/battle-map'
-import { createFileRoute } from '@tanstack/react-router'
-import { trpc } from '@/utils/trpc'
-import { useQuery } from '@tanstack/react-query'
-import { Loader } from '@/components/loader'
+import { BattleBanner } from "@/components/lesson-banner";
+import { BattleMap } from "@/components/battle-map";
+import { createFileRoute } from "@tanstack/react-router";
+import { trpc } from "@/utils/trpc";
+import { useQuery } from "@tanstack/react-query";
+import { Loader } from "@/components/loader";
 
-export const Route = createFileRoute('/arena/lessons/$lessonName/')({
+export const Route = createFileRoute("/arena/lessons/$lessonName/")({
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
   const { lessonName } = Route.useParams();
 
   const { data: stages, isLoading: stagesLoading } = useQuery(
-    trpc.stages.getProgress.queryOptions({ worldId: lessonName })
+    trpc.stages.getProgress.queryOptions({ worldId: lessonName }),
   );
 
   const { data: worldData, isLoading: worldLoading } = useQuery(
-    trpc.worlds.getById.queryOptions({ id: lessonName })
+    trpc.worlds.getById.queryOptions({ id: lessonName }),
   );
 
   if (stagesLoading || worldLoading) {
@@ -33,17 +33,21 @@ function RouteComponent() {
     name: worldData?.name || "Warrior of Words",
   };
 
-  const lessons = stages?.map(s => ({
-    id: s.id,
-    title: `Stage ${s.stageNumber}`,
-    completed: s.completed,
-    difficulty: s.difficulty,
-  })) || [];
+  const lessons =
+    stages?.map((s) => ({
+      id: s.id,
+      title: `Stage ${s.stageNumber}`,
+      completed: s.completed,
+      difficulty: s.difficulty,
+    })) || [];
 
-  const activeLesson = stages?.find(s => !s.completed) || stages?.[0];
+  const activeLesson = stages?.find((s) => !s.completed) || stages?.[0];
 
   return (
-    <div className="flex w-full gap-x-12">
+    <div className="flex w-full space-y-4 sm:space-y-0 flex-col gap-x-12">
+      <h1 className="block sm:hidden text-lg font-black text-slate-700 capitalize tracking-tight">
+        BATTLE MAP
+      </h1>
       <div className="flex-1 space-y-5">
         <BattleBanner
           name={worldData?.name || lessonName}
@@ -62,5 +66,5 @@ function RouteComponent() {
         />
       </div>
     </div>
-  )
+  );
 }
