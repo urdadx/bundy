@@ -1,21 +1,19 @@
-
-import { type ComponentProps, useState } from 'react'
-import { useMediaQuery } from 'usehooks-ts'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer'
-import { Button } from '@/components/ui/button'
-import { ButtonBase } from './button-base'
-import { CurrentButton } from './current-buttons'
-import { Link } from '@tanstack/react-router'
-import { Popover as BasePopover } from "@radix-ui/react-popover";
+import { type ComponentProps, useState } from "react";
+import { useMediaQuery } from "usehooks-ts";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
+import { Button } from "@/components/ui/button";
+import { ButtonBase } from "./button-base";
+import { CurrentButton } from "./current-buttons";
+import { Link } from "@tanstack/react-router";
 
 type RenderTriggerProps = {
-  variant: ComponentProps<typeof ButtonBase>['variant']
-  current?: boolean
-  completed?: boolean
-  percentage?: number
-  ariaLabel?: string
-}
+  variant: ComponentProps<typeof ButtonBase>["variant"];
+  current?: boolean;
+  completed?: boolean;
+  percentage?: number;
+  ariaLabel?: string;
+};
 
 const renderTrigger = ({
   percentage,
@@ -27,26 +25,26 @@ const renderTrigger = ({
   if (completed) {
     return (
       <ButtonBase
-        icon={variant === 'golden' ? 'crown' : 'check'}
+        icon={variant === "golden" ? "crown" : "check"}
         variant={variant}
         aria-label="Completed Lesson"
       />
-    )
+    );
   }
   if (current) {
     return (
       <CurrentButton icon="star" percentage={percentage} variant={variant} ariaLabel={ariaLabel} />
-    )
+    );
   }
-}
+};
 
 type ActiveButtonContentProps = {
-  title: string
-  prompt: string
-  href: any
-  hrefText: string
-  variant: ComponentProps<typeof ButtonBase>['variant']
-}
+  title: string;
+  prompt: string;
+  href: any;
+  hrefText: string;
+  variant: ComponentProps<typeof ButtonBase>["variant"];
+};
 
 function ActiveButtonContent({ variant, title, prompt, href, hrefText }: ActiveButtonContentProps) {
   return (
@@ -59,10 +57,10 @@ function ActiveButtonContent({ variant, title, prompt, href, hrefText }: ActiveB
         <Link to={href}>{hrefText}</Link>
       </Button>
     </div>
-  )
+  );
 }
 
-type ActiveButtonProps = RenderTriggerProps & ActiveButtonContentProps
+type ActiveButtonProps = RenderTriggerProps & ActiveButtonContentProps;
 
 export function ActiveButton({
   title,
@@ -75,8 +73,8 @@ export function ActiveButton({
   hrefText,
   ariaLabel,
 }: ActiveButtonProps) {
-  const [open, setOpen] = useState(false)
-  const isDesktop = useMediaQuery('(min-width: 640px)')
+  const [open, setOpen] = useState(false);
+  const isDesktop = useMediaQuery("(min-width: 640px)");
 
   if (isDesktop) {
     return (
@@ -92,10 +90,9 @@ export function ActiveButton({
             hrefText={hrefText}
             prompt={prompt}
           />
-
         </PopoverContent>
       </Popover>
-    )
+    );
   }
 
   return (
@@ -113,5 +110,5 @@ export function ActiveButton({
         />
       </DrawerContent>
     </Drawer>
-  )
+  );
 }

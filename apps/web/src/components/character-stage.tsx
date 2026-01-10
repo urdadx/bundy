@@ -21,7 +21,7 @@ const CharacterStage = ({
   <div className="flex flex-col justify-center px-1">
     <div className="grid grid-cols-2 gap-4 mb-4">
       <GameCard
-        depth={selectedCharacter === "female" ? "4" : "4"}
+        depth="4"
         onClick={() => setSelectedCharacter("female")}
         className={cn(
           "cursor-pointer flex flex-col items-center justify-center gap-2 p-2 transition-all hover:bg-slate-50 active:translate-y-1 active:border-b-4",

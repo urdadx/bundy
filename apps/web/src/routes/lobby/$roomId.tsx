@@ -4,23 +4,35 @@ import { useMultiplayerGame } from "@/hooks/use-multiplayer-game";
 import { AvatarDisplay } from "@/components/avatar-selector";
 import { Button } from "@/components/ui/button";
 import { Loader } from "@/components/loader";
-import { useSession } from "@/lib/auth-client";
+import { authClient, useSession } from "@/lib/auth-client";
 import { Swords, LogOutIcon } from "lucide-react";
 import { getInviteLink } from "@/lib/multiplayer/api";
 import { cn } from "@/lib/utils";
 import type { AvatarId } from "@/lib/avatars";
+import { normalizeAvatar } from "@/lib/avatars";
 import backgroundImage from "@/assets/background/backgroundCastles.png";
 import { CountdownOverlay } from "@/components/playground/countdown-overlay";
 import { GameConnectionError } from "@/components/playground/game-connection-error";
+import { LobbyAuthForm } from "@/components/lobby-auth-form";
 
 export const Route = createFileRoute("/lobby/$roomId")({
   component: LobbyPage,
+  beforeLoad: async () => {
+    const { data: session } = await authClient.getSession();
+    return {
+      session,
+      isAuthenticated: !!session,
+    };
+  },
 });
 
 function LobbyPage() {
   const { roomId } = Route.useParams();
+  const { isAuthenticated, session: initialSession } = Route.useRouteContext();
   const navigate = useNavigate();
   const { data: session } = useSession();
+
+  const currentSession = session || initialSession;
 
   const {
     connect,
@@ -38,16 +50,19 @@ function LobbyPage() {
   } = useMultiplayerGame({ roomId });
 
   const [copiedLink, setCopiedLink] = useState(false);
-  const [selectedAvatar, setSelectedAvatar] = useState<AvatarId>("jack-avatar.png");
+  const avatarSrc = currentSession?.user?.image || "";
+  const [selectedAvatar, setSelectedAvatar] = useState<AvatarId>(
+    avatarSrc.includes("marie-avatar") ? "marie-avatar.png" : "jack-avatar.png",
+  );
 
   useEffect(() => {
-    if (roomId && session?.user?.id) {
+    if (roomId && currentSession?.user?.id && isAuthenticated) {
       connect();
+      const newAvatar = avatarSrc.includes("marie-avatar") ? "marie-avatar.png" : "jack-avatar.png";
+      setSelectedAvatar(newAvatar);
     }
-    return () => {
-      disconnect();
-    };
-  }, [roomId, session?.user?.id, connect, disconnect]);
+    return () => disconnect();
+  }, [roomId, currentSession?.user?.id, isAuthenticated, connect, disconnect]);
 
   useEffect(() => {
     if (phase === "playing") {
@@ -88,11 +103,35 @@ function LobbyPage() {
 
   if (isConnecting) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-50">
+      <div
+        style={{
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+        className="flex items-center justify-center min-h-screen "
+      >
         <div className="flex flex-col items-center gap-4">
           <Loader />
           <p className="text-slate-500 font-medium">Connecting to room...</p>
         </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div
+        className="min-h-screen flex flex-col"
+        style={{
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        <LobbyAuthForm open={true} onOpenChange={() => {}} />
       </div>
     );
   }
@@ -129,7 +168,7 @@ function LobbyPage() {
           <div className="flex-1 flex flex-col items-center gap-4">
             <div className={cn("w-32 h-32 flex items-center justify-center p-2 transition-all")}>
               <AvatarDisplay
-                avatarId={selectedAvatar || myPlayer?.avatar || "jack-avatar.png"}
+                avatarId={normalizeAvatar(selectedAvatar || myPlayer?.avatar)}
                 size="xl"
                 showBorder={false}
               />
@@ -157,7 +196,7 @@ function LobbyPage() {
             <div className={cn("w-32 h-32 flex items-center justify-center transition-all")}>
               {opponent ? (
                 <AvatarDisplay
-                  avatarId={opponent.avatar || "jack-avatar.png"}
+                  avatarId={normalizeAvatar(opponent.avatar)}
                   size="xl"
                   showBorder={false}
                 />

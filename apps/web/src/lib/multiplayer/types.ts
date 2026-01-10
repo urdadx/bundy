@@ -40,7 +40,6 @@ export interface FoundWord {
 
 export type RoomStatus = "waiting" | "ready" | "playing" | "finished";
 
-// Serialized room for client
 export interface SerializedRoom {
   id: string;
   hostId: string;
@@ -93,7 +92,6 @@ export type ServerMessage =
   | { type: "error"; message: string }
   | { type: "pong" };
 
-// Connection state
 export type ConnectionState = "connecting" | "connected" | "disconnected" | "reconnecting";
 
 // Avatar options (matching the files in assets/avatars)

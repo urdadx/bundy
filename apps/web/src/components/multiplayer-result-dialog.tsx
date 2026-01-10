@@ -11,6 +11,10 @@ import { motion } from "motion/react";
 import { useNavigate } from "@tanstack/react-router";
 import { RotateCcw, LogOut, Loader2 } from "lucide-react";
 import type { Player } from "@/lib/multiplayer/types";
+import { normalizeAvatar } from "@/lib/avatars";
+import trophy from "@/assets/rewards/trophy.png";
+import handshake from "@/assets/rewards/handshake.png";
+import sadBunny from "@/assets/rewards/sad.png";
 
 const PLAYER_COLORS = {
   host: "#1cb0f6",
@@ -56,21 +60,24 @@ export function MultiplayerResultDialog({
     switch (result) {
       case "win":
         return {
-          title: "YOU WON 🏆",
-          bgColor: "bg-yellow-100",
-          borderColor: "border-yellow-300",
+          title: "YOU WON",
+          bgGradient: "bg-gradient-to-b from-yellow-50 to-amber-50",
+          accentColor: "text-yellow-600",
+          icon: trophy,
         };
       case "lose":
         return {
-          title: "YOU LOST 😞",
-          bgColor: "bg-slate-100",
-          borderColor: "border-slate-300",
+          title: "YOU LOST ",
+          bgGradient: "bg-gradient-to-b from-slate-50 to-gray-50",
+          accentColor: "text-slate-600",
+          icon: sadBunny,
         };
       case "draw":
         return {
-          title: "IT'S A DRAW 🤝",
-          bgColor: "bg-blue-100",
-          borderColor: "border-blue-300",
+          title: "IT'S A DRAW",
+          bgGradient: "bg-gradient-to-b from-blue-50 to-cyan-50",
+          accentColor: "text-blue-600",
+          icon: handshake,
         };
     }
   };
@@ -79,109 +86,97 @@ export function MultiplayerResultDialog({
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="w-full! max-w-md! p-6 border-none bg-white overflow-hidden">
-        <AlertDialogHeader className="w-full justify-center">
-          <AlertDialogTitle className="text-3xl uppercase text-center font-black text-slate-800 tracking-tight">
-            {config.title}
-          </AlertDialogTitle>
-        </AlertDialogHeader>
+      <AlertDialogContent className="w-full! max-w-md! p-6 border-none bg-white overflow-hidden ">
+        <div className="">
+          <AlertDialogHeader className="w-full justify-center">
+            <AlertDialogTitle className="text-3xl uppercase text-center font-black text-slate-800 tracking-tight">
+              {config.title}
+            </AlertDialogTitle>
+          </AlertDialogHeader>
 
-        <div className="px-6 py-4">
-          <div className="flex items-center justify-center gap-4">
+          <div className="flex justify-center">
+            <motion.img
+              src={config.icon}
+              alt="Trophy"
+              className="w-44 h-44 "
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{
+                delay: 0.2,
+                type: "spring",
+                stiffness: 200,
+                damping: 15,
+              }}
+            />
+          </div>
+        </div>
+
+        <div className=" bg-white">
+          <div className="flex items-center justify-center gap-12">
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-              className="flex-1 text-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="text-center"
             >
-              <div className="relative inline-block">
-                <AvatarDisplay
-                  avatarId={currentPlayer?.avatar || "avatar1"}
-                  size="lg"
-                  borderColor={myColor}
-                />
-                {result === "win" && (
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.5, type: "spring" }}
-                    className="absolute -top-2 -right-2"
-                  ></motion.div>
-                )}
-              </div>
-              <p className="mt-2 text-center font-bold text-slate-700 truncate max-w-24 mx-auto">
-                {currentPlayer?.name || "You"}
-              </p>
-              <motion.p
-                initial={{ scale: 0.5 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.3, type: "spring" }}
-                className="text-3xl font-black"
-                style={{ color: myColor }}
-              >
+              <AvatarDisplay
+                avatarId={normalizeAvatar(currentPlayer?.avatar)}
+                size="md"
+                showBorder={false}
+              />
+
+              <p className="text-2xl font-black" style={{ color: myColor }}>
                 {myScore}
-              </motion.p>
+              </p>
             </motion.div>
 
-            <div className="flex flex-col items-center">
-              <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center">
-                <span className="text-lg font-black text-slate-400">VS</span>
-              </div>
-            </div>
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.5 }}
+              className="text-2xl font-black text-slate-300"
+            >
+              VS
+            </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-              className="flex-1 text-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="text-center"
             >
-              <div className="relative inline-block">
-                <AvatarDisplay
-                  avatarId={opponent?.avatar || "avatar1"}
-                  size="lg"
-                  borderColor={opponentColor}
-                />
-                {result === "lose" && (
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.5, type: "spring" }}
-                    className="absolute -top-2 -right-2"
-                  ></motion.div>
-                )}
-              </div>
-              <p className="mt-2 text-center font-bold text-slate-700 truncate max-w-24 mx-auto">
-                {opponent?.name || "Opponent"}
-              </p>
-              <motion.p
-                initial={{ scale: 0.5 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.3, type: "spring" }}
-                className="text-3xl font-black"
-                style={{ color: opponentColor }}
-              >
+              <AvatarDisplay
+                avatarId={normalizeAvatar(opponent?.avatar)}
+                size="md"
+                showBorder={false}
+              />
+
+              <p className="text-2xl font-black" style={{ color: opponentColor }}>
                 {opponentScore}
-              </motion.p>
+              </p>
             </motion.div>
           </div>
         </div>
 
         {opponentRequestedRematch && (
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mx-6 p-3 bg-green-50 border border-green-200 rounded-xl text-center"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            className="mx-8 mb-4"
           >
-            <p className="text-sm font-medium text-green-700">
-              {opponent?.name || "Opponent"} wants a rematch! 🔥
-            </p>
+            <div className="p-4 bg-linear-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-2xl text-center">
+              <p className="text-base font-bold text-green-700">
+                {opponent?.name || "Opponent"} wants a rematch! 🔥
+              </p>
+            </div>
           </motion.div>
         )}
 
-        <AlertDialogFooter className="p-6 pt-4 flex gap-2">
+        <AlertDialogFooter className=" flex gap-3">
           <Button
             variant="default"
-            className="w-full"
+            size="lg"
+            className="w-full text-base font-semibold"
             onClick={() => {
               onOpenChange(false);
               navigate({
@@ -189,28 +184,29 @@ export function MultiplayerResultDialog({
               });
             }}
           >
-            <LogOut className="w-4 h-4 mr-2" />
+            <LogOut className="w-5 h-5 mr-2" />
             Exit
           </Button>
           <Button
             variant="primary"
-            className="w-full"
+            size="lg"
+            className="w-full text-base font-semibold"
             onClick={onRematch}
             disabled={hasRequestedRematch}
           >
             {hasRequestedRematch ? (
               <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
                 Waiting...
               </>
             ) : opponentRequestedRematch ? (
               <>
-                <RotateCcw className="w-4 h-4 mr-2" />
+                <RotateCcw className="w-5 h-5 mr-2" />
                 Accept Rematch
               </>
             ) : (
               <>
-                <RotateCcw className="w-4 h-4 mr-2" />
+                <RotateCcw className="w-5 h-5 mr-2" />
                 Rematch
               </>
             )}

@@ -29,13 +29,19 @@ export function MultiplayerGameHeader({ player1, player2, timeRemaining }: GameH
 
   const isLowTime = timeRemaining !== undefined && timeRemaining <= 60;
 
+  const normalizeAvatar = (avatar: string | undefined): string => {
+    if (!avatar) return "jack-avatar.png";
+    const filename = avatar.split("/").pop();
+    return filename || "jack-avatar.png";
+  };
+
   return (
     <div className="w-full bg-white border-2 border-b-4 border-slate-200 rounded-xl p-5">
       <div className="flex items-center justify-between gap-6">
         <div className="flex items-center gap-2">
           <div className="w-12 h-12 rounded-full overflow-hidden border-3 border-[#1cb0f6] bg-[#ddf4ff] p-1 shrink-0">
             <img
-              src={getAvatarSrc(player1.avatar)}
+              src={getAvatarSrc(normalizeAvatar(player1.avatar))}
               alt={player1.name}
               className="w-full h-full object-contain"
             />
@@ -72,7 +78,7 @@ export function MultiplayerGameHeader({ player1, player2, timeRemaining }: GameH
           </div>
           <div className="w-12 h-12 rounded-full overflow-hidden border-3 border-hp-red bg-[#ffdfe0] p-1 shrink-0">
             <img
-              src={getAvatarSrc(player2.avatar)}
+              src={getAvatarSrc(normalizeAvatar(player2.avatar))}
               alt={player2.name}
               className="w-full h-full object-contain"
             />

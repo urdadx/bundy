@@ -1,17 +1,16 @@
-// routes/arena/battles.tsx
-import { createFileRoute, Outlet } from '@tanstack/react-router'
-import { ArenaLayout } from '@/components/layouts/arena-layout'
+import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { ArenaLayout } from "@/components/layouts/arena-layout";
 
-export const Route = createFileRoute('/arena/lessons')({
+export const Route = createFileRoute("/arena/lessons")({
   component: BattlesLayout,
-})
+});
 
 function BattlesLayout() {
   return (
     <ArenaLayout sidebar={<ProgressSidebar />}>
       <Outlet />
     </ArenaLayout>
-  )
+  );
 }
 
 function ProgressSidebar() {
@@ -25,11 +24,9 @@ function ProgressSidebar() {
           <div className="h-4 bg-slate-100 rounded-full overflow-hidden">
             <div className="h-full bg-green-500 w-[60%]" />
           </div>
-          <p className="text-xs font-bold text-slate-400 text-center">
-            60% TO NEXT WORLD
-          </p>
+          <p className="text-xs font-bold text-slate-400 text-center">60% TO NEXT WORLD</p>
         </div>
       </div>
     </div>
-  )
+  );
 }

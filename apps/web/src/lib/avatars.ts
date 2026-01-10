@@ -4,7 +4,6 @@ import jackAvatar from "@/assets/avatars/jack-avatar.png";
 import marieAvatar from "@/assets/avatars/marie-avatar.png";
 import rudeusAvatar from "@/assets/avatars/rudeus-avatar.png";
 
-// Avatar options with their image imports
 export const AVATARS = [
   { id: "jack-avatar.png", name: "Jack", src: jackAvatar },
   { id: "marie-avatar.png", name: "Marie", src: marieAvatar },
@@ -43,4 +42,11 @@ export function getPrevAvatar(currentAvatarId: string | null | undefined): Avata
 export function getAvatarIndex(avatarId: string | null | undefined): number {
   const index = AVATARS.findIndex((a) => a.id === avatarId);
   return index >= 0 ? index : 0;
+}
+
+// Normalize avatar from various formats to AvatarId
+export function normalizeAvatar(avatar: string | undefined): AvatarId {
+  if (!avatar) return "jack-avatar.png";
+  const filename = avatar.split("/").pop();
+  return (filename === "marie-avatar.png" ? "marie-avatar.png" : "jack-avatar.png") as AvatarId;
 }

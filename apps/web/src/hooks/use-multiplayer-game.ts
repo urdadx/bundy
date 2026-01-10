@@ -53,7 +53,7 @@ export function useMultiplayerGame(options: UseMultiplayerGameOptions = {}) {
 
   useEffect(() => {
     if (session?.user && (!odId || !odName)) {
-      setUser(session.user.id, session.user.name || "Player", "jack-avatar.png");
+      setUser(session.user.id, session.user.name || "Player", session.user.image || "jack-avatar.png");
     }
   }, [session?.user, odId, odName, setUser]);
 

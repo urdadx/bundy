@@ -13,9 +13,24 @@ const THEME_WORDS = {
   countries: ['CANADA', 'BRAZIL', 'FRANCE', 'GERMANY', 'JAPAN', 'AUSTRALIA', 'EGYPT', 'MEXICO', 'ITALY', 'SPAIN', 'NORWAY', 'SWEDEN']
 };
 
-function getRandomWords(theme: string, count: number, maxLength: number): string {
+// Add difficulty constraints matching the word search generator
+const DIFFICULTY_CONFIG = {
+  easy: { minWordLength: 4, maxWordLength: 7 },
+  medium: { minWordLength: 4, maxWordLength: 10 },
+  hard: { minWordLength: 5, maxWordLength: 12 }
+};
+
+function getRandomWords(theme: string, count: number, gridSize: number, difficulty: string): string {
   const words = THEME_WORDS[theme as keyof typeof THEME_WORDS] || THEME_WORDS.general;
-  const validWords = words.filter(word => word.length <= maxLength - 2);
+  const diffConfig = DIFFICULTY_CONFIG[difficulty as keyof typeof DIFFICULTY_CONFIG] || DIFFICULTY_CONFIG.easy;
+  
+  // Filter by both grid size AND difficulty constraints
+  const validWords = words.filter(word => 
+    word.length >= diffConfig.minWordLength &&
+    word.length <= diffConfig.maxWordLength &&
+    word.length <= gridSize
+  );
+  
   const shuffled = [...validWords].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, count).join(',');
 }
@@ -28,7 +43,6 @@ async function seed() {
   await db.delete(world);
 
   // Define all 6 worlds
-  // Each world gives 100 XP total (10+15+20+25+30), so XP requirements increase by 100
   const worlds = [
     {
       id: "meadow",
@@ -104,7 +118,7 @@ async function seed() {
         timeLimit: 180,
         xpReward: 10,
         diamondReward: 5,
-        words: getRandomWords(w.theme, 5, 8),
+        words: getRandomWords(w.theme, 5, 8, "easy"),
       },
       {
         id: `${w.id}-2`,
@@ -116,7 +130,7 @@ async function seed() {
         timeLimit: 240,
         xpReward: 15,
         diamondReward: 8,
-        words: getRandomWords(w.theme, 6, 10),
+        words: getRandomWords(w.theme, 6, 10, "easy"),
       },
       {
         id: `${w.id}-3`,
@@ -128,7 +142,7 @@ async function seed() {
         timeLimit: 300,
         xpReward: 20,
         diamondReward: 10,
-        words: getRandomWords(w.theme, 7, 10),
+        words: getRandomWords(w.theme, 7, 10, "medium"),
       },
       {
         id: `${w.id}-4`,
@@ -140,7 +154,7 @@ async function seed() {
         timeLimit: 360,
         xpReward: 25,
         diamondReward: 12,
-        words: getRandomWords(w.theme, 8, 12),
+        words: getRandomWords(w.theme, 8, 12, "medium"),
       },
       {
         id: `${w.id}-5`,
@@ -152,7 +166,7 @@ async function seed() {
         timeLimit: 420,
         xpReward: 30,
         diamondReward: 15,
-        words: getRandomWords(w.theme, 10, 12),
+        words: getRandomWords(w.theme, 10, 12, "hard"),
       },
     ];
     await db.insert(stage).values(worldStages);

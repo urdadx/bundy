@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { useRouter } from "@tanstack/react-router";
+import { useParams, useRouter } from "@tanstack/react-router";
 import { authClient } from "@/lib/auth-client";
 import { motion, AnimatePresence } from "motion/react";
 import { NameStage } from "./name-stage";
 import { CharacterStage } from "./character-stage";
 import femaleAvatar from "@/assets/avatars/marie-avatar.png";
 import maleAvatar from "@/assets/avatars/jack-avatar.png";
-import { DialogContent, DialogHeader, Dialog } from "./ui/dialog";
+import { AlertDialog, AlertDialogContent, AlertDialogHeader } from "./ui/alert-dialog";
 
-export const AuthForm = ({
+export const LobbyAuthForm = ({
   open,
   onOpenChange,
 }: {
@@ -17,6 +17,9 @@ export const AuthForm = ({
 }) => {
   const [step, setStep] = useState<"name" | "character">("name");
   const [direction, setDirection] = useState(0);
+  const { roomId } = useParams({ from: "/lobby/$roomId" });
+
+  console.log("roomId in LobbyAuthForm:", roomId);
 
   const [battleName, setBattleName] = useState("");
   const [selectedCharacter, setSelectedCharacter] = useState<"male" | "female" | null>(null);
@@ -34,19 +37,17 @@ export const AuthForm = ({
     setStep("name");
   };
 
+  const handleBackToIntro = () => {
+    onOpenChange(false);
+  };
+
   const handleSubmitGuest = async () => {
     if (!battleName.trim() || !selectedCharacter) return;
 
     setIsLoading(true);
     try {
       await authClient.signIn.anonymous({
-        fetchOptions: {
-          onSuccess: () => {
-            router.navigate({
-              to: "/choose",
-            });
-          },
-        },
+        fetchOptions: {},
       });
 
       await authClient.updateUser({
@@ -54,10 +55,14 @@ export const AuthForm = ({
         image: selectedCharacter === "male" ? maleAvatar : femaleAvatar,
       });
 
+      await authClient.getSession();
+
       localStorage.setItem("characterGender", selectedCharacter);
 
+      router.invalidate();
       router.navigate({
-        to: "/choose",
+        to: `/lobby/${roomId}`,
+        params: { roomId: roomId as string },
       });
     } catch (error) {
       console.error("Failed to create guest account:", error);
@@ -110,9 +115,9 @@ export const AuthForm = ({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
+    <AlertDialog open={open} onOpenChange={onOpenChange}>
+      <AlertDialogContent className="sm:max-w-md">
+        <AlertDialogHeader className="flex justify-center">
           <AnimatePresence mode="wait" custom={direction}>
             <motion.h2
               key={step}
@@ -127,7 +132,7 @@ export const AuthForm = ({
               {getTitle(step)}
             </motion.h2>
           </AnimatePresence>
-        </DialogHeader>
+        </AlertDialogHeader>
         <motion.div
           className="relative w-full overflow-hidden"
           animate={{ height: getContainerHeight() }}
@@ -148,6 +153,7 @@ export const AuthForm = ({
                   battleName={battleName}
                   setBattleName={setBattleName}
                   handleContinueToCharacter={handleContinueToCharacter}
+                  handleBackToIntro={handleBackToIntro}
                   isLoading={isLoading}
                 />
               </motion.div>
@@ -172,7 +178,7 @@ export const AuthForm = ({
             )}
           </AnimatePresence>
         </motion.div>
-      </DialogContent>
-    </Dialog>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };

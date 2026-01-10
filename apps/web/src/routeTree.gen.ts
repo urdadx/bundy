@@ -18,10 +18,10 @@ import { Route as MultiplayerRoomIdRouteImport } from './routes/multiplayer/$roo
 import { Route as LobbyRoomIdRouteImport } from './routes/lobby/$roomId'
 import { Route as ArenaShopRouteImport } from './routes/arena/shop'
 import { Route as ArenaProfileRouteImport } from './routes/arena/profile'
-import { Route as ArenaLeaderboardRouteImport } from './routes/arena/leaderboard'
 import { Route as ArenaLessonsRouteRouteImport } from './routes/arena/lessons/route'
 import { Route as ArenaPlaygroundIndexRouteImport } from './routes/arena/playground/index'
 import { Route as ArenaLessonsIndexRouteImport } from './routes/arena/lessons/index'
+import { Route as ArenaLeaderboardIndexRouteImport } from './routes/arena/leaderboard/index'
 import { Route as ArenaLessonsLessonNameIndexRouteImport } from './routes/arena/lessons/$lessonName/index'
 import { Route as ArenaLessonsLessonNameLevelRouteImport } from './routes/arena/lessons/$lessonName/$level'
 
@@ -70,11 +70,6 @@ const ArenaProfileRoute = ArenaProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => ArenaRouteRoute,
 } as any)
-const ArenaLeaderboardRoute = ArenaLeaderboardRouteImport.update({
-  id: '/leaderboard',
-  path: '/leaderboard',
-  getParentRoute: () => ArenaRouteRoute,
-} as any)
 const ArenaLessonsRouteRoute = ArenaLessonsRouteRouteImport.update({
   id: '/lessons',
   path: '/lessons',
@@ -89,6 +84,11 @@ const ArenaLessonsIndexRoute = ArenaLessonsIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => ArenaLessonsRouteRoute,
+} as any)
+const ArenaLeaderboardIndexRoute = ArenaLeaderboardIndexRouteImport.update({
+  id: '/leaderboard/',
+  path: '/leaderboard/',
+  getParentRoute: () => ArenaRouteRoute,
 } as any)
 const ArenaLessonsLessonNameIndexRoute =
   ArenaLessonsLessonNameIndexRouteImport.update({
@@ -110,11 +110,11 @@ export interface FileRoutesByFullPath {
   '/components': typeof ComponentsRoute
   '/worlds': typeof WorldsRoute
   '/arena/lessons': typeof ArenaLessonsRouteRouteWithChildren
-  '/arena/leaderboard': typeof ArenaLeaderboardRoute
   '/arena/profile': typeof ArenaProfileRoute
   '/arena/shop': typeof ArenaShopRoute
   '/lobby/$roomId': typeof LobbyRoomIdRoute
   '/multiplayer/$roomId': typeof MultiplayerRoomIdRoute
+  '/arena/leaderboard': typeof ArenaLeaderboardIndexRoute
   '/arena/lessons/': typeof ArenaLessonsIndexRoute
   '/arena/playground': typeof ArenaPlaygroundIndexRoute
   '/arena/lessons/$lessonName/$level': typeof ArenaLessonsLessonNameLevelRoute
@@ -126,11 +126,11 @@ export interface FileRoutesByTo {
   '/choose': typeof ChooseRoute
   '/components': typeof ComponentsRoute
   '/worlds': typeof WorldsRoute
-  '/arena/leaderboard': typeof ArenaLeaderboardRoute
   '/arena/profile': typeof ArenaProfileRoute
   '/arena/shop': typeof ArenaShopRoute
   '/lobby/$roomId': typeof LobbyRoomIdRoute
   '/multiplayer/$roomId': typeof MultiplayerRoomIdRoute
+  '/arena/leaderboard': typeof ArenaLeaderboardIndexRoute
   '/arena/lessons': typeof ArenaLessonsIndexRoute
   '/arena/playground': typeof ArenaPlaygroundIndexRoute
   '/arena/lessons/$lessonName/$level': typeof ArenaLessonsLessonNameLevelRoute
@@ -144,11 +144,11 @@ export interface FileRoutesById {
   '/components': typeof ComponentsRoute
   '/worlds': typeof WorldsRoute
   '/arena/lessons': typeof ArenaLessonsRouteRouteWithChildren
-  '/arena/leaderboard': typeof ArenaLeaderboardRoute
   '/arena/profile': typeof ArenaProfileRoute
   '/arena/shop': typeof ArenaShopRoute
   '/lobby/$roomId': typeof LobbyRoomIdRoute
   '/multiplayer/$roomId': typeof MultiplayerRoomIdRoute
+  '/arena/leaderboard/': typeof ArenaLeaderboardIndexRoute
   '/arena/lessons/': typeof ArenaLessonsIndexRoute
   '/arena/playground/': typeof ArenaPlaygroundIndexRoute
   '/arena/lessons/$lessonName/$level': typeof ArenaLessonsLessonNameLevelRoute
@@ -163,11 +163,11 @@ export interface FileRouteTypes {
     | '/components'
     | '/worlds'
     | '/arena/lessons'
-    | '/arena/leaderboard'
     | '/arena/profile'
     | '/arena/shop'
     | '/lobby/$roomId'
     | '/multiplayer/$roomId'
+    | '/arena/leaderboard'
     | '/arena/lessons/'
     | '/arena/playground'
     | '/arena/lessons/$lessonName/$level'
@@ -179,11 +179,11 @@ export interface FileRouteTypes {
     | '/choose'
     | '/components'
     | '/worlds'
-    | '/arena/leaderboard'
     | '/arena/profile'
     | '/arena/shop'
     | '/lobby/$roomId'
     | '/multiplayer/$roomId'
+    | '/arena/leaderboard'
     | '/arena/lessons'
     | '/arena/playground'
     | '/arena/lessons/$lessonName/$level'
@@ -196,11 +196,11 @@ export interface FileRouteTypes {
     | '/components'
     | '/worlds'
     | '/arena/lessons'
-    | '/arena/leaderboard'
     | '/arena/profile'
     | '/arena/shop'
     | '/lobby/$roomId'
     | '/multiplayer/$roomId'
+    | '/arena/leaderboard/'
     | '/arena/lessons/'
     | '/arena/playground/'
     | '/arena/lessons/$lessonName/$level'
@@ -282,13 +282,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ArenaProfileRouteImport
       parentRoute: typeof ArenaRouteRoute
     }
-    '/arena/leaderboard': {
-      id: '/arena/leaderboard'
-      path: '/leaderboard'
-      fullPath: '/arena/leaderboard'
-      preLoaderRoute: typeof ArenaLeaderboardRouteImport
-      parentRoute: typeof ArenaRouteRoute
-    }
     '/arena/lessons': {
       id: '/arena/lessons'
       path: '/lessons'
@@ -309,6 +302,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/arena/lessons/'
       preLoaderRoute: typeof ArenaLessonsIndexRouteImport
       parentRoute: typeof ArenaLessonsRouteRoute
+    }
+    '/arena/leaderboard/': {
+      id: '/arena/leaderboard/'
+      path: '/leaderboard'
+      fullPath: '/arena/leaderboard'
+      preLoaderRoute: typeof ArenaLeaderboardIndexRouteImport
+      parentRoute: typeof ArenaRouteRoute
     }
     '/arena/lessons/$lessonName/': {
       id: '/arena/lessons/$lessonName/'
@@ -344,17 +344,17 @@ const ArenaLessonsRouteRouteWithChildren =
 
 interface ArenaRouteRouteChildren {
   ArenaLessonsRouteRoute: typeof ArenaLessonsRouteRouteWithChildren
-  ArenaLeaderboardRoute: typeof ArenaLeaderboardRoute
   ArenaProfileRoute: typeof ArenaProfileRoute
   ArenaShopRoute: typeof ArenaShopRoute
+  ArenaLeaderboardIndexRoute: typeof ArenaLeaderboardIndexRoute
   ArenaPlaygroundIndexRoute: typeof ArenaPlaygroundIndexRoute
 }
 
 const ArenaRouteRouteChildren: ArenaRouteRouteChildren = {
   ArenaLessonsRouteRoute: ArenaLessonsRouteRouteWithChildren,
-  ArenaLeaderboardRoute: ArenaLeaderboardRoute,
   ArenaProfileRoute: ArenaProfileRoute,
   ArenaShopRoute: ArenaShopRoute,
+  ArenaLeaderboardIndexRoute: ArenaLeaderboardIndexRoute,
   ArenaPlaygroundIndexRoute: ArenaPlaygroundIndexRoute,
 }
 

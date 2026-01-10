@@ -8,8 +8,8 @@ import { z } from "zod";
 const VALID_AVATARS = ["jack-avatar.png", "marie-avatar.png", "rudeus-avatar.png"] as const;
 
 function calculateLeague(xp: number): string {
-  if (xp >= 700) return "Gold";
-  if (xp >= 400) return "Silver";
+  if (xp >= 600) return "Gold";
+  if (xp >= 300) return "Silver";
   return "Bronze";
 }
 

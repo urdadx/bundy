@@ -1,8 +1,18 @@
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { ArrowLeft } from 'lucide-react';
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 
-const NameStage = ({ battleName, setBattleName, handleContinueToCharacter, handleBackToIntro, isLoading }: { battleName: string; setBattleName: (name: string) => void; handleContinueToCharacter: () => void; handleBackToIntro: () => void; isLoading: boolean }) => (
+const NameStage = ({
+  battleName,
+  setBattleName,
+  handleContinueToCharacter,
+  isLoading,
+}: {
+  battleName: string;
+  setBattleName: (name: string) => void;
+  handleContinueToCharacter: () => void;
+  handleBackToIntro?: () => void;
+  isLoading: boolean;
+}) => (
   <div className="flex flex-col justify-center px-1">
     <Input
       value={battleName}
@@ -10,7 +20,7 @@ const NameStage = ({ battleName, setBattleName, handleContinueToCharacter, handl
       placeholder="Enter your battle name"
       disabled={isLoading}
       onKeyDown={(e) => {
-        if (e.key === 'Enter' && battleName.trim()) {
+        if (e.key === "Enter" && battleName.trim()) {
           handleContinueToCharacter();
         }
       }}
@@ -22,17 +32,9 @@ const NameStage = ({ battleName, setBattleName, handleContinueToCharacter, handl
         variant="primary"
         onClick={handleContinueToCharacter}
         disabled={!battleName.trim()}
-        className='w-full'
+        className="w-full"
       >
         Continue
-      </Button>
-      <Button
-        variant="ghost"
-        className="w-full text-slate-500"
-        onClick={handleBackToIntro}
-      >
-        <ArrowLeft className="w-4 h-4 mr-1" />
-        Back
       </Button>
     </div>
   </div>

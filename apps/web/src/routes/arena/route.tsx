@@ -1,10 +1,9 @@
-// routes/arena.tsx
-import { SideMenu } from '@/components/ui/side-menu'
-import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { SideMenu } from "@/components/ui/side-menu";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/arena')({
+export const Route = createFileRoute("/arena")({
   component: ArenaLayout,
-})
+});
 
 function ArenaLayout() {
   return (
@@ -14,5 +13,5 @@ function ArenaLayout() {
         <Outlet />
       </div>
     </div>
-  )
+  );
 }
