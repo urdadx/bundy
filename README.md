@@ -47,7 +47,7 @@ For better observability, I recommend you run each service seperately. Check the
 ## Project Structure
 
 ```
-wordsearch/
+bundy/
 ├── apps/
 │   ├── web/         # Frontend application (React + TanStack Router)
 │   └── server/      # Backend API (Hono, TRPC, Bun)
@@ -72,4 +72,4 @@ wordsearch/
 
 
 ## Contribution
-All contributions are welcomedd. Kindly open an issue or submit a PR request
+All contributions are welcomed. Kindly open an issue or submit a PR request
