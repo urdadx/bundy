@@ -212,7 +212,7 @@ function MultiplayerGamePage() {
                   />
                 </div>
 
-                <div className="lg:hidden w-full flex flex-col gap-3 mb-4">
+                <div className="lg:hidden w-full flex flex-col gap-3 mb-14">
                   <WordListPanel
                     words={puzzle.words.map((w) => w.word)}
                     foundWords={foundWordsSet}

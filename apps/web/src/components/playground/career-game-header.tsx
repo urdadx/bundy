@@ -36,7 +36,7 @@ export function CareerGameHeader({
         className,
       )}
     >
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-3">
           <div className="relative">
             <Avatar className="w-10 h-10 sm:w-12 sm:h-12 border-2 border-[#1cb0f6]">
@@ -47,7 +47,7 @@ export function CareerGameHeader({
             </Avatar>
           </div>
           <div className="flex flex-col">
-            <span className="text-slate-700 font-bold text-sm">{userName}</span>
+            <span className="hidden sm:block text-slate-700 font-bold text-sm">{userName}</span>
             <span className="text-[#1cb0f6] hidden sm:block font-bold text-xs uppercase tracking-wider">
               Career Mode
             </span>

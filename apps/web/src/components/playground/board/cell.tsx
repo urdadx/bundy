@@ -64,9 +64,9 @@ export function Cell({
   const customStyles: React.CSSProperties =
     customColor && isFound
       ? {
-          backgroundColor: `${customColor}40`, // 25% opacity
+          backgroundColor: `${customColor}40`,
           color: customColor,
-          borderColor: `${customColor}80`, // 50% opacity
+          borderColor: `${customColor}80`,
         }
       : {};
 

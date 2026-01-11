@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { ResignDialog } from "@/components/resign-dialog";
 import { GameSettingsUI } from "../game-settings-ui";
 import { Dialog, DialogTrigger } from "../ui/dialog";
+import { useNavigate } from "@tanstack/react-router";
 
 interface Player {
   name: string;
@@ -97,29 +98,87 @@ export function WordListPanel({ words, foundWords }: { words: string[]; foundWor
   );
 }
 
-export function GameActionsPanel() {
+interface GameActionsPanelProps {
+  diamonds?: number;
+  foundWords?: Set<string>;
+  placedWords?: Array<{
+    word: string;
+    start: { r: number; c: number };
+    end: { r: number; c: number };
+  }>;
+  onDiamondsChange?: (newDiamonds: number) => void;
+  onRequestHint?: () => void;
+  canUseHint?: boolean;
+}
+
+function HintButton({
+  onRequestHint,
+  canUseHint,
+}: {
+  onRequestHint?: () => void;
+  canUseHint?: boolean;
+}) {
+  const handleHintClick = () => {
+    if (onRequestHint) {
+      onRequestHint();
+    } else {
+      toast.info("You need atleast 5 diamonds to use a hint!");
+    }
+  };
+
+  return (
+    <Button
+      onClick={handleHintClick}
+      variant="primary"
+      size="icon"
+      className="w-full"
+      disabled={canUseHint === false}
+    >
+      Hint
+      <Lightbulb className="h-5 w-5 ml-1" />
+    </Button>
+  );
+}
+
+export function GameActionsPanel({ onRequestHint, canUseHint }: GameActionsPanelProps = {}) {
+  const [showResignDialog, setShowResignDialog] = useState(false);
+  const navigate = useNavigate();
+
   return (
     <GameInfoPanel>
       <div className="flex gap-3 justify-center">
+        <HintButton onRequestHint={onRequestHint} canUseHint={canUseHint} />
         <Button
-          onClick={() => toast.info("Hint feature coming soon!")}
-          variant="primary"
+          onClick={() => setShowResignDialog(true)}
+          variant="highlight"
           size="icon"
           className="w-full"
         >
-          Hint
-          <Lightbulb className="h-5 w-5 ml-1" />
-        </Button>
-        <Button variant="highlight" size="icon" className="w-full">
           Resign <Flag className="h-5 w-5 ml-1" />
         </Button>
-        <Button variant="super" size="icon" className="w-full">
-          Settings <Settings className="h-5 w-5 ml-1" />
-        </Button>
+        <Dialog>
+          <DialogTrigger>
+            <Button variant="super" className="w-full">
+              Settings <Settings className="h-5 w-5 ml-1" />
+            </Button>
+          </DialogTrigger>
+          <GameSettingsUI />
+        </Dialog>
       </div>
+      <ResignDialog
+        open={showResignDialog}
+        onOpenChange={setShowResignDialog}
+        onConfirm={() => {
+          setShowResignDialog(false);
+          navigate({
+            to: "/arena/lessons",
+          });
+        }}
+      />
     </GameInfoPanel>
   );
 }
+
 export function GameActionsPanelMultiplayer({ onResign }: { onResign?: () => void }) {
   const [showResignDialog, setShowResignDialog] = useState(false);
 

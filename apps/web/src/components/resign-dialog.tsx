@@ -14,6 +14,7 @@ interface ResignDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onConfirm: () => void;
+  isMultiplayer?: boolean;
 }
 
 export function ResignDialog({ open, onOpenChange, onConfirm }: ResignDialogProps) {

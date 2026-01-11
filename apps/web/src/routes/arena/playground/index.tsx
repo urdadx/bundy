@@ -12,6 +12,7 @@ import { PuzzleCompletionDialog } from "@/components/puzzle-completion-dialog";
 import { PuzzleInCompletionDialog } from "@/components/puzzle-incomplete-dialog";
 import { useGameTimer } from "@/hooks/use-game-timer";
 import { useUnmount } from "@/hooks/use-unmount";
+import { useHint } from "@/hooks/use-hint";
 
 import jackAvatar from "@/assets/avatars/jack-avatar.png";
 import marieAvatar from "@/assets/avatars/marie-avatar.png";
@@ -34,6 +35,14 @@ function RouteComponent() {
   const [foundWords, setFoundWords] = useState<Set<string>>(new Set());
   const [messages, setMessages] = useState<Message[]>([]);
   const [placedWords, setPlacedWords] = useState<string[]>([]);
+  const [placedWordsData, setPlacedWordsData] = useState<
+    Array<{
+      word: string;
+      start: { r: number; c: number };
+      end: { r: number; c: number };
+    }>
+  >([]);
+
   const [completionDialogOpen, setCompletionDialogOpen] = useState(false);
   const [incompleteDialogOpen, setIncompleteDialogOpen] = useState(false);
   const [completionData, setCompletionData] = useState<{
@@ -74,6 +83,30 @@ function RouteComponent() {
     },
   });
 
+  const updateDiamonds = useMutation({
+    mutationFn: async (params: { diamonds: number; operation: "add" | "subtract" | "set" }) => {
+      return trpcClient.user.updateDiamonds.mutate(params);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: trpc.user.getStats.queryKey() });
+    },
+    onError: (error) => {
+      console.error("Failed to update diamonds:", error);
+      if (typeof window !== "undefined") {
+        alert(`Failed to update diamonds: ${error.message || "Unknown error"}`);
+      }
+    },
+  });
+
+  const hint = useHint({
+    diamonds: stats?.diamonds || 0,
+    foundWords,
+    placedWords: placedWordsData,
+    onDiamondsChange: () => {
+      updateDiamonds.mutate({ diamonds: 5, operation: "subtract" });
+    },
+  });
+
   const handleTimeUp = () => {
     if (foundWords.size < placedWords.length) {
       setIncompleteDialogOpen(true);
@@ -110,6 +143,16 @@ function RouteComponent() {
   const handlePuzzleGenerated = (words: string[]) => {
     setPlacedWords(words);
     start();
+  };
+
+  const handlePuzzleDataGenerated = (
+    wordsData: Array<{
+      word: string;
+      start: { r: number; c: number };
+      end: { r: number; c: number };
+    }>,
+  ) => {
+    setPlacedWordsData(wordsData);
   };
 
   const handlePuzzleComplete = () => {
@@ -232,7 +275,9 @@ function RouteComponent() {
                 words={stageWords}
                 onWordFound={(word) => handleWordFound(word)}
                 onPuzzleGenerated={handlePuzzleGenerated}
+                onPuzzleDataGenerated={handlePuzzleDataGenerated}
                 onPuzzleComplete={handlePuzzleComplete}
+                hint={hint.hint}
               />
             </div>
 
@@ -241,7 +286,16 @@ function RouteComponent() {
                 words={placedWords.length > 0 ? placedWords : stageWords}
                 foundWords={foundWords}
               />
-              <GameActionsPanel />
+              <GameActionsPanel
+                diamonds={stats?.diamonds}
+                foundWords={foundWords}
+                placedWords={placedWordsData}
+                onDiamondsChange={() =>
+                  updateDiamonds.mutate({ diamonds: 5, operation: "subtract" })
+                }
+                onRequestHint={hint.requestHint}
+                canUseHint={hint.canUseHint}
+              />
             </div>
           </div>
 
@@ -263,7 +317,14 @@ function RouteComponent() {
               }}
               onSendMessage={handleSendMessage}
             />
-            <GameActionsPanel />
+            <GameActionsPanel
+              diamonds={stats?.diamonds}
+              foundWords={foundWords}
+              placedWords={placedWordsData}
+              onDiamondsChange={() => updateDiamonds.mutate({ diamonds: 5, operation: "subtract" })}
+              onRequestHint={hint.requestHint}
+              canUseHint={hint.canUseHint}
+            />
           </div>
         </div>
       </div>

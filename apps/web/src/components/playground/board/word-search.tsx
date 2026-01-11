@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { getValidEndCell } from "@/utils/valid-search";
 import { Cell } from "./cell";
 import {
@@ -10,6 +10,7 @@ import {
   type Theme,
   type Difficulty,
 } from "@/utils/word-search-generator";
+import type { HintResult } from "@/utils/hint-utils";
 
 interface WordSearchProps {
   theme?: Theme;
@@ -19,7 +20,15 @@ interface WordSearchProps {
   onWordFound?: (word: string, remaining: number) => void;
   onPuzzleComplete?: () => void;
   onPuzzleGenerated?: (placedWords: string[]) => void;
+  onPuzzleDataGenerated?: (
+    placedWords: Array<{
+      word: string;
+      start: { r: number; c: number };
+      end: { r: number; c: number };
+    }>,
+  ) => void;
   colorTheme?: "default" | "ocean" | "forest" | "sunset";
+  hint?: HintResult | null;
 }
 
 export function WordSearch({
@@ -30,12 +39,25 @@ export function WordSearch({
   onWordFound,
   onPuzzleComplete,
   onPuzzleGenerated,
+  onPuzzleDataGenerated,
   colorTheme = "default",
+  hint,
 }: WordSearchProps) {
   const puzzle = useMemo<WordSearchPuzzle>(() => {
     const config: WordSearchConfig = { theme, difficulty, size: size || 0, words };
     return generateWordSearch(config);
   }, [theme, difficulty, size, words]);
+
+  const onPuzzleGeneratedRef = useRef(onPuzzleGenerated);
+  const onPuzzleDataGeneratedRef = useRef(onPuzzleDataGenerated);
+
+  useEffect(() => {
+    onPuzzleGeneratedRef.current = onPuzzleGenerated;
+  }, [onPuzzleGenerated]);
+
+  useEffect(() => {
+    onPuzzleDataGeneratedRef.current = onPuzzleDataGenerated;
+  }, [onPuzzleDataGenerated]);
 
   const [startCell, setStartCell] = useState<{ r: number; c: number } | null>(null);
   const [currentCell, setCurrentCell] = useState<{ r: number; c: number } | null>(null);
@@ -45,9 +67,12 @@ export function WordSearch({
 
   useEffect(() => {
     setFoundWords(new Set());
-    if (onPuzzleGenerated) {
+    if (onPuzzleGeneratedRef.current) {
       const placedWords = puzzle.words.map((w) => w.word);
-      onPuzzleGenerated(placedWords);
+      onPuzzleGeneratedRef.current(placedWords);
+    }
+    if (onPuzzleDataGeneratedRef.current) {
+      onPuzzleDataGeneratedRef.current(puzzle.words);
     }
   }, [puzzle]);
 
@@ -151,6 +176,14 @@ export function WordSearch({
     [puzzle.words, foundWords],
   );
 
+  const isCellInHint = useCallback(
+    (r: number, c: number): boolean => {
+      if (!hint) return false;
+      return hint.cells.some((cell) => cell.row === r && cell.col === c);
+    },
+    [hint],
+  );
+
   return (
     <div className="flex items-center justify-center w-full h-full min-h-100">
       <div
@@ -176,13 +209,14 @@ export function WordSearch({
                 col={c}
                 isSelected={selectedCells.has(`${r}-${c}`)}
                 isFound={isCellInFoundWord(r, c)}
-                isHighlighted={false}
+                isHighlighted={isCellInHint(r, c)}
                 onMouseDown={() => handleMouseDown(r, c)}
                 onMouseEnter={() => handleMouseEnter(r, c)}
                 onTouchStart={() => handleTouchStart(r, c)}
                 onTouchMove={handleTouchMove}
                 size={cellSize}
                 theme={colorTheme}
+                customColor={isCellInHint(r, c) ? "#fbbf24" : undefined}
               />
             )),
           )}

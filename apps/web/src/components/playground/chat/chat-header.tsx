@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button";
 
 interface ChatHeaderProps {
   className?: string;
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
 }
 
-export function ChatHeader({ className }: ChatHeaderProps) {
+export function ChatHeader({ className, isCollapsed = false, onToggleCollapse }: ChatHeaderProps) {
   return (
     <div
       className={cn(
@@ -20,9 +22,13 @@ export function ChatHeader({ className }: ChatHeaderProps) {
       </div>
 
       <div className="flex items-center gap-2 ml-auto">
-        <Button variant="ghost" size="sm">
-          <EyeOff className="w-4 h-4 text-slate-500 mr-1" />
-          Hide Chat
+        <Button variant="ghost" size="sm" onClick={onToggleCollapse}>
+          {isCollapsed ? (
+            <Eye className="w-4 h-4 text-slate-500 mr-1" />
+          ) : (
+            <EyeOff className="w-4 h-4 text-slate-500 mr-1" />
+          )}
+          {isCollapsed ? "Show Chat" : "Hide Chat"}
         </Button>
       </div>
     </div>

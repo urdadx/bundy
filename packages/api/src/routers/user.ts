@@ -102,4 +102,46 @@ export const userRouter = router({
 
       return { success: true, name: input.name };
     }),
+
+  updateDiamonds: protectedProcedure
+    .input(z.object({
+      diamonds: z.number(),
+      operation: z.enum(['add', 'subtract', 'set']),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.userId;
+
+      // Get current user stats
+      const currentStats = await db
+        .select()
+        .from(userStats)
+        .where(eq(userStats.userId, userId))
+        .limit(1);
+
+      if (!currentStats.length) {
+        throw new Error('User stats not found');
+      }
+
+      const currentDiamonds = currentStats[0]!.diamonds;
+      let newDiamonds: number;
+
+      switch (input.operation) {
+        case 'add':
+          newDiamonds = currentDiamonds + input.diamonds;
+          break;
+        case 'subtract':
+          newDiamonds = Math.max(0, currentDiamonds - input.diamonds); // Don't go below 0
+          break;
+        case 'set':
+          newDiamonds = input.diamonds;
+          break;
+      }
+
+      await db
+        .update(userStats)
+        .set({ diamonds: newDiamonds })
+        .where(eq(userStats.userId, userId));
+
+      return { success: true, diamonds: newDiamonds };
+    }),
 });
