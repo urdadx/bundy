@@ -1,7 +1,7 @@
 # bundycrush
-A turn based word search puzzle game.
+An educational word search puzzle game for humans. Play career mode or invite friends to play together.
 
-## Stack
+## Built with
 
 - **TypeScript** - For type safety and improved developer experience
 - **TanStack Router** - File-based routing with full type safety
@@ -40,7 +40,9 @@ pnpm run dev
 
 Open [http://localhost:3001](http://localhost:3001) in your browser to see the web application.
 The API is running at [http://localhost:3000](http://localhost:3000).
+The web socket API is running at [http://localhost:3003](http://localhost:3003).
 
+For better observability, I recommend you run each service seperately. Check the [Available Scripts](#available-scripts) section below for the necessary scripts.
 
 ## Project Structure
 
@@ -53,6 +55,7 @@ wordsearch/
 │   ├── api/         # API layer / business logic
 │   └── db/          # Database schema & queries
 │   └── auth          # Authentication
+│   └── env          # Environment variables
 ```
 
 ## Available Scripts
@@ -60,8 +63,13 @@ wordsearch/
 - `pnpm run dev`: Start all applications in development mode
 - `pnpm run build`: Build all applications
 - `pnpm run dev:web`: Start only the web application
+- `pnpm run dev:ws`: Start only the websocket application.
 - `pnpm run dev:server`: Start only the server
 - `pnpm run check-types`: Check TypeScript types across all apps
 - `pnpm run db:push`: Push schema changes to database
 - `pnpm run db:studio`: Open database studio UI
 - `pnpm run check`: Run Oxlint and Oxfmt
+
+
+## Contribution
+All contributions are welcomedd. Kindly open an issue or submit a PR request

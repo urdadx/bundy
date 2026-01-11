@@ -1,5 +1,4 @@
 import type { AppRouter } from "@wordsearch/api/routers/index";
-
 import { QueryCache, QueryClient } from "@tanstack/react-query";
 import { createTRPCClient, httpBatchLink } from "@trpc/client";
 import { createTRPCOptionsProxy } from "@trpc/tanstack-react-query";
@@ -18,7 +17,7 @@ export const queryClient = new QueryClient({
   }),
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 5, // 5 minutes - SWR behavior
+      staleTime: 1000 * 60 * 5, 
       refetchOnWindowFocus: true,
       refetchOnReconnect: true,
       retry: 1,
@@ -30,7 +29,6 @@ export const trpcClient = createTRPCClient<AppRouter>({
   links: [
     httpBatchLink({
       url: `${import.meta.env.VITE_SERVER_URL}/trpc`,
-      // Include credentials for auth cookies
       fetch(url, options) {
         return fetch(url, {
           ...options,
