@@ -13,6 +13,7 @@ import { PuzzleInCompletionDialog } from "@/components/puzzle-incomplete-dialog"
 import { useGameTimer } from "@/hooks/use-game-timer";
 import { useUnmount } from "@/hooks/use-unmount";
 import { useHint } from "@/hooks/use-hint";
+import { ColorThemeProvider, useColorTheme } from "@/contexts/color-theme-context";
 
 import jackAvatar from "@/assets/avatars/jack-avatar.png";
 import marieAvatar from "@/assets/avatars/marie-avatar.png";
@@ -24,12 +25,17 @@ const playgroundSearchSchema = z.object({
 
 export const Route = createFileRoute("/arena/playground/")({
   validateSearch: (search) => playgroundSearchSchema.parse(search),
-  component: RouteComponent,
+  component: () => (
+    <ColorThemeProvider>
+      <RouteComponent />
+    </ColorThemeProvider>
+  ),
 });
 
 function RouteComponent() {
   const { stageId } = Route.useSearch();
   const { data: session } = useSession();
+  const { colorTheme } = useColorTheme();
   const queryClient = useQueryClient();
   const [gameKey, setGameKey] = useState(0);
   const [foundWords, setFoundWords] = useState<Set<string>>(new Set());
@@ -278,6 +284,7 @@ function RouteComponent() {
                 onPuzzleDataGenerated={handlePuzzleDataGenerated}
                 onPuzzleComplete={handlePuzzleComplete}
                 hint={hint.hint}
+                colorTheme={colorTheme}
               />
             </div>
 

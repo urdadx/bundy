@@ -1,9 +1,9 @@
-import type { ReactNode } from 'react'
-import { UserStats } from '../user-stats'
+import type { ReactNode } from "react";
+import { UserStats } from "../user-stats";
 
 interface ArenaLayoutProps {
-  children: ReactNode
-  sidebar?: ReactNode
+  children: ReactNode;
+  sidebar?: ReactNode;
 }
 
 export function ArenaLayout({ children, sidebar }: ArenaLayoutProps) {
@@ -11,18 +11,19 @@ export function ArenaLayout({ children, sidebar }: ArenaLayoutProps) {
     <div className="flex justify-center w-full min-h-screen">
       <div className="flex w-full max-w-5xl gap-6 px-6 py-4">
         <main className="flex-1 flex flex-col gap-4 ">
+          <div className="lg:hidden">
+            <UserStats />
+          </div>
           {children}
         </main>
 
         {sidebar && (
           <div className="hidden lg:flex w-96 pl-10 flex-col gap-5">
             <UserStats />
-            <div className="sticky top-8 w-full flex justify-center">
-              {sidebar}
-            </div>
+            <div className="sticky top-8 w-full flex justify-center">{sidebar}</div>
           </div>
         )}
       </div>
     </div>
-  )
+  );
 }

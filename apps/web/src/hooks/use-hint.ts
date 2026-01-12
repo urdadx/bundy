@@ -57,11 +57,9 @@ export function useHint({
     setHint(unfoundWords);
     setIsHintActive(true);
 
-    toast.success("Hint used");
-
     setTimeout(() => {
       clearHint();
-    }, 6000);
+    }, 5000);
   }, [diamonds, canUseHint, placedWords, foundWords, onDiamondsChange, clearHint]);
 
   return {

@@ -45,9 +45,6 @@ function RouteComponent() {
 
   return (
     <div className="flex w-full space-y-4 sm:space-y-0 flex-col gap-x-12">
-      <h1 className="block sm:hidden text-lg font-black text-slate-700 capitalize tracking-tight">
-        BATTLE MAP
-      </h1>
       <div className="flex-1 space-y-5">
         <BattleBanner
           name={worldData?.name || lessonName}

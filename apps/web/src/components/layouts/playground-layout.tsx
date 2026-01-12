@@ -7,6 +7,8 @@ import { ResignDialog } from "@/components/resign-dialog";
 import { GameSettingsUI } from "../game-settings-ui";
 import { Dialog, DialogTrigger } from "../ui/dialog";
 import { useNavigate } from "@tanstack/react-router";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import jerryLaughing from "@/assets/jerry-laughing.gif";
 
 interface Player {
   name: string;
@@ -54,7 +56,7 @@ export function GameInfoPanel({
   return (
     <div
       className={cn(
-        "bg-white border-2 border-b-4 border-slate-200 rounded-xl overflow-hidden",
+        "bg-white w-full border-2 border-b-4 border-slate-200 rounded-xl overflow-hidden",
         className,
       )}
     >
@@ -128,10 +130,9 @@ function HintButton({
 
   return (
     <Button
+      className="w-full"
       onClick={handleHintClick}
       variant="primary"
-      size="icon"
-      className="w-full"
       disabled={canUseHint === false}
     >
       Hint
@@ -146,19 +147,14 @@ export function GameActionsPanel({ onRequestHint, canUseHint }: GameActionsPanel
 
   return (
     <GameInfoPanel>
-      <div className="flex gap-3 justify-center">
+      <div className="flex gap-2">
         <HintButton onRequestHint={onRequestHint} canUseHint={canUseHint} />
-        <Button
-          onClick={() => setShowResignDialog(true)}
-          variant="highlight"
-          size="icon"
-          className="w-full"
-        >
+        <Button className="w-full" onClick={() => setShowResignDialog(true)} variant="highlight">
           Resign <Flag className="h-5 w-5 ml-1" />
         </Button>
         <Dialog>
           <DialogTrigger>
-            <Button variant="super" className="w-full">
+            <Button className="w-full" variant="super">
               Settings <Settings className="h-5 w-5 ml-1" />
             </Button>
           </DialogTrigger>
@@ -184,27 +180,32 @@ export function GameActionsPanelMultiplayer({ onResign }: { onResign?: () => voi
 
   return (
     <GameInfoPanel>
-      <div className="flex gap-3 justify-center">
-        <Button
-          onClick={() => toast.info("Hint feature coming soon!")}
-          variant="primary"
-          size="icon"
-          className="w-full"
-        >
-          Hint
-          <Lightbulb className="h-5 w-5 ml-1" />
-        </Button>
-        <Button
-          variant="highlight"
-          size="icon"
-          className="w-full"
-          onClick={() => setShowResignDialog(true)}
-        >
+      <div className="flex gap-2">
+        <Popover>
+          <PopoverTrigger>
+            <Button className="w-full" variant="primary">
+              Hint
+              <Lightbulb className="h-5 w-5 ml-1" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-60 p-0">
+            <img
+              src={jerryLaughing}
+              alt="Jerry laughing"
+              loading="lazy"
+              className="w-full h-50 rounded"
+            />
+            <p className="text-center text-base uppercase font-bold pb-2">
+              You can't use hint in multiplayer mode
+            </p>
+          </PopoverContent>
+        </Popover>
+        <Button className="w-full" variant="highlight" onClick={() => setShowResignDialog(true)}>
           Resign <Flag className="h-5 w-5 ml-1" />
         </Button>
         <Dialog>
           <DialogTrigger>
-            <Button variant="super" className="w-full">
+            <Button className="w-full" variant="super">
               Settings <Settings className="h-5 w-5 ml-1" />
             </Button>
           </DialogTrigger>

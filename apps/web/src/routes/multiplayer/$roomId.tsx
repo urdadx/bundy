@@ -15,14 +15,20 @@ import { Drawer, DrawerTrigger, DrawerContent } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { ChatPanelMobile } from "@/components/playground/chat/chat-panel-mobile";
 import { sleep } from "@/lib/utils";
+import { ColorThemeProvider, useColorTheme } from "@/contexts/color-theme-context";
 
 export const Route = createFileRoute("/multiplayer/$roomId")({
-  component: MultiplayerGamePage,
+  component: () => (
+    <ColorThemeProvider>
+      <MultiplayerGamePage />
+    </ColorThemeProvider>
+  ),
 });
 
 function MultiplayerGamePage() {
   const { roomId } = Route.useParams();
   const navigate = useNavigate();
+  const { colorTheme } = useColorTheme();
 
   const {
     room,
@@ -209,6 +215,7 @@ function MultiplayerGamePage() {
                     onWordFound={handleWordFound}
                     onCursorMove={handleCursorMove}
                     onCursorLeave={handleCursorLeave}
+                    colorTheme={colorTheme}
                   />
                 </div>
 

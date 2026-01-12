@@ -22,7 +22,7 @@ export function ResignDialog({ open, onOpenChange, onConfirm }: ResignDialogProp
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="max-w-sm! sm:max-w-md! w-full p-3 sm:p-4 border-none bg-white">
+      <AlertDialogContent className="sm:max-w-md! w-200! p-3 sm:p-4 border-none bg-white">
         <AlertDialogHeader className="flex flex-col mx-auto items-center justify-center">
           <motion.div
             initial={{ scale: 0, rotate: -10 }}

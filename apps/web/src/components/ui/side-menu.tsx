@@ -30,7 +30,6 @@ export function SideMenu() {
       <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t-2 py-2 flex justify-around z-50">
         <SideMenuItem href="/arena/lessons" icon="learn" label="home" hideLabel />
         <SideMenuItem href="/arena/leaderboard" icon="leaderboard" label="Leaderboard" hideLabel />
-        <SideMenuItem href="/arena/quests" icon="quests" label="Quests" hideLabel />
         <SideMenuItem href="/arena/shop" icon="shop" label="Shop" hideLabel />
         <SideMenuItem href="/arena/profile" label="Profile" hideLabel isProfile={true} />
       </div>

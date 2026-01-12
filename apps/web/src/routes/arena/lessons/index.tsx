@@ -8,7 +8,9 @@ export const Route = createFileRoute("/arena/lessons/")({
 function BattlesIndex() {
   return (
     <section className="space-y-6">
-      <h1 className="text-2xl font-black text-slate-700 uppercase tracking-tight">Learn</h1>
+      <h1 className="text-2xl hidden sm:block font-black text-slate-700 uppercase tracking-tight">
+        Learn
+      </h1>
       <WorldProgressCard />
       <div className="h-24" />
     </section>

@@ -216,7 +216,6 @@ export function WordSearch({
                 onTouchMove={handleTouchMove}
                 size={cellSize}
                 theme={colorTheme}
-                customColor={isCellInHint(r, c) ? "#fbbf24" : undefined}
               />
             )),
           )}

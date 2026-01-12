@@ -223,7 +223,6 @@ export function generateWordSearch(config: WordSearchConfig): WordSearchPuzzle {
   for (const word of selectedWords) {
     let placed = false;
     let attempts = 0;
-    // More attempts for longer words or when using custom word lists
     const maxAttempts = config.words ? 200 : 100;
 
     while (!placed && attempts < maxAttempts) {
@@ -246,13 +245,11 @@ export function generateWordSearch(config: WordSearchConfig): WordSearchPuzzle {
       attempts++;
     }
     
-    // Log warning if word couldn't be placed
     if (!placed) {
       console.warn(`Could not place word "${word}" in grid after ${maxAttempts} attempts. Grid size: ${size}x${size}`);
     }
   }
 
-  // Fill empty cells with random letters
   fillEmptyCells(grid);
 
   return {
