@@ -16,11 +16,6 @@ export function GameSettingsUI() {
   const [error, _setError] = useState<string | null>(null);
   const { colorTheme, setColorTheme } = useColorTheme();
 
-  const handleSave = async () => {
-    // Theme is already saved to localStorage via context
-    // No additional actions needed
-  };
-
   return (
     <DialogContent className="border-none p-4 sm:p-6 w-200! sm:max-w-md">
       <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto">
@@ -67,9 +62,9 @@ export function GameSettingsUI() {
             )}
 
             <div className="pt-2">
-              <DialogClose 
+              <DialogClose
                 render={
-                  <Button variant="primary" className="w-full text-base" onClick={handleSave}>
+                  <Button variant="primary" className="w-full text-base">
                     Save
                   </Button>
                 }
