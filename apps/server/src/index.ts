@@ -43,7 +43,7 @@ app.use(
   }),
 );
 
-app.get("/", (c) => {
+app.get("/health", (c) => {
   return c.text("OK");
 });
 

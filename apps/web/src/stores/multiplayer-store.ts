@@ -517,7 +517,6 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
   }))
 );
 
-// Selector hooks for common patterns
 export const useCurrentPlayer = () => useMultiplayerStore(state => state.getCurrentPlayer());
 export const useOpponent = () => useMultiplayerStore(state => state.getOpponent());
 export const useGameStatus = () => useMultiplayerStore(state => state.getGameStatus());

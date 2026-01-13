@@ -1,4 +1,3 @@
-// Helper to find the valid end cell based on word search rules
 export const getValidEndCell = (start: {r: number, c: number}, current: {r: number, c: number}) => {
   const rowDiff = current.r - start.r;
   const colDiff = current.c - start.c;
@@ -12,8 +11,8 @@ export const getValidEndCell = (start: {r: number, c: number}, current: {r: numb
   }
 
   // Snap to the closest valid axis for a better "feel"
-  if (absRowDiff > absColDiff * 2) return { r: current.r, c: start.c }; // Snap to Vertical
-  if (absColDiff > absRowDiff * 2) return { r: start.r, c: current.c }; // Snap to Horizontal
+  if (absRowDiff > absColDiff * 2) return { r: current.r, c: start.c }; 
+  if (absColDiff > absRowDiff * 2) return { r: start.r, c: current.c }; 
   
   // Snap to Diagonal
   const minDiff = Math.min(absRowDiff, absColDiff);

@@ -1,6 +1,6 @@
 # Docker Deployment Guide
 
-This guide explains how to deploy the Bundycrush application using Docker on Dokploy or any VPS.
+This guide explains how to deploy bundy using Docker on Dokploy or any VPS.
 
 ## Architecture
 
@@ -37,9 +37,9 @@ docker-compose up -d --build
 Services will be available at:
 - Web: http://localhost:3001
 - API: http://localhost:3000
-- WebSocket: ws://localhost:3003
+- WebSocket: http://localhost:3003
 
-## Deploying to Dokploy (with Traefik)
+## Deploying to Dokploy
 
 Dokploy uses **Traefik** as its reverse proxy, which automatically handles:
 - SSL/TLS termination (Let's Encrypt)
@@ -122,16 +122,6 @@ services:
 - `SQLITE_PATH`: an explicit path the bundled DB package also reads; set it to `/data/sqlite.db` to ensure the runtime code finds the file.
 - The container images now expose `/data` as a volume; bind-mount `./data` from the host to persist the DB file across container restarts.
 
-Notes & caveats:
-
-- SQLite is single-file and best for local development or very low-traffic deployments. It is not recommended for multi-replica production setups.
-- If you must use SQLite in production, keep a single writer instance and consider read replicas using exported snapshots.
-- Enable WAL mode for better concurrency. From inside a running container you can run:
-
-```bash
-sqlite3 /data/sqlite.db "PRAGMA journal_mode=WAL;"
-```
-
 - Ensure the container can write to `/data`. Dockerfiles create `/data` and set permissive permissions, and `docker-compose.yml` mounts `./data` by default for local setups.
 - Backup the `./data/sqlite.db` file regularly (copy while the app is stopped or use `sqlite3` to create a consistent dump).
 
@@ -148,7 +138,6 @@ sqlite3 /data/sqlite.db "PRAGMA journal_mode=WAL;"
 
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `DATABASE_URL` | PostgreSQL connection string | `postgresql://user:pass@host:5432/db` |
 | `BETTER_AUTH_SECRET` | Auth signing secret | Random 32+ char string |
 | `BETTER_AUTH_URL` | Auth base URL | `https://api.yourdomain.com` |
 | `CORS_ORIGIN` | Allowed CORS origin | `https://yourdomain.com` |
@@ -173,8 +162,7 @@ sqlite3 /data/sqlite.db "PRAGMA journal_mode=WAL;"
 ## Health Checks
 
 All services have health check endpoints:
-- Web: `GET /health`
-- API: `GET /`
+- API: `GET /health`
 - WebSocket: `GET /health`
 
 ## Troubleshooting

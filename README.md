@@ -70,6 +70,12 @@ bundy/
 - `pnpm run db:studio`: Open database studio UI
 - `pnpm run check`: Run Oxlint and Oxfmt
 
+### Deployment
+
+For detailed deployment instructions—including Docker, Dokploy, and VPS setup—see the [DEPLOYMENT.md](./DEPLOYMENT.md) file.
+
+More deployment platforms will be supported soon.
+
 
 ## Contribution
 All contributions are welcomed. Kindly open an issue or submit a PR request

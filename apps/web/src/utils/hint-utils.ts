@@ -13,12 +13,10 @@ export interface HintResult {
   path: { start: { r: number; c: number }; end: { r: number; c: number } };
 }
 
-/**
- * Finds an unfound word from the puzzle 
- * @param placedWords All words placed in the puzzle
- * @param foundWords Set of words that have already been found
- * @returns HintResult with word and cell coordinates, or null if no unfound words
- */
+
+// Finds an unfound word from the puzzle and returns that word
+// with its cell coordinates,or null if no unfound words
+
 export function findUnfoundWord(
   placedWords: PlacedWord[],
   foundWords: Set<string>
@@ -42,11 +40,8 @@ export function findUnfoundWord(
   };
 }
 
-/**
- * Calculates all cells in a word's path using breadth-first traversal
- * @param placedWord The placed word with start/end coordinates
- * @returns Array of cell coordinates in the word path
- */
+// Calculates all cells in a word's path using breadth-first traversal
+
 export function getCellsInWordPath(placedWord: PlacedWord): HintCell[] {
   const { start, end } = placedWord;
   const cells: HintCell[] = [];
