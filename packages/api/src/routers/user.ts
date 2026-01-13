@@ -2,7 +2,7 @@ import { protectedProcedure, router } from "../index";
 import { db } from "@wordsearch/db";
 import { userStats } from "@wordsearch/db/schema/game-schema";
 import { user } from "@wordsearch/db/schema/auth";
-import { eq } from "drizzle-orm";
+import { eq, desc, asc } from "drizzle-orm";
 import { z } from "zod";
 
 const VALID_AVATARS = ["jack-avatar.png", "marie-avatar.png", "rudeus-avatar.png"] as const;
@@ -17,11 +17,7 @@ export const userRouter = router({
   getStats: protectedProcedure.query(async ({ ctx }) => {
     const userId = ctx.userId;
 
-    let stats = await db
-      .select()
-      .from(userStats)
-      .where(eq(userStats.userId, userId))
-      .limit(1);
+    let stats = await db.select().from(userStats).where(eq(userStats.userId, userId)).limit(1);
 
     if (!stats.length) {
       await db.insert(userStats).values({
@@ -35,15 +31,11 @@ export const userRouter = router({
         gamesLost: 0,
       });
 
-      stats = await db
-        .select()
-        .from(userStats)
-        .where(eq(userStats.userId, userId))
-        .limit(1);
+      stats = await db.select().from(userStats).where(eq(userStats.userId, userId)).limit(1);
     }
 
     const userStat = stats[0]!;
-    
+
     return {
       ...userStat,
       league: calculateLeague(userStat.totalXp),
@@ -74,40 +66,40 @@ export const userRouter = router({
   }),
 
   updateAvatar: protectedProcedure
-    .input(z.object({
-      avatar: z.enum(VALID_AVATARS),
-    }))
+    .input(
+      z.object({
+        avatar: z.enum(VALID_AVATARS),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.userId;
 
-      await db
-        .update(user)
-        .set({ avatar: input.avatar })
-        .where(eq(user.id, userId));
+      await db.update(user).set({ avatar: input.avatar }).where(eq(user.id, userId));
 
       return { success: true, avatar: input.avatar };
     }),
 
   updateName: protectedProcedure
-    .input(z.object({
-      name: z.string().min(1).max(50),
-    }))
+    .input(
+      z.object({
+        name: z.string().min(1).max(50),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.userId;
 
-      await db
-        .update(user)
-        .set({ name: input.name })
-        .where(eq(user.id, userId));
+      await db.update(user).set({ name: input.name }).where(eq(user.id, userId));
 
       return { success: true, name: input.name };
     }),
 
   updateDiamonds: protectedProcedure
-    .input(z.object({
-      diamonds: z.number(),
-      operation: z.enum(['add', 'subtract', 'set']),
-    }))
+    .input(
+      z.object({
+        diamonds: z.number(),
+        operation: z.enum(["add", "subtract", "set"]),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.userId;
 
@@ -119,29 +111,60 @@ export const userRouter = router({
         .limit(1);
 
       if (!currentStats.length) {
-        throw new Error('User stats not found');
+        throw new Error("User stats not found");
       }
 
       const currentDiamonds = currentStats[0]!.diamonds;
       let newDiamonds: number;
 
       switch (input.operation) {
-        case 'add':
+        case "add":
           newDiamonds = currentDiamonds + input.diamonds;
           break;
-        case 'subtract':
+        case "subtract":
           newDiamonds = Math.max(0, currentDiamonds - input.diamonds); // Don't go below 0
           break;
-        case 'set':
+        case "set":
           newDiamonds = input.diamonds;
           break;
       }
 
-      await db
-        .update(userStats)
-        .set({ diamonds: newDiamonds })
-        .where(eq(userStats.userId, userId));
+      await db.update(userStats).set({ diamonds: newDiamonds }).where(eq(userStats.userId, userId));
 
       return { success: true, diamonds: newDiamonds };
+    }),
+
+  getLeaderboard: protectedProcedure
+    .input(
+      z.object({
+        cursor: z.number().optional().default(0),
+        limit: z.number().default(10),
+      }),
+    )
+    .query(async ({ input }) => {
+      const { cursor, limit } = input;
+
+      const results = await db
+        .select({
+          id: user.id,
+          username: user.name,
+          avatar: user.avatar,
+          xp: userStats.totalXp,
+          isOnline: userStats.isOnline,
+        })
+        .from(userStats)
+        .innerJoin(user, eq(userStats.userId, user.id))
+        .orderBy(desc(userStats.totalXp), asc(user.id))
+        .limit(limit + 1)
+        .offset(cursor);
+
+      const hasNextPage = results.length > limit;
+      const items = results.slice(0, limit);
+      const nextCursor = hasNextPage ? cursor + limit : null;
+
+      return {
+        items,
+        nextCursor,
+      };
     }),
 });

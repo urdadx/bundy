@@ -31,72 +31,72 @@ export interface ChatMessage {
 
 interface MultiplayerState {
   connectionState: ConnectionState;
-  
+
   odId: string | null;
   odName: string | null;
   odAvatar: string | null;
-  
+
   room: SerializedRoom | null;
   roomId: string | null;
-  
+
   countdown: number | null;
   gameStartTime: number | null;
-  
+
   opponentCursor: OpponentCursor | null;
-  
+
   rematchRequestedBy: string | null;
   isRematch: boolean;
-  
+
   error: string | null;
-  
+
   disconnectedPlayerId: string | null;
   reconnectTimeout: number | null;
-  
+
   chatMessages: ChatMessage[];
   isOpponentTyping: boolean;
 }
 
 interface MultiplayerActions {
   setUser: (odId: string, odName: string, odAvatar: string) => void;
-  
+
   setConnectionState: (state: ConnectionState) => void;
-  
+
   setRoom: (room: SerializedRoom | null) => void;
   setRoomId: (roomId: string | null) => void;
-  
+
   handleServerMessage: (message: ServerMessage) => void;
-  
+
   setCountdown: (countdown: number | null) => void;
-  
+
   reset: () => void;
   clearError: () => void;
 }
 
 interface MultiplayerGetters {
   getCurrentPlayer: () => Player | null;
-  
+
   getOpponent: () => Player | null;
-  
+
   isHost: () => boolean;
-  
+
   getMyScore: () => number;
-  
+
   getOpponentScore: () => number;
-  
+
   getFoundWords: () => FoundWord[];
-  
+
   getMyFoundWords: () => FoundWord[];
-  
+
   getOpponentFoundWords: () => FoundWord[];
-  
+
   getRemainingWordsCount: () => number;
-  
+
   getGameStatus: () => RoomStatus | null;
-  
+
   getWinner: () => { player: Player; isDraw: boolean } | null;
-  
+
   getPuzzle: () => PuzzleData | null;
-  
+
   getSettings: () => GameSettings | null;
 }
 
@@ -166,17 +166,18 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
         case "player_joined": {
           const room = state.room;
           if (!room) break;
-          
+
           if (message.player.id !== state.odId) {
             toast.success(`${message.player.name} has joined the game`);
           }
-          
+
           // Check if player already exists
-          const existingIndex = room.players.findIndex(p => p.id === message.player.id);
-          const updatedPlayers = existingIndex >= 0
-            ? room.players.map((p, i) => i === existingIndex ? message.player : p)
-            : [...room.players, message.player];
-          
+          const existingIndex = room.players.findIndex((p) => p.id === message.player.id);
+          const updatedPlayers =
+            existingIndex >= 0
+              ? room.players.map((p, i) => (i === existingIndex ? message.player : p))
+              : [...room.players, message.player];
+
           set({
             room: {
               ...room,
@@ -190,18 +191,19 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
         case "player_left": {
           const room = state.room;
           if (!room) break;
-          
+
           toast.info(`${message.odName} has left the game`, {
             duration: 4000,
           });
-          
+
           set({
             room: {
               ...room,
-              players: room.players.filter(p => p.id !== message.odId),
+              players: room.players.filter((p) => p.id !== message.odId),
               guestId: room.guestId === message.odId ? null : room.guestId,
             },
-            opponentCursor: state.opponentCursor?.odId === message.odId ? null : state.opponentCursor,
+            opponentCursor:
+              state.opponentCursor?.odId === message.odId ? null : state.opponentCursor,
           });
           break;
         }
@@ -209,12 +211,12 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
         case "player_ready_changed": {
           const room = state.room;
           if (!room) break;
-          
+
           set({
             room: {
               ...room,
-              players: room.players.map(p =>
-                p.id === message.odId ? { ...p, isReady: message.ready } : p
+              players: room.players.map((p) =>
+                p.id === message.odId ? { ...p, isReady: message.ready } : p,
               ),
             },
           });
@@ -224,12 +226,12 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
         case "player_avatar_changed": {
           const room = state.room;
           if (!room) break;
-          
+
           set({
             room: {
               ...room,
-              players: room.players.map(p =>
-                p.id === message.odId ? { ...p, avatar: message.avatar } : p
+              players: room.players.map((p) =>
+                p.id === message.odId ? { ...p, avatar: message.avatar } : p,
               ),
             },
           });
@@ -243,7 +245,7 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
         case "game_started": {
           const room = state.room;
           if (!room) break;
-          
+
           set({
             room: {
               ...room,
@@ -262,10 +264,10 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
         case "cursor_update": {
           const room = state.room;
           if (!room || message.odId === state.odId) break;
-          
-          const player = room.players.find(p => p.id === message.odId);
+
+          const player = room.players.find((p) => p.id === message.odId);
           if (!player) break;
-          
+
           set({
             opponentCursor: {
               odId: message.odId,
@@ -287,19 +289,19 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
         case "word_claimed": {
           const room = state.room;
           if (!room) break;
-          
+
           const newFoundWord: FoundWord = {
             word: message.word,
             foundBy: message.odId,
             start: message.start,
             end: message.end,
           };
-          
+
           set({
             room: {
               ...room,
               foundWords: [...room.foundWords, newFoundWord],
-              players: room.players.map(p => {
+              players: room.players.map((p) => {
                 if (p.id === room.hostId) {
                   return { ...p, score: message.hostScore };
                 }
@@ -320,14 +322,14 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
         case "game_ended": {
           const room = state.room;
           if (!room) break;
-          
+
           set({
             room: {
               ...room,
               status: "finished",
               winnerId: message.winnerId,
               isDraw: message.isDraw,
-              players: room.players.map(p => {
+              players: room.players.map((p) => {
                 if (p.id === room.hostId) {
                   return { ...p, score: message.hostScore };
                 }
@@ -353,17 +355,17 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
         case "player_reconnected": {
           const room = state.room;
           if (!room) break;
-          
-          const player = room.players.find(p => p.id === message.odId);
+
+          const player = room.players.find((p) => p.id === message.odId);
           if (player) {
             toast.success(`${player.name} reconnected`);
           }
-          
+
           set({
             room: {
               ...room,
-              players: room.players.map(p =>
-                p.id === message.odId ? { ...p, isConnected: true } : p
+              players: room.players.map((p) =>
+                p.id === message.odId ? { ...p, isConnected: true } : p,
               ),
             },
             disconnectedPlayerId: null,
@@ -383,7 +385,7 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
         case "rematch_starting": {
           const room = state.room;
           if (!room) break;
-          
+
           set({
             room: {
               ...room,
@@ -393,7 +395,7 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
               gameStartedAt: null,
               winnerId: null,
               isDraw: false,
-              players: room.players.map(p => ({
+              players: room.players.map((p) => ({
                 ...p,
                 score: 0,
                 wordsFound: [],
@@ -444,13 +446,13 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
     getCurrentPlayer: () => {
       const { room, odId } = get();
       if (!room || !odId) return null;
-      return room.players.find(p => p.id === odId) ?? null;
+      return room.players.find((p) => p.id === odId) ?? null;
     },
 
     getOpponent: () => {
       const { room, odId } = get();
       if (!room || !odId) return null;
-      return room.players.find(p => p.id !== odId) ?? null;
+      return room.players.find((p) => p.id !== odId) ?? null;
     },
 
     isHost: () => {
@@ -474,13 +476,13 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
     getMyFoundWords: () => {
       const { room, odId } = get();
       if (!room || !odId) return [];
-      return room.foundWords.filter(fw => fw.foundBy === odId);
+      return room.foundWords.filter((fw) => fw.foundBy === odId);
     },
 
     getOpponentFoundWords: () => {
       const { room, odId } = get();
       if (!room || !odId) return [];
-      return room.foundWords.filter(fw => fw.foundBy !== odId);
+      return room.foundWords.filter((fw) => fw.foundBy !== odId);
     },
 
     getRemainingWordsCount: () => {
@@ -496,14 +498,14 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
     getWinner: () => {
       const room = get().room;
       if (!room || room.status !== "finished") return null;
-      
+
       if (room.isDraw) {
         return { player: room.players[0], isDraw: true };
       }
-      
-      const winner = room.players.find(p => p.id === room.winnerId);
+
+      const winner = room.players.find((p) => p.id === room.winnerId);
       if (!winner) return null;
-      
+
       return { player: winner, isDraw: false };
     },
 
@@ -514,14 +516,14 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
     getSettings: () => {
       return get().room?.settings ?? null;
     },
-  }))
+  })),
 );
 
-export const useCurrentPlayer = () => useMultiplayerStore(state => state.getCurrentPlayer());
-export const useOpponent = () => useMultiplayerStore(state => state.getOpponent());
-export const useGameStatus = () => useMultiplayerStore(state => state.getGameStatus());
-export const usePuzzle = () => useMultiplayerStore(state => state.getPuzzle());
-export const useOpponentCursor = () => useMultiplayerStore(state => state.opponentCursor);
-export const useCountdown = () => useMultiplayerStore(state => state.countdown);
-export const useRoomId = () => useMultiplayerStore(state => state.roomId);
-export const useIsHost = () => useMultiplayerStore(state => state.isHost());
+export const useCurrentPlayer = () => useMultiplayerStore((state) => state.getCurrentPlayer());
+export const useOpponent = () => useMultiplayerStore((state) => state.getOpponent());
+export const useGameStatus = () => useMultiplayerStore((state) => state.getGameStatus());
+export const usePuzzle = () => useMultiplayerStore((state) => state.getPuzzle());
+export const useOpponentCursor = () => useMultiplayerStore((state) => state.opponentCursor);
+export const useCountdown = () => useMultiplayerStore((state) => state.countdown);
+export const useRoomId = () => useMultiplayerStore((state) => state.roomId);
+export const useIsHost = () => useMultiplayerStore((state) => state.isHost());

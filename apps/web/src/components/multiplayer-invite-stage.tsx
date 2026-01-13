@@ -23,7 +23,7 @@ export const MultiplayerInviteStage = ({
   const [copiedLink, setCopiedLink] = useState(false);
 
   const gameCode = roomId || "------";
-  const inviteLink = useMemo(() => roomId ? getInviteLink(roomId) : "", [roomId]);
+  const inviteLink = useMemo(() => (roomId ? getInviteLink(roomId) : ""), [roomId]);
   const hostAvatar = player1Avatar || (session?.user as any)?.avatar || "jack-avatar.png";
 
   const handleCopyCode = async () => {
@@ -97,7 +97,12 @@ export const MultiplayerInviteStage = ({
             <div className="flex-1 flex items-center justify-center bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3">
               <span className="text-2xl font-black text-slate-700 tracking-widest">{gameCode}</span>
             </div>
-            <Button variant="default" size="icon" onClick={handleCopyCode} className="shrink-0 h-auto w-12">
+            <Button
+              variant="default"
+              size="icon"
+              onClick={handleCopyCode}
+              className="shrink-0 h-auto w-12"
+            >
               {copied ? <Check className="h-5 w-5 text-green-600" /> : <Copy className="h-5 w-5" />}
             </Button>
           </div>
@@ -110,10 +115,21 @@ export const MultiplayerInviteStage = ({
           </p>
           <div className="flex gap-2">
             <div className="flex-1 flex items-center bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-2 overflow-hidden">
-              <span className="text-sm font-medium text-slate-500 truncate">{inviteLink || "Generating..."}</span>
+              <span className="text-sm font-medium text-slate-500 truncate">
+                {inviteLink || "Generating..."}
+              </span>
             </div>
-            <Button variant="default" size="icon" onClick={handleCopyLink} className="shrink-0 h-auto w-12">
-              {copiedLink ? <Check className="h-5 w-5 text-green-600" /> : <Link className="h-5 w-5" />}
+            <Button
+              variant="default"
+              size="icon"
+              onClick={handleCopyLink}
+              className="shrink-0 h-auto w-12"
+            >
+              {copiedLink ? (
+                <Check className="h-5 w-5 text-green-600" />
+              ) : (
+                <Link className="h-5 w-5" />
+              )}
             </Button>
           </div>
         </div>

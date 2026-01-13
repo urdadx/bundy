@@ -64,7 +64,7 @@ export function ChatInput({
           disabled={disabled}
           rows={1}
           className={cn(
-            "w-full resize-none rounded-xl border-2 border-b-4 border-slate-200 bg-white px-3 py-2",
+            "w-full resize-none rounded-xl border-2 border-b-4 border-slate-200 bg-white px-3 py-2.5",
             "text-sm font-medium text-slate-700 placeholder:text-slate-400",
             "outline-none transition-all",
             "focus:border-sky-400 focus:border-b-sky-500",
@@ -81,7 +81,7 @@ export function ChatInput({
         type="submit"
         size="icon"
         className={cn(
-          "shrink-0 rounded-xl h-9.5 w-9.5",
+          "shrink-0 rounded-xl h-10 w-9.5",
           "bg-sky-500 hover:bg-sky-600 border border-sky-600",
         )}
       >

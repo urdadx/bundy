@@ -1,9 +1,16 @@
-import { createFileRoute } from '@tanstack/react-router'
+import ShopPage from "@/components/shop/shop-grid";
+import { createFileRoute } from "@tanstack/react-router";
+import { ArenaLayout } from "@/components/layouts/arena-layout";
 
-export const Route = createFileRoute('/arena/shop')({
+export const Route = createFileRoute("/arena/shop")({
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
-  return <div>Hello "/arena/shop"!</div>
+  return (
+    <ArenaLayout>
+      <ShopPage />
+      <div className="h-14" />
+    </ArenaLayout>
+  );
 }

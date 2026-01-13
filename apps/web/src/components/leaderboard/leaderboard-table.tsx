@@ -9,63 +9,23 @@ import {
 } from "@tanstack/react-table";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { trpc } from "@/utils/trpc";
 import { cn } from "@/lib/utils";
 import trophyCabinet from "@/assets/rewards/trophy-cabinet.png";
 import goldMedal from "@/assets/medals/gold-medal.png";
 import silverMedal from "@/assets/medals/silver-medal.png";
 import bronzeMedal from "@/assets/medals/bronze-medal.png";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
 type LeaderboardEntry = {
   id: string;
   rank: number;
   username: string;
-  avatar: string;
+  avatar: string | null;
   xp: number;
-  status?: "online" | "idle";
-  streak?: number;
+  isOnline?: boolean;
 };
-
-const data: LeaderboardEntry[] = [
-  {
-    id: "1",
-    rank: 1,
-    username: "Khai đỗ đình",
-    avatar: "/avatars/1.png",
-    xp: 228,
-    status: "online",
-    streak: 100,
-  },
-  { id: "2", rank: 2, username: "Ishu", avatar: "/avatars/2.png", xp: 210, status: "online" },
-  {
-    id: "3",
-    rank: 3,
-    username: "Bekhzod Nurmatov",
-    avatar: "/avatars/3.png",
-    xp: 138,
-    status: "online",
-  },
-  { id: "4", rank: 4, username: "Алексей", avatar: "/avatars/4.png", xp: 129, status: "online" },
-  { id: "5", rank: 5, username: "Asmi Dhage", avatar: "/avatars/5.png", xp: 70 },
-  { id: "6", rank: 6, username: "Phương Phạm", avatar: "/avatars/6.png", xp: 63, status: "online" },
-  { id: "7", rank: 7, username: "Lecea", avatar: "/avatars/7.png", xp: 60 },
-  {
-    id: "8",
-    rank: 8,
-    username: "Kristian Panjaitan",
-    avatar: "/avatars/8.png",
-    xp: 58,
-    status: "online",
-  },
-  { id: "9", rank: 9, username: "solah", avatar: "/avatars/9.png", xp: 50, status: "online" },
-  {
-    id: "10",
-    rank: 10,
-    username: "jonathanlimrs",
-    avatar: "/avatars/10.png",
-    xp: 46,
-    status: "online",
-  },
-];
 
 export const columns: ColumnDef<LeaderboardEntry>[] = [
   {
@@ -88,17 +48,20 @@ export const columns: ColumnDef<LeaderboardEntry>[] = [
     header: "Player",
     cell: ({ row }) => {
       const entry = row.original;
+      if (!entry || !entry.username) {
+        return <div className="text-slate-500">Unknown Player</div>;
+      }
+
       return (
         <div className="flex items-center gap-4">
           <div className="relative">
             <Avatar className="h-10 w-10 md:h-12 md:w-12 border-2 border-slate-100">
-              <AvatarImage src={entry.avatar} />
+              <AvatarImage src={entry.avatar ?? undefined} />
               <AvatarFallback className="font-bold text-slate-400 bg-slate-100">
-                {entry.username.slice(0, 2).toUpperCase()}
+                {entry.username?.slice(0, 2).toUpperCase() || "??"}
               </AvatarFallback>
             </Avatar>
-            {/* Online Status Dot */}
-            {entry.status === "online" && (
+            {entry.isOnline === true && (
               <div className="absolute bottom-0 right-0 size-3 bg-green-500 rounded-full border-2 border-white" />
             )}
           </div>
@@ -113,9 +76,10 @@ export const columns: ColumnDef<LeaderboardEntry>[] = [
     accessorKey: "xp",
     header: "XP",
     cell: ({ row }) => {
+      const xp = row.getValue("xp");
       return (
         <div className="text-right text-base font-bold text-slate-500 pr-4">
-          {row.getValue("xp")} XP
+          {typeof xp === "number" ? `${xp} XP` : "0 XP"}
         </div>
       );
     },
@@ -125,8 +89,30 @@ export const columns: ColumnDef<LeaderboardEntry>[] = [
 export function LeaderboardTable() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
+  const { data: profile } = useQuery(trpc.user.getProfile.queryOptions());
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, error, isLoading } =
+    useInfiniteQuery(
+      trpc.user.getLeaderboard.infiniteQueryOptions(
+        { limit: 10 },
+        {
+          getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
+        },
+      ),
+    );
+
+  const allItems = data?.pages.flatMap((page) => page?.items || []) || [];
+  const leaderboardData: LeaderboardEntry[] = React.useMemo(
+    () =>
+      allItems.map((item, index) => ({
+        ...item,
+        rank: index + 1,
+      })),
+    [allItems],
+  );
+
   const table = useReactTable({
-    data,
+    data: leaderboardData,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -135,6 +121,27 @@ export function LeaderboardTable() {
       sorting,
     },
   });
+
+  if (error) {
+    console.error("Leaderboard error:", error);
+    return (
+      <div className="w-full max-w-2xl mx-auto space-y-6 mb-10">
+        <div className="text-center text-red-500">
+          {error.message.includes("UNAUTHORIZED")
+            ? "Please log in to view the leaderboard"
+            : `Error loading leaderboard: ${error.message}`}
+        </div>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="w-full max-w-2xl mx-auto space-y-6 mb-10">
+        <div className="text-center text-slate-500">Loading leaderboard...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-2xl mx-auto space-y-6 mb-10">
@@ -157,8 +164,7 @@ export function LeaderboardTable() {
                   data-state={row.getIsSelected() && "selected"}
                   className={cn(
                     "hover:bg-slate-50 border-slate-100 transition-colors cursor-pointer h-20",
-                    // Highlight logged in user (mocking ID 1 as current user)
-                    row.original.id === "1" && "bg-sky-50 hover:bg-sky-100",
+                    row.original.id === profile?.id && "bg-sky-50 hover:bg-sky-100",
                   )}
                 >
                   {row.getVisibleCells().map((cell) => (
@@ -170,7 +176,7 @@ export function LeaderboardTable() {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell colSpan={columns.length} className="h-24 text-center text-lg">
                   No players found.
                 </TableCell>
               </TableRow>
@@ -178,6 +184,13 @@ export function LeaderboardTable() {
           </TableBody>
         </Table>
       </div>
+      {hasNextPage && (
+        <div className="flex justify-center">
+          <Button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
+            {isFetchingNextPage ? "Loading..." : "Load More"}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

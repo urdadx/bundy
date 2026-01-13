@@ -15,7 +15,7 @@ export type AvatarId = (typeof AVATARS)[number]["id"];
 // Get avatar source by ID
 export function getAvatarSrc(avatarId: string | null | undefined): string {
   const avatar = AVATARS.find((a) => a.id === avatarId);
-  return avatar?.src ?? jackAvatar; 
+  return avatar?.src ?? jackAvatar;
 }
 
 // Get avatar name by ID

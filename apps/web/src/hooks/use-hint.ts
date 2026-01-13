@@ -1,7 +1,7 @@
-import { useState, useCallback } from 'react';
-import { findUnfoundWord } from '../utils/hint-utils';
-import type { HintResult } from '../utils/hint-utils';
-import { toast } from 'sonner';
+import { useState, useCallback } from "react";
+import { findUnfoundWord } from "../utils/hint-utils";
+import type { HintResult } from "../utils/hint-utils";
+import { toast } from "sonner";
 
 interface UseHintOptions {
   diamonds: number;
@@ -22,7 +22,6 @@ interface UseHintReturn {
   canUseHint: boolean;
 }
 
-
 export function useHint({
   diamonds,
   foundWords,
@@ -41,14 +40,14 @@ export function useHint({
 
   const requestHint = useCallback(() => {
     if (!canUseHint) {
-      toast.warning('You need 5 diamonds to use hint!');
+      toast.warning("You need 5 diamonds to use hint!");
       return;
     }
 
     const unfoundWords = findUnfoundWord(placedWords, foundWords);
-    
+
     if (!unfoundWords) {
-      toast.info('All words have been found!');
+      toast.info("All words have been found!");
       return;
     }
 
@@ -67,6 +66,6 @@ export function useHint({
     isHintActive,
     clearHint,
     requestHint,
-    canUseHint
+    canUseHint,
   };
 }

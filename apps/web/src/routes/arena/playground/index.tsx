@@ -257,9 +257,9 @@ function RouteComponent() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-slate-50">
-      <div className="flex justify-center items-start w-full min-h-screen py-6 px-4">
-        <div className="flex gap-6 max-w-7xl w-full" key={gameKey}>
+    <div className="min-h-screen w-full bg-slate-50 overflow-x-hidden">
+      <div className="flex justify-center items-start w-full min-h-screen py-6 px-4 overflow-x-hidden">
+        <div className="flex gap-6 max-w-7xl w-full overflow-x-hidden" key={gameKey}>
           <div className="flex-1 flex flex-col items-center gap-4">
             <div className="w-full max-w-175">
               <CareerGameHeader

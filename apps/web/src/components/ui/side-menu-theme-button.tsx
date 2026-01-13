@@ -1,7 +1,7 @@
-import { Button, type ButtonProps } from '@/components/ui/button'
-import { useThemeToggle } from '@/hooks/use-theme'
+import { Button, type ButtonProps } from "@/components/ui/button";
+import { useThemeToggle } from "@/hooks/use-theme";
 export function SideMenuThemeButton({ ...props }: ButtonProps) {
-  const { isDark, toggle, hydrated, theme } = useThemeToggle()
+  const { isDark, toggle, hydrated, theme } = useThemeToggle();
 
   return (
     <Button
@@ -12,14 +12,14 @@ export function SideMenuThemeButton({ ...props }: ButtonProps) {
       onClick={toggle}
     >
       <span
-        className={`flex size-10 items-center justify-center rounded-full text-3xl ${hydrated ? '' : 'bg-loading'}`}
+        className={`flex size-10 items-center justify-center rounded-full text-3xl ${hydrated ? "" : "bg-loading"}`}
       >
-        {hydrated && (isDark ? '🌛' : '🌞')}
+        {hydrated && (isDark ? "🌛" : "🌞")}
       </span>
       <span className="ml-5 truncate sm:max-lg:sr-only">
         <span className="text-muted-foreground/85">Theme: </span>
         {hydrated && theme}
       </span>
     </Button>
-  )
+  );
 }

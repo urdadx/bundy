@@ -47,7 +47,7 @@ export const stage = sqliteTable(
   (table) => [
     index("stage_worldId_idx").on(table.worldId),
     index("stage_worldId_stageNumber_idx").on(table.worldId, table.stageNumber),
-  ]
+  ],
 );
 
 // User stats - tracks XP, diamonds, and overall progress
@@ -61,11 +61,14 @@ export const userStats = sqliteTable(
       .references(() => user.id, { onDelete: "cascade" }),
     totalXp: integer("total_xp").notNull().default(10), // starts with 10 XP
     diamonds: integer("diamonds").notNull().default(0), // starts with 0 diamonds
-    currentWorldId: text("current_world_id").references(() => world.id).default("meadow"), // current world player is in, starts at meadow
+    currentWorldId: text("current_world_id")
+      .references(() => world.id)
+      .default("meadow"), // current world player is in, starts at meadow
     gamesPlayed: integer("games_played").notNull().default(0),
     gamesWon: integer("games_won").notNull().default(0),
     gamesLost: integer("games_lost").notNull().default(0),
     totalPlayTime: integer("total_play_time").notNull().default(0), // in seconds
+    isOnline: integer("is_online", { mode: "boolean" }).default(false).notNull(),
     createdAt: integer("created_at", { mode: "timestamp_ms" })
       .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
       .notNull(),
@@ -74,7 +77,7 @@ export const userStats = sqliteTable(
       .$onUpdate(() => new Date())
       .notNull(),
   },
-  (table) => [index("userStats_userId_idx").on(table.userId)]
+  (table) => [index("userStats_userId_idx").on(table.userId)],
 );
 
 // World progress - tracks which worlds are unlocked and completed
@@ -88,12 +91,8 @@ export const worldProgress = sqliteTable(
     worldId: text("world_id")
       .notNull()
       .references(() => world.id, { onDelete: "cascade" }),
-    isUnlocked: integer("is_unlocked", { mode: "boolean" })
-      .notNull()
-      .default(false),
-    isCompleted: integer("is_completed", { mode: "boolean" })
-      .notNull()
-      .default(false),
+    isUnlocked: integer("is_unlocked", { mode: "boolean" }).notNull().default(false),
+    isCompleted: integer("is_completed", { mode: "boolean" }).notNull().default(false),
     completedStages: integer("completed_stages").notNull().default(0), // 0-5
     totalStars: integer("total_stars").notNull().default(0), // stars earned across all stages
     bestTime: integer("best_time"), // best completion time across all stages in seconds
@@ -109,7 +108,7 @@ export const worldProgress = sqliteTable(
     index("worldProgress_userId_idx").on(table.userId),
     index("worldProgress_worldId_idx").on(table.worldId),
     index("worldProgress_userId_worldId_idx").on(table.userId, table.worldId),
-  ]
+  ],
 );
 
 // Stage progress - tracks individual stage completion
@@ -123,9 +122,7 @@ export const stageProgress = sqliteTable(
     stageId: text("stage_id")
       .notNull()
       .references(() => stage.id, { onDelete: "cascade" }),
-    isCompleted: integer("is_completed", { mode: "boolean" })
-      .notNull()
-      .default(false),
+    isCompleted: integer("is_completed", { mode: "boolean" }).notNull().default(false),
     stars: integer("stars").notNull().default(0), // 0-3 stars based on performance
     bestTime: integer("best_time"), // best completion time in seconds
     attempts: integer("attempts").notNull().default(0),
@@ -141,7 +138,7 @@ export const stageProgress = sqliteTable(
     index("stageProgress_userId_idx").on(table.userId),
     index("stageProgress_stageId_idx").on(table.stageId),
     index("stageProgress_userId_stageId_idx").on(table.userId, table.stageId),
-  ]
+  ],
 );
 
 // Game session - tracks individual game plays
@@ -163,9 +160,7 @@ export const gameSession = sqliteTable(
     xpEarned: integer("xp_earned").notNull().default(0),
     diamondsEarned: integer("diamonds_earned").notNull().default(0),
     stars: integer("stars").notNull().default(0), // 0-3 stars
-    isCompleted: integer("is_completed", { mode: "boolean" })
-      .notNull()
-      .default(false),
+    isCompleted: integer("is_completed", { mode: "boolean" }).notNull().default(false),
     createdAt: integer("created_at", { mode: "timestamp_ms" })
       .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
       .notNull(),
@@ -178,7 +173,7 @@ export const gameSession = sqliteTable(
     index("gameSession_userId_idx").on(table.userId),
     index("gameSession_stageId_idx").on(table.stageId),
     index("gameSession_userId_stageId_idx").on(table.userId, table.stageId),
-  ]
+  ],
 );
 
 // Shop item - items available for purchase with diamonds
@@ -189,9 +184,7 @@ export const shopItem = sqliteTable("shop_item", {
   image: text("image").notNull(), // URL or path to item image
   price: integer("price").notNull(), // price in diamonds
   category: text("category").notNull(), // e.g., 'avatar', 'theme', 'powerup', 'booster'
-  isAvailable: integer("is_available", { mode: "boolean" })
-    .notNull()
-    .default(true),
+  isAvailable: integer("is_available", { mode: "boolean" }).notNull().default(true),
   sortOrder: integer("sort_order").notNull().default(0), // for ordering in shop UI
   createdAt: integer("created_at", { mode: "timestamp_ms" })
     .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
@@ -214,9 +207,7 @@ export const userInventory = sqliteTable(
       .notNull()
       .references(() => shopItem.id, { onDelete: "cascade" }),
     purchasedAt: integer("purchased_at", { mode: "timestamp_ms" }).notNull(),
-    isEquipped: integer("is_equipped", { mode: "boolean" })
-      .notNull()
-      .default(false), // for items that can be equipped (avatars, themes, etc.)
+    isEquipped: integer("is_equipped", { mode: "boolean" }).notNull().default(false), // for items that can be equipped (avatars, themes, etc.)
     createdAt: integer("created_at", { mode: "timestamp_ms" })
       .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
       .notNull(),
@@ -229,7 +220,7 @@ export const userInventory = sqliteTable(
     index("userInventory_userId_idx").on(table.userId),
     index("userInventory_itemId_idx").on(table.itemId),
     index("userInventory_userId_itemId_idx").on(table.userId, table.itemId),
-  ]
+  ],
 );
 
 // Leaderboard - tracks top players ranked by diamonds
@@ -258,7 +249,7 @@ export const leaderboard = sqliteTable(
     index("leaderboard_userId_idx").on(table.userId),
     index("leaderboard_rank_idx").on(table.rank),
     index("leaderboard_diamonds_idx").on(table.diamonds),
-  ]
+  ],
 );
 
 // Relations

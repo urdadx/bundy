@@ -17,13 +17,13 @@
     "db:seed": "bun run src/seed.ts",
     "db:verify": "bun run src/verify-seed.ts"
   },
-  "devDependencies": {
-    "drizzle-kit": "^0.31.8",
-    "typescript": "catalog:",
-    "@wordsearch/config": "workspace:*"
-  },
   "dependencies": {
     "drizzle-orm": "^0.45.1",
     "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@wordsearch/config": "workspace:*",
+    "drizzle-kit": "^0.31.8",
+    "typescript": "catalog:"
   }
 }

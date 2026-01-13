@@ -42,6 +42,7 @@ export function ChatPanel({
         "flex flex-col bg-white border-2 border-b-4 border-slate-200 rounded-xl overflow-hidden",
         className,
       )}
+      initial={false}
       animate={{ height: isCollapsed ? collapsedHeight : expandedHeight }}
       transition={{ duration: 0.3 }}
     >
@@ -51,7 +52,7 @@ export function ChatPanel({
         <AnimatePresence>
           {!isCollapsed && (
             <motion.div
-              initial={{ scaleY: 0, transformOrigin: "top" }}
+              initial={false}
               animate={{ scaleY: 1, transformOrigin: "top" }}
               exit={{ scaleY: 0, transformOrigin: "top" }}
               transition={{ duration: 0.3 }}

@@ -10,11 +10,11 @@ const connections = new Map<string, WSConnection>();
 // Player ID to Room ID mapping for quick lookup
 const playerRooms = new Map<string, string>();
 
-const RECONNECT_TIMEOUT = 10000; 
+const RECONNECT_TIMEOUT = 10000;
 const POINTS_PER_WORD = 2;
 const PLAYER_COLORS = {
-  host: "#1cb0f6", 
-  guest: "#ff4b4b", 
+  host: "#1cb0f6",
+  guest: "#ff4b4b",
 };
 
 export function generateRoomCode(): string {
@@ -26,7 +26,12 @@ export function generateRoomCode(): string {
   return code;
 }
 
-export function createRoom(hostId: string, hostName: string, hostAvatar: string, settings: GameSettings): Room {
+export function createRoom(
+  hostId: string,
+  hostName: string,
+  hostAvatar: string,
+  settings: GameSettings,
+): Room {
   let roomId = generateRoomCode();
   while (rooms.has(roomId)) {
     roomId = generateRoomCode();
@@ -77,7 +82,12 @@ export function getRoomByPlayerId(playerId: string): Room | undefined {
   return roomId ? rooms.get(roomId) : undefined;
 }
 
-export function joinRoom(roomId: string, odId: string, odName: string, odAvatar: string): { room: Room; isReconnection: boolean } | null {
+export function joinRoom(
+  roomId: string,
+  odId: string,
+  odName: string,
+  odAvatar: string,
+): { room: Room; isReconnection: boolean } | null {
   const room = rooms.get(roomId);
   if (!room) return null;
 
@@ -124,7 +134,7 @@ export function setPlayerReady(roomId: string, odId: string, ready: boolean): Ro
 
   if (room.players.size === 2) {
     const players = Array.from(room.players.values());
-    if (players.every(p => p.isReady)) {
+    if (players.every((p) => p.isReady)) {
       room.status = "ready";
     } else {
       room.status = "waiting";
@@ -157,7 +167,7 @@ export function claimWord(
   odId: string,
   word: string,
   start: { r: number; c: number },
-  end: { r: number; c: number }
+  end: { r: number; c: number },
 ): { success: boolean; room?: Room; reason?: string } {
   const room = rooms.get(roomId);
   if (!room) return { success: false, reason: "Room not found" };
@@ -166,24 +176,28 @@ export function claimWord(
   const player = room.players.get(odId);
   if (!player) return { success: false, reason: "Player not in room" };
 
-  if (room.foundWords.some(fw => fw.word === word)) {
+  if (room.foundWords.some((fw) => fw.word === word)) {
     return { success: false, reason: "Word already claimed" };
   }
 
   if (!room.puzzle) return { success: false, reason: "No puzzle data" };
-  
-  const puzzleWord = room.puzzle.words.find(w => w.word === word);
+
+  const puzzleWord = room.puzzle.words.find((w) => w.word === word);
   if (!puzzleWord) {
     return { success: false, reason: "Word not in puzzle" };
   }
 
   // Validate start and end positions match
-  const isValidPosition = 
-    (puzzleWord.start.r === start.r && puzzleWord.start.c === start.c &&
-     puzzleWord.end.r === end.r && puzzleWord.end.c === end.c) ||
+  const isValidPosition =
+    (puzzleWord.start.r === start.r &&
+      puzzleWord.start.c === start.c &&
+      puzzleWord.end.r === end.r &&
+      puzzleWord.end.c === end.c) ||
     // Also allow reverse selection
-    (puzzleWord.start.r === end.r && puzzleWord.start.c === end.c &&
-     puzzleWord.end.r === start.r && puzzleWord.end.c === start.c);
+    (puzzleWord.start.r === end.r &&
+      puzzleWord.start.c === end.c &&
+      puzzleWord.end.r === start.r &&
+      puzzleWord.end.c === start.c);
 
   if (!isValidPosition) {
     return { success: false, reason: "Invalid word position" };
@@ -233,8 +247,8 @@ export function endGame(room: Room): void {
   room.gameEndedAt = Date.now();
 
   const players = Array.from(room.players.values());
-  const host = players.find(p => p.isHost);
-  const guest = players.find(p => !p.isHost);
+  const host = players.find((p) => p.isHost);
+  const guest = players.find((p) => !p.isHost);
 
   if (host && guest) {
     if (host.score > guest.score) {
@@ -260,12 +274,16 @@ export function handleDisconnect(roomId: string, odId: string): void {
   player.isConnected = false;
   player.cursor = null;
 
-  broadcastToRoom(roomId, { 
-    type: "player_disconnected", 
-    odId, 
-    odName: player.name,
-    reconnectTimeout: RECONNECT_TIMEOUT 
-  }, odId);
+  broadcastToRoom(
+    roomId,
+    {
+      type: "player_disconnected",
+      odId,
+      odName: player.name,
+      reconnectTimeout: RECONNECT_TIMEOUT,
+    },
+    odId,
+  );
 
   // Set reconnection timer
   const timer = setTimeout(() => {
@@ -286,7 +304,7 @@ function handleReconnectTimeout(roomId: string, odId: string): void {
 
   // Player failed to reconnect - opponent wins if game was in progress
   if (room.status === "playing") {
-    const opponent = Array.from(room.players.values()).find(p => p.id !== odId);
+    const opponent = Array.from(room.players.values()).find((p) => p.id !== odId);
     if (opponent) {
       room.winnerId = opponent.id;
       room.isDraw = false;
@@ -295,17 +313,21 @@ function handleReconnectTimeout(roomId: string, odId: string): void {
 
       const opponentWs = connections.get(opponent.id);
       if (opponentWs) {
-        opponentWs.send(JSON.stringify({
-          type: "opponent_left",
-          reason: "Opponent disconnected",
-        }));
-        opponentWs.send(JSON.stringify({
-          type: "game_ended",
-          winnerId: opponent.id,
-          isDraw: false,
-          hostScore: room.players.get(room.hostId)?.score ?? 0,
-          guestScore: room.guestId ? room.players.get(room.guestId)?.score ?? 0 : 0,
-        }));
+        opponentWs.send(
+          JSON.stringify({
+            type: "opponent_left",
+            reason: "Opponent disconnected",
+          }),
+        );
+        opponentWs.send(
+          JSON.stringify({
+            type: "game_ended",
+            winnerId: opponent.id,
+            isDraw: false,
+            hostScore: room.players.get(room.hostId)?.score ?? 0,
+            guestScore: room.guestId ? (room.players.get(room.guestId)?.score ?? 0) : 0,
+          }),
+        );
       }
     }
   } else {
@@ -400,7 +422,10 @@ export function setupRematch(roomId: string): Room | null {
   return room;
 }
 
-export function voteForRematch(roomId: string, odId: string): { room: Room | null, totalVotes: number } {
+export function voteForRematch(
+  roomId: string,
+  odId: string,
+): { room: Room | null; totalVotes: number } {
   const room = rooms.get(roomId);
   if (!room || room.status !== "finished") return { room: null, totalVotes: 0 };
 
@@ -431,10 +456,10 @@ export function broadcastToRoom(roomId: string, message: object, excludeId?: str
   if (!room) return;
 
   const messageStr = JSON.stringify(message);
-  
+
   for (const player of room.players.values()) {
     if (player.id === excludeId) continue;
-    
+
     const ws = connections.get(player.id);
     if (ws && player.isConnected) {
       ws.send(messageStr);

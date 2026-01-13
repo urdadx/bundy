@@ -21,7 +21,7 @@ interface UseMultiplayerSocketReturn {
 }
 
 export function useMultiplayerSocket(
-  options: UseMultiplayerSocketOptions = {}
+  options: UseMultiplayerSocketOptions = {},
 ): UseMultiplayerSocketReturn {
   const {
     onMessage,
@@ -66,10 +66,10 @@ export function useMultiplayerSocket(
   const getWsUrl = useCallback(() => {
     if (env.VITE_WS_URL) {
       const wsUrl = env.VITE_WS_URL;
-      const normalizedUrl = wsUrl.replace(/^http/, 'ws');
+      const normalizedUrl = wsUrl.replace(/^http/, "ws");
       return `${normalizedUrl}/ws/multiplayer`;
     }
-    
+
     const serverUrl = env.VITE_SERVER_URL;
     const wsProtocol = serverUrl.startsWith("https") ? "wss" : "ws";
     const wsHost = serverUrl.replace(/^https?:\/\//, "");
@@ -99,7 +99,7 @@ export function useMultiplayerSocket(
           if (ws.readyState === WebSocket.OPEN) {
             ws.send(JSON.stringify({ type: "ping" }));
           }
-        }, 30000); 
+        }, 30000);
       };
 
       ws.onmessage = (event) => {
@@ -120,10 +120,12 @@ export function useMultiplayerSocket(
           if (reconnectAttemptsRef.current < reconnectAttempts) {
             setConnectionState("reconnecting");
             onReconnectingRef.current?.();
-            
+
             const delay = reconnectInterval * Math.pow(2, reconnectAttemptsRef.current);
-            console.log(`[WS] Reconnecting in ${delay}ms (attempt ${reconnectAttemptsRef.current + 1})`);
-            
+            console.log(
+              `[WS] Reconnecting in ${delay}ms (attempt ${reconnectAttemptsRef.current + 1})`,
+            );
+
             reconnectTimeoutRef.current = setTimeout(() => {
               reconnectAttemptsRef.current++;
               connect();
@@ -150,12 +152,12 @@ export function useMultiplayerSocket(
   const disconnect = useCallback(() => {
     isIntentionalDisconnectRef.current = true;
     clearTimers();
-    
+
     if (wsRef.current) {
       wsRef.current.close(1000, "User disconnected");
       wsRef.current = null;
     }
-    
+
     setConnectionState("disconnected");
   }, [clearTimers]);
 

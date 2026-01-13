@@ -73,7 +73,7 @@ app.post("/api/multiplayer/rooms", async (c) => {
         gridSize: 10,
         wordCount: 7,
         timeLimit: 600,
-      }
+      },
     );
 
     return c.json({ roomId: result.roomId });
@@ -99,7 +99,6 @@ app.get("/api/multiplayer/rooms/:roomId", (c) => {
 app.get(
   "/ws/multiplayer",
   upgradeWebSocket(() => {
-
     const wsData: WSData = {
       odId: "",
       odName: "",
@@ -125,7 +124,7 @@ app.get(
         handleError(ws as any, new Error("WebSocket error"));
       },
     };
-  })
+  }),
 );
 
 export default {

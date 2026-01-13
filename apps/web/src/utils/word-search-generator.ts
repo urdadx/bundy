@@ -1,5 +1,14 @@
-export type Theme = 'animals' | 'planets' | 'technology' | 'food' | 'sports' | 'general' | 'science' | 'vocabulary' | 'countries';
-export type Difficulty = 'easy' | 'medium' | 'hard' | 'expert';
+export type Theme =
+  | "animals"
+  | "planets"
+  | "technology"
+  | "food"
+  | "sports"
+  | "general"
+  | "science"
+  | "vocabulary"
+  | "countries";
+export type Difficulty = "easy" | "medium" | "hard" | "expert";
 
 export interface WordSearchConfig {
   size: number;
@@ -22,45 +31,159 @@ export interface WordSearchPuzzle {
 
 const THEME_WORDS: Record<Theme, string[]> = {
   animals: [
-    'LION', 'TIGER', 'ELEPHANT', 'GIRAFFE', 'ZEBRA', 'MONKEY', 'PANDA',
-    'KANGAROO', 'DOLPHIN', 'PENGUIN', 'EAGLE', 'BUTTERFLY', 'LEOPARD',
-    'CHEETAH', 'RHINOCEROS', 'HIPPOPOTAMUS', 'CROCODILE', 'GORILLA'
+    "LION",
+    "TIGER",
+    "ELEPHANT",
+    "GIRAFFE",
+    "ZEBRA",
+    "MONKEY",
+    "PANDA",
+    "KANGAROO",
+    "DOLPHIN",
+    "PENGUIN",
+    "EAGLE",
+    "BUTTERFLY",
+    "LEOPARD",
+    "CHEETAH",
+    "RHINOCEROS",
+    "HIPPOPOTAMUS",
+    "CROCODILE",
+    "GORILLA",
   ],
   planets: [
-    'MERCURY', 'VENUS', 'EARTH', 'MARS', 'JUPITER', 'SATURN', 'URANUS',
-    'NEPTUNE', 'PLUTO', 'MOON', 'COMET', 'ASTEROID', 'GALAXY', 'NEBULA'
+    "MERCURY",
+    "VENUS",
+    "EARTH",
+    "MARS",
+    "JUPITER",
+    "SATURN",
+    "URANUS",
+    "NEPTUNE",
+    "PLUTO",
+    "MOON",
+    "COMET",
+    "ASTEROID",
+    "GALAXY",
+    "NEBULA",
   ],
   technology: [
-    'COMPUTER', 'INTERNET', 'SOFTWARE', 'HARDWARE', 'KEYBOARD', 'MOUSE',
-    'MONITOR', 'ALGORITHM', 'DATABASE', 'NETWORK', 'SERVER', 'CLOUD',
-    'MOBILE', 'TABLET', 'LAPTOP', 'DIGITAL', 'BINARY', 'CODING'
+    "COMPUTER",
+    "INTERNET",
+    "SOFTWARE",
+    "HARDWARE",
+    "KEYBOARD",
+    "MOUSE",
+    "MONITOR",
+    "ALGORITHM",
+    "DATABASE",
+    "NETWORK",
+    "SERVER",
+    "CLOUD",
+    "MOBILE",
+    "TABLET",
+    "LAPTOP",
+    "DIGITAL",
+    "BINARY",
+    "CODING",
   ],
   food: [
-    'PIZZA', 'BURGER', 'PASTA', 'SUSHI', 'TACO', 'SANDWICH', 'SALAD',
-    'CHICKEN', 'STEAK', 'FISH', 'RICE', 'NOODLES', 'BREAD', 'CHEESE',
-    'CHOCOLATE', 'COOKIE', 'CAKE', 'FRUIT', 'VEGETABLE'
+    "PIZZA",
+    "BURGER",
+    "PASTA",
+    "SUSHI",
+    "TACO",
+    "SANDWICH",
+    "SALAD",
+    "CHICKEN",
+    "STEAK",
+    "FISH",
+    "RICE",
+    "NOODLES",
+    "BREAD",
+    "CHEESE",
+    "CHOCOLATE",
+    "COOKIE",
+    "CAKE",
+    "FRUIT",
+    "VEGETABLE",
   ],
   sports: [
-    'SOCCER', 'BASKETBALL', 'FOOTBALL', 'TENNIS', 'BASEBALL', 'HOCKEY',
-    'GOLF', 'SWIMMING', 'RUNNING', 'CYCLING', 'BOXING', 'CRICKET',
-    'VOLLEYBALL', 'RUGBY', 'SKIING', 'SURFING', 'SKATING'
+    "SOCCER",
+    "BASKETBALL",
+    "FOOTBALL",
+    "TENNIS",
+    "BASEBALL",
+    "HOCKEY",
+    "GOLF",
+    "SWIMMING",
+    "RUNNING",
+    "CYCLING",
+    "BOXING",
+    "CRICKET",
+    "VOLLEYBALL",
+    "RUGBY",
+    "SKIING",
+    "SURFING",
+    "SKATING",
   ],
   general: [
-    'HELLO', 'WORLD', 'FRIEND', 'FAMILY', 'HAPPY', 'SMILE', 'LOVE',
-    'PEACE', 'DREAM', 'HOPE', 'LIGHT', 'MUSIC', 'DANCE', 'PLAY'
+    "HELLO",
+    "WORLD",
+    "FRIEND",
+    "FAMILY",
+    "HAPPY",
+    "SMILE",
+    "LOVE",
+    "PEACE",
+    "DREAM",
+    "HOPE",
+    "LIGHT",
+    "MUSIC",
+    "DANCE",
+    "PLAY",
   ],
   science: [
-    'ATOM', 'MOLECULE', 'GENETICS', 'PHYSICS', 'BIOLOGY', 'CHEMISTRY',
-    'ENERGY', 'LABORATORY', 'RESEARCH', 'TELESCOPE', 'MICROSCOPE', 'GRAVITY'
+    "ATOM",
+    "MOLECULE",
+    "GENETICS",
+    "PHYSICS",
+    "BIOLOGY",
+    "CHEMISTRY",
+    "ENERGY",
+    "LABORATORY",
+    "RESEARCH",
+    "TELESCOPE",
+    "MICROSCOPE",
+    "GRAVITY",
   ],
   vocabulary: [
-    'ELOQUENT', 'EPHEMERAL', 'SERENDIPITY', 'SOLITUDE', 'ETHEREAL', 'LUMINOUS',
-    'PANACEA', 'MELLIFLUOUS', 'PRISTINE', 'EVOCATIVE', 'RESONANCE', 'SURREAL'
+    "ELOQUENT",
+    "EPHEMERAL",
+    "SERENDIPITY",
+    "SOLITUDE",
+    "ETHEREAL",
+    "LUMINOUS",
+    "PANACEA",
+    "MELLIFLUOUS",
+    "PRISTINE",
+    "EVOCATIVE",
+    "RESONANCE",
+    "SURREAL",
   ],
   countries: [
-    'CANADA', 'BRAZIL', 'FRANCE', 'GERMANY', 'JAPAN', 'AUSTRALIA',
-    'EGYPT', 'MEXICO', 'ITALY', 'SPAIN', 'NORWAY', 'SWEDEN'
-  ]
+    "CANADA",
+    "BRAZIL",
+    "FRANCE",
+    "GERMANY",
+    "JAPAN",
+    "AUSTRALIA",
+    "EGYPT",
+    "MEXICO",
+    "ITALY",
+    "SPAIN",
+    "NORWAY",
+    "SWEDEN",
+  ],
 };
 
 const DIFFICULTY_CONFIG = {
@@ -70,7 +193,7 @@ const DIFFICULTY_CONFIG = {
     wordCount: 5,
     minWordLength: 4,
     maxWordLength: 7,
-    directions: ['horizontal', 'vertical'] // Only right and down
+    directions: ["horizontal", "vertical"], // Only right and down
   },
   medium: {
     minSize: 8,
@@ -78,7 +201,7 @@ const DIFFICULTY_CONFIG = {
     wordCount: 7,
     minWordLength: 4,
     maxWordLength: 10,
-    directions: ['horizontal', 'vertical', 'diagonal'] // Right, down, and diagonal-down-right
+    directions: ["horizontal", "vertical", "diagonal"], // Right, down, and diagonal-down-right
   },
   hard: {
     minSize: 10,
@@ -86,7 +209,7 @@ const DIFFICULTY_CONFIG = {
     wordCount: 10,
     minWordLength: 5,
     maxWordLength: 12,
-    directions: ['horizontal', 'vertical', 'diagonal', 'horizontal-reverse', 'vertical-reverse']
+    directions: ["horizontal", "vertical", "diagonal", "horizontal-reverse", "vertical-reverse"],
   },
   expert: {
     minSize: 15,
@@ -94,29 +217,36 @@ const DIFFICULTY_CONFIG = {
     wordCount: 15,
     minWordLength: 5,
     maxWordLength: 15,
-    directions: ['horizontal', 'vertical', 'diagonal', 'horizontal-reverse', 'vertical-reverse', 'diagonal-reverse']
-  }
+    directions: [
+      "horizontal",
+      "vertical",
+      "diagonal",
+      "horizontal-reverse",
+      "vertical-reverse",
+      "diagonal-reverse",
+    ],
+  },
 };
 
-type Direction = 
-  | 'horizontal' 
-  | 'vertical' 
-  | 'diagonal' 
-  | 'horizontal-reverse' 
-  | 'vertical-reverse' 
-  | 'diagonal-reverse'
-  | 'diagonal-up'
-  | 'diagonal-down';
+type Direction =
+  | "horizontal"
+  | "vertical"
+  | "diagonal"
+  | "horizontal-reverse"
+  | "vertical-reverse"
+  | "diagonal-reverse"
+  | "diagonal-up"
+  | "diagonal-down";
 
 const DIRECTION_VECTORS: Record<Direction, { dr: number; dc: number }> = {
-  'horizontal': { dr: 0, dc: 1 },
-  'vertical': { dr: 1, dc: 0 },
-  'diagonal': { dr: 1, dc: 1 },
-  'horizontal-reverse': { dr: 0, dc: -1 },
-  'vertical-reverse': { dr: -1, dc: 0 },
-  'diagonal-reverse': { dr: -1, dc: -1 },
-  'diagonal-up': { dr: -1, dc: 1 },
-  'diagonal-down': { dr: 1, dc: -1 }
+  horizontal: { dr: 0, dc: 1 },
+  vertical: { dr: 1, dc: 0 },
+  diagonal: { dr: 1, dc: 1 },
+  "horizontal-reverse": { dr: 0, dc: -1 },
+  "vertical-reverse": { dr: -1, dc: 0 },
+  "diagonal-reverse": { dr: -1, dc: -1 },
+  "diagonal-up": { dr: -1, dc: 1 },
+  "diagonal-down": { dr: 1, dc: -1 },
 };
 
 function canPlaceWord(
@@ -124,7 +254,7 @@ function canPlaceWord(
   word: string,
   row: number,
   col: number,
-  direction: Direction
+  direction: Direction,
 ): boolean {
   const { dr, dc } = DIRECTION_VECTORS[direction];
   const size = grid.length;
@@ -137,7 +267,7 @@ function canPlaceWord(
       return false;
     }
 
-    if (grid[r][c] !== '' && grid[r][c] !== word[i]) {
+    if (grid[r][c] !== "" && grid[r][c] !== word[i]) {
       return false;
     }
   }
@@ -150,7 +280,7 @@ function placeWord(
   word: string,
   row: number,
   col: number,
-  direction: Direction
+  direction: Direction,
 ): { start: { r: number; c: number }; end: { r: number; c: number } } {
   const { dr, dc } = DIRECTION_VECTORS[direction];
 
@@ -165,16 +295,16 @@ function placeWord(
 
   return {
     start: { r: row, c: col },
-    end: { r: endRow, c: endCol }
+    end: { r: endRow, c: endCol },
   };
 }
 
 function fillEmptyCells(grid: string[][]): void {
-  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
   for (let r = 0; r < grid.length; r++) {
     for (let c = 0; c < grid[r].length; c++) {
-      if (grid[r][c] === '') {
+      if (grid[r][c] === "") {
         grid[r][c] = letters[Math.floor(Math.random() * letters.length)];
       }
     }
@@ -184,32 +314,36 @@ function fillEmptyCells(grid: string[][]): void {
 export function generateWordSearch(config: WordSearchConfig): WordSearchPuzzle {
   const { theme, difficulty } = config;
   const diffConfig = DIFFICULTY_CONFIG[difficulty];
-  
+
   // Determine grid size
-  const size = config.size || Math.floor(
-    Math.random() * (diffConfig.maxSize - diffConfig.minSize + 1) + diffConfig.minSize
-  );
+  const size =
+    config.size ||
+    Math.floor(Math.random() * (diffConfig.maxSize - diffConfig.minSize + 1) + diffConfig.minSize);
 
   // Initialize empty grid
-  const grid: string[][] = Array(size).fill(null).map(() => Array(size).fill(''));
+  const grid: string[][] = Array(size)
+    .fill(null)
+    .map(() => Array(size).fill(""));
 
   // Get available words for theme or use provided words
-  let availableWords = config.words && config.words.length > 0 
-    ? config.words 
-    : THEME_WORDS[theme];
-  
+  let availableWords = config.words && config.words.length > 0 ? config.words : THEME_WORDS[theme];
+
   // Always filter words by grid size and difficulty constraints
-  availableWords = availableWords.filter(word => 
-    word.length >= diffConfig.minWordLength && 
-    word.length <= diffConfig.maxWordLength &&
-    word.length <= size
+  availableWords = availableWords.filter(
+    (word) =>
+      word.length >= diffConfig.minWordLength &&
+      word.length <= diffConfig.maxWordLength &&
+      word.length <= size,
   );
 
   // Shuffle and select words
-  const shuffled = config.words && config.words.length > 0 ? [...availableWords] : [...availableWords].sort(() => Math.random() - 0.5);
+  const shuffled =
+    config.words && config.words.length > 0
+      ? [...availableWords]
+      : [...availableWords].sort(() => Math.random() - 0.5);
   const wordCount = config.wordCount || (config.words ? config.words.length : diffConfig.wordCount);
   let selectedWords = shuffled.slice(0, Math.min(wordCount, shuffled.length));
-  
+
   // Sort words by length (longest first) to improve placement success rate
   selectedWords = [...selectedWords].sort((a, b) => b.length - a.length);
 
@@ -237,16 +371,18 @@ export function generateWordSearch(config: WordSearchConfig): WordSearchPuzzle {
         const placement = placeWord(grid, word, row, col, direction);
         placedWords.push({
           word,
-          ...placement
+          ...placement,
         });
         placed = true;
       }
 
       attempts++;
     }
-    
+
     if (!placed) {
-      console.warn(`Could not place word "${word}" in grid after ${maxAttempts} attempts. Grid size: ${size}x${size}`);
+      console.warn(
+        `Could not place word "${word}" in grid after ${maxAttempts} attempts. Grid size: ${size}x${size}`,
+      );
     }
   }
 
@@ -256,28 +392,28 @@ export function generateWordSearch(config: WordSearchConfig): WordSearchPuzzle {
     grid,
     words: placedWords,
     theme,
-    difficulty
+    difficulty,
   };
 }
 
 export function getCellsInPath(
   start: { r: number; c: number },
-  end: { r: number; c: number }
+  end: { r: number; c: number },
 ): Array<{ r: number; c: number }> {
   const cells: Array<{ r: number; c: number }> = [];
-  
+
   const dr = Math.sign(end.r - start.r);
   const dc = Math.sign(end.c - start.c);
-  
+
   const steps = Math.max(Math.abs(end.r - start.r), Math.abs(end.c - start.c));
-  
+
   for (let i = 0; i <= steps; i++) {
     cells.push({
       r: start.r + i * dr,
-      c: start.c + i * dc
+      c: start.c + i * dc,
     });
   }
-  
+
   return cells;
 }
 
@@ -285,18 +421,22 @@ export function checkWordMatch(
   grid: string[][],
   start: { r: number; c: number },
   end: { r: number; c: number },
-  targetWords: Array<{ word: string; start: { r: number; c: number }; end: { r: number; c: number } }>
+  targetWords: Array<{
+    word: string;
+    start: { r: number; c: number };
+    end: { r: number; c: number };
+  }>,
 ): { word: string; start: { r: number; c: number }; end: { r: number; c: number } } | null {
   const cells = getCellsInPath(start, end);
-  const selectedWord = cells.map(cell => grid[cell.r][cell.c]).join('');
-  const reversedWord = selectedWord.split('').reverse().join('');
+  const selectedWord = cells.map((cell) => grid[cell.r][cell.c]).join("");
+  const reversedWord = selectedWord.split("").reverse().join("");
 
   for (const target of targetWords) {
     if (target.word === selectedWord || target.word === reversedWord) {
       // Check if selection matches the position
       const targetCells = getCellsInPath(target.start, target.end);
-      const targetWord = targetCells.map(cell => grid[cell.r][cell.c]).join('');
-      
+      const targetWord = targetCells.map((cell) => grid[cell.r][cell.c]).join("");
+
       if (selectedWord === targetWord || reversedWord === targetWord) {
         return target;
       }

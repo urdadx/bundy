@@ -25,7 +25,7 @@ export function UserStats() {
     <div className="flex items-center w-full justify-between">
       <Button variant="ghost" className="flex items-center gap-2 h-auto p-2">
         <img loading="lazy" src={medalIcon} alt="League" className="w-7 h-7 object-contain" />
-        <span className="text-lg font-semibold">{league}</span>
+        <span className="text-lg font-semibold">{league} </span>
       </Button>
       <Button variant="ghost" className="flex items-center gap-2 h-auto p-2">
         <img loading="lazy" src={xpIcon} alt="XP" className="w-6 h-6 object-cover" />

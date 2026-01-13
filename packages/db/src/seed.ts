@@ -2,37 +2,189 @@ import { db } from "./index";
 import { world, stage } from "./schema/game-schema";
 
 const THEME_WORDS = {
-  animals: ['LION', 'TIGER', 'ELEPHANT', 'GIRAFFE', 'ZEBRA', 'MONKEY', 'PANDA', 'KANGAROO', 'DOLPHIN', 'PENGUIN', 'EAGLE', 'BUTTERFLY', 'LEOPARD', 'CHEETAH', 'RHINOCEROS', 'HIPPOPOTAMUS', 'CROCODILE', 'GORILLA'],
-  planets: ['MERCURY', 'VENUS', 'EARTH', 'MARS', 'JUPITER', 'SATURN', 'URANUS', 'NEPTUNE', 'PLUTO', 'MOON', 'COMET', 'ASTEROID', 'GALAXY', 'NEBULA'],
-  technology: ['COMPUTER', 'INTERNET', 'SOFTWARE', 'HARDWARE', 'KEYBOARD', 'MOUSE', 'MONITOR', 'ALGORITHM', 'DATABASE', 'NETWORK', 'SERVER', 'CLOUD', 'MOBILE', 'TABLET', 'LAPTOP', 'DIGITAL', 'BINARY', 'CODING'],
-  food: ['PIZZA', 'BURGER', 'PASTA', 'SUSHI', 'TACO', 'SANDWICH', 'SALAD', 'CHICKEN', 'STEAK', 'FISH', 'RICE', 'NOODLES', 'BREAD', 'CHEESE', 'CHOCOLATE', 'COOKIE', 'CAKE', 'FRUIT', 'VEGETABLE'],
-  sports: ['SOCCER', 'BASKETBALL', 'FOOTBALL', 'TENNIS', 'BASEBALL', 'HOCKEY', 'GOLF', 'SWIMMING', 'RUNNING', 'CYCLING', 'BOXING', 'CRICKET', 'VOLLEYBALL', 'RUGBY', 'SKIING', 'SURFING', 'SKATING'],
-  general: ['HELLO', 'WORLD', 'FRIEND', 'FAMILY', 'HAPPY', 'SMILE', 'LOVE', 'PEACE', 'DREAM', 'HOPE', 'LIGHT', 'MUSIC', 'DANCE', 'PLAY'],
-  science: ['ATOM', 'MOLECULE', 'GENETICS', 'PHYSICS', 'BIOLOGY', 'CHEMISTRY', 'ENERGY', 'LABORATORY', 'RESEARCH', 'TELESCOPE', 'MICROSCOPE', 'GRAVITY'],
-  vocabulary: ['ELOQUENT', 'EPHEMERAL', 'SERENDIPITY', 'SOLITUDE', 'ETHEREAL', 'LUMINOUS', 'PANACEA', 'MELLIFLUOUS', 'PRISTINE', 'EVOCATIVE', 'RESONANCE', 'SURREAL'],
-  countries: ['CANADA', 'BRAZIL', 'FRANCE', 'GERMANY', 'JAPAN', 'AUSTRALIA', 'EGYPT', 'MEXICO', 'ITALY', 'SPAIN', 'NORWAY', 'SWEDEN']
+  animals: [
+    "LION",
+    "TIGER",
+    "ELEPHANT",
+    "GIRAFFE",
+    "ZEBRA",
+    "MONKEY",
+    "PANDA",
+    "KANGAROO",
+    "DOLPHIN",
+    "PENGUIN",
+    "EAGLE",
+    "BUTTERFLY",
+    "LEOPARD",
+    "CHEETAH",
+    "RHINOCEROS",
+    "HIPPOPOTAMUS",
+    "CROCODILE",
+    "GORILLA",
+  ],
+  planets: [
+    "MERCURY",
+    "VENUS",
+    "EARTH",
+    "MARS",
+    "JUPITER",
+    "SATURN",
+    "URANUS",
+    "NEPTUNE",
+    "PLUTO",
+    "MOON",
+    "COMET",
+    "ASTEROID",
+    "GALAXY",
+    "NEBULA",
+  ],
+  technology: [
+    "COMPUTER",
+    "INTERNET",
+    "SOFTWARE",
+    "HARDWARE",
+    "KEYBOARD",
+    "MOUSE",
+    "MONITOR",
+    "ALGORITHM",
+    "DATABASE",
+    "NETWORK",
+    "SERVER",
+    "CLOUD",
+    "MOBILE",
+    "TABLET",
+    "LAPTOP",
+    "DIGITAL",
+    "BINARY",
+    "CODING",
+  ],
+  food: [
+    "PIZZA",
+    "BURGER",
+    "PASTA",
+    "SUSHI",
+    "TACO",
+    "SANDWICH",
+    "SALAD",
+    "CHICKEN",
+    "STEAK",
+    "FISH",
+    "RICE",
+    "NOODLES",
+    "BREAD",
+    "CHEESE",
+    "CHOCOLATE",
+    "COOKIE",
+    "CAKE",
+    "FRUIT",
+    "VEGETABLE",
+  ],
+  sports: [
+    "SOCCER",
+    "BASKETBALL",
+    "FOOTBALL",
+    "TENNIS",
+    "BASEBALL",
+    "HOCKEY",
+    "GOLF",
+    "SWIMMING",
+    "RUNNING",
+    "CYCLING",
+    "BOXING",
+    "CRICKET",
+    "VOLLEYBALL",
+    "RUGBY",
+    "SKIING",
+    "SURFING",
+    "SKATING",
+  ],
+  general: [
+    "HELLO",
+    "WORLD",
+    "FRIEND",
+    "FAMILY",
+    "HAPPY",
+    "SMILE",
+    "LOVE",
+    "PEACE",
+    "DREAM",
+    "HOPE",
+    "LIGHT",
+    "MUSIC",
+    "DANCE",
+    "PLAY",
+  ],
+  science: [
+    "ATOM",
+    "MOLECULE",
+    "GENETICS",
+    "PHYSICS",
+    "BIOLOGY",
+    "CHEMISTRY",
+    "ENERGY",
+    "LABORATORY",
+    "RESEARCH",
+    "TELESCOPE",
+    "MICROSCOPE",
+    "GRAVITY",
+  ],
+  vocabulary: [
+    "ELOQUENT",
+    "EPHEMERAL",
+    "SERENDIPITY",
+    "SOLITUDE",
+    "ETHEREAL",
+    "LUMINOUS",
+    "PANACEA",
+    "MELLIFLUOUS",
+    "PRISTINE",
+    "EVOCATIVE",
+    "RESONANCE",
+    "SURREAL",
+  ],
+  countries: [
+    "CANADA",
+    "BRAZIL",
+    "FRANCE",
+    "GERMANY",
+    "JAPAN",
+    "AUSTRALIA",
+    "EGYPT",
+    "MEXICO",
+    "ITALY",
+    "SPAIN",
+    "NORWAY",
+    "SWEDEN",
+  ],
 };
 
 // Add difficulty constraints matching the word search generator
 const DIFFICULTY_CONFIG = {
   easy: { minWordLength: 4, maxWordLength: 7 },
   medium: { minWordLength: 4, maxWordLength: 10 },
-  hard: { minWordLength: 5, maxWordLength: 12 }
+  hard: { minWordLength: 5, maxWordLength: 12 },
 };
 
-function getRandomWords(theme: string, count: number, gridSize: number, difficulty: string): string {
+function getRandomWords(
+  theme: string,
+  count: number,
+  gridSize: number,
+  difficulty: string,
+): string {
   const words = THEME_WORDS[theme as keyof typeof THEME_WORDS] || THEME_WORDS.general;
-  const diffConfig = DIFFICULTY_CONFIG[difficulty as keyof typeof DIFFICULTY_CONFIG] || DIFFICULTY_CONFIG.easy;
-  
+  const diffConfig =
+    DIFFICULTY_CONFIG[difficulty as keyof typeof DIFFICULTY_CONFIG] || DIFFICULTY_CONFIG.easy;
+
   // Filter by both grid size AND difficulty constraints
-  const validWords = words.filter(word => 
-    word.length >= diffConfig.minWordLength &&
-    word.length <= diffConfig.maxWordLength &&
-    word.length <= gridSize
+  const validWords = words.filter(
+    (word) =>
+      word.length >= diffConfig.minWordLength &&
+      word.length <= diffConfig.maxWordLength &&
+      word.length <= gridSize,
   );
-  
+
   const shuffled = [...validWords].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, count).join(',');
+  return shuffled.slice(0, count).join(",");
 }
 
 async function seed() {

@@ -3,36 +3,36 @@
 @import "shadcn/tailwind.css";
 
 @font-face {
-  font-family: 'DIN Round Pro';
-  src: url('@/assets/din-round-font/dinroundpro_light.otf') format('opentype');
+  font-family: "DIN Round Pro";
+  src: url("@/assets/din-round-font/dinroundpro_light.otf") format("opentype");
   font-weight: 300;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'DIN Round Pro';
-  src: url('@/assets/din-round-font/dinroundpro.otf') format('opentype');
+  font-family: "DIN Round Pro";
+  src: url("@/assets/din-round-font/dinroundpro.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'DIN Round Pro';
-  src: url('@/assets/din-round-font/dinroundpro_medi.otf') format('opentype');
+  font-family: "DIN Round Pro";
+  src: url("@/assets/din-round-font/dinroundpro_medi.otf") format("opentype");
   font-weight: 500;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'DIN Round Pro';
-  src: url('@/assets/din-round-font/dinroundpro_bold.otf') format('opentype');
+  font-family: "DIN Round Pro";
+  src: url("@/assets/din-round-font/dinroundpro_bold.otf") format("opentype");
   font-weight: 700;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'DIN Round Pro';
-  src: url('@/assets/din-round-font/dinroundpro_black.otf') format('opentype');
+  font-family: "DIN Round Pro";
+  src: url("@/assets/din-round-font/dinroundpro_black.otf") format("opentype");
   font-weight: 900;
   font-style: normal;
 }
@@ -184,9 +184,16 @@
   --radius-4xl: calc(var(--radius) + 16px);
 
   @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-4px); }
-    75% { transform: translateX(4px); }
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(-4px);
+    }
+    75% {
+      transform: translateX(4px);
+    }
   }
   --animation-shake: shake 0.2s ease-in-out 0s 2;
 
@@ -196,15 +203,25 @@
   --color-hp-yellow: #ffc800;
 
   @keyframes pulse-soft {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.8; }
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.8;
+    }
   }
   --animation-pulse-soft: pulse-soft 2s ease-in-out infinite;
 
   /* floating effect for game-card component */
   @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
   }
   --animation-float: float 3s ease-in-out infinite;
 

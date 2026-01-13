@@ -1,6 +1,6 @@
-import * as React from "react"
-import { Input as InputPrimitive } from "@base-ui/react/input"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { Input as InputPrimitive } from "@base-ui/react/input";
+import { cn } from "@/lib/utils";
 
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (
@@ -22,12 +22,12 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
           // 4. Disabled State
           "disabled:opacity-50 disabled:bg-neutral-100 disabled:cursor-not-allowed",
 
-          className
+          className,
         )}
         {...props}
       />
     </div>
-  )
+  );
 }
 
-export { Input }
+export { Input };

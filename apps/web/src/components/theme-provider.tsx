@@ -5,9 +5,11 @@ export function ThemeProvider({
   children,
   ...props
 }: React.ComponentProps<typeof NextThemesProvider>) {
-  return <NextThemesProvider
-    defaultTheme="light"
-    {...props}>{children}</NextThemesProvider>;
+  return (
+    <NextThemesProvider defaultTheme="light" {...props}>
+      {children}
+    </NextThemesProvider>
+  );
 }
 
 export { useTheme } from "next-themes";

@@ -8,13 +8,13 @@
     "./web": "./src/web.ts"
   },
   "dependencies": {
+    "@t3-oss/env-core": "^0.13.1",
     "dotenv": "catalog:",
-    "zod": "catalog:",
-    "@t3-oss/env-core": "^0.13.1"
+    "zod": "catalog:"
   },
   "devDependencies": {
-    "typescript": "catalog:",
     "@types/bun": "catalog:",
-    "@wordsearch/config": "workspace:*"
+    "@wordsearch/config": "workspace:*",
+    "typescript": "catalog:"
   }
 }

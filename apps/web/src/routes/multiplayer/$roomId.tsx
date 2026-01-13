@@ -183,11 +183,11 @@ function MultiplayerGamePage() {
 
   return (
     <>
-      <div className="flex">
+      <div className="flex overflow-x-hidden">
         <SideMenu />
         <div className="min-h-screen w-full bg-slate-50 overflow-x-hidden">
-          <div className="flex justify-center items-start w-full min-h-screen py-6 px-4">
-            <div className="flex gap-6 max-w-7xl w-full">
+          <div className="flex justify-center items-start w-full min-h-screen py-6 px-4 overflow-x-hidden">
+            <div className="flex gap-6 max-w-7xl w-full overflow-x-hidden">
               <div className="flex-3 flex flex-col items-center gap-4">
                 <div className="w-full">
                   <MultiplayerGameHeader

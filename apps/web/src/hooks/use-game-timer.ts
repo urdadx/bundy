@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from "react";
 
 interface UseGameTimerProps {
-  initialTime: number; 
+  initialTime: number;
   onTimeUp?: () => void;
 }
 
@@ -50,7 +50,7 @@ export function useGameTimer({ initialTime, onTimeUp }: UseGameTimerProps) {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
   return {

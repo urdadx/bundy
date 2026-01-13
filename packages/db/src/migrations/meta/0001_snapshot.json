@@ -104,9 +104,7 @@
       "indexes": {
         "account_userId_idx": {
           "name": "account_userId_idx",
-          "columns": [
-            "user_id"
-          ],
+          "columns": ["user_id"],
           "isUnique": false
         }
       },
@@ -115,12 +113,8 @@
           "name": "account_user_id_user_id_fk",
           "tableFrom": "account",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -194,16 +188,12 @@
       "indexes": {
         "session_token_unique": {
           "name": "session_token_unique",
-          "columns": [
-            "token"
-          ],
+          "columns": ["token"],
           "isUnique": true
         },
         "session_userId_idx": {
           "name": "session_userId_idx",
-          "columns": [
-            "user_id"
-          ],
+          "columns": ["user_id"],
           "isUnique": false
         }
       },
@@ -212,12 +202,8 @@
           "name": "session_user_id_user_id_fk",
           "tableFrom": "session",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -293,9 +279,7 @@
       "indexes": {
         "user_email_unique": {
           "name": "user_email_unique",
-          "columns": [
-            "email"
-          ],
+          "columns": ["email"],
           "isUnique": true
         }
       },
@@ -355,9 +339,7 @@
       "indexes": {
         "verification_identifier_idx": {
           "name": "verification_identifier_idx",
-          "columns": [
-            "identifier"
-          ],
+          "columns": ["identifier"],
           "isUnique": false
         }
       },
@@ -478,24 +460,17 @@
       "indexes": {
         "gameSession_userId_idx": {
           "name": "gameSession_userId_idx",
-          "columns": [
-            "user_id"
-          ],
+          "columns": ["user_id"],
           "isUnique": false
         },
         "gameSession_stageId_idx": {
           "name": "gameSession_stageId_idx",
-          "columns": [
-            "stage_id"
-          ],
+          "columns": ["stage_id"],
           "isUnique": false
         },
         "gameSession_userId_stageId_idx": {
           "name": "gameSession_userId_stageId_idx",
-          "columns": [
-            "user_id",
-            "stage_id"
-          ],
+          "columns": ["user_id", "stage_id"],
           "isUnique": false
         }
       },
@@ -504,12 +479,8 @@
           "name": "game_session_user_id_user_id_fk",
           "tableFrom": "game_session",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -517,12 +488,8 @@
           "name": "game_session_stage_id_stage_id_fk",
           "tableFrom": "game_session",
           "tableTo": "stage",
-          "columnsFrom": [
-            "stage_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["stage_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -617,17 +584,12 @@
       "indexes": {
         "stage_worldId_idx": {
           "name": "stage_worldId_idx",
-          "columns": [
-            "world_id"
-          ],
+          "columns": ["world_id"],
           "isUnique": false
         },
         "stage_worldId_stageNumber_idx": {
           "name": "stage_worldId_stageNumber_idx",
-          "columns": [
-            "world_id",
-            "stage_number"
-          ],
+          "columns": ["world_id", "stage_number"],
           "isUnique": false
         }
       },
@@ -636,12 +598,8 @@
           "name": "stage_world_id_world_id_fk",
           "tableFrom": "stage",
           "tableTo": "world",
-          "columnsFrom": [
-            "world_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["world_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -725,24 +683,17 @@
       "indexes": {
         "stageProgress_userId_idx": {
           "name": "stageProgress_userId_idx",
-          "columns": [
-            "user_id"
-          ],
+          "columns": ["user_id"],
           "isUnique": false
         },
         "stageProgress_stageId_idx": {
           "name": "stageProgress_stageId_idx",
-          "columns": [
-            "stage_id"
-          ],
+          "columns": ["stage_id"],
           "isUnique": false
         },
         "stageProgress_userId_stageId_idx": {
           "name": "stageProgress_userId_stageId_idx",
-          "columns": [
-            "user_id",
-            "stage_id"
-          ],
+          "columns": ["user_id", "stage_id"],
           "isUnique": false
         }
       },
@@ -751,12 +702,8 @@
           "name": "stage_progress_user_id_user_id_fk",
           "tableFrom": "stage_progress",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -764,12 +711,8 @@
           "name": "stage_progress_stage_id_stage_id_fk",
           "tableFrom": "stage_progress",
           "tableTo": "stage",
-          "columnsFrom": [
-            "stage_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["stage_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -870,16 +813,12 @@
       "indexes": {
         "user_stats_user_id_unique": {
           "name": "user_stats_user_id_unique",
-          "columns": [
-            "user_id"
-          ],
+          "columns": ["user_id"],
           "isUnique": true
         },
         "userStats_userId_idx": {
           "name": "userStats_userId_idx",
-          "columns": [
-            "user_id"
-          ],
+          "columns": ["user_id"],
           "isUnique": false
         }
       },
@@ -888,12 +827,8 @@
           "name": "user_stats_user_id_user_id_fk",
           "tableFrom": "user_stats",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -901,12 +836,8 @@
           "name": "user_stats_current_world_id_world_id_fk",
           "tableFrom": "user_stats",
           "tableTo": "world",
-          "columnsFrom": [
-            "current_world_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["current_world_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1059,24 +990,17 @@
       "indexes": {
         "worldProgress_userId_idx": {
           "name": "worldProgress_userId_idx",
-          "columns": [
-            "user_id"
-          ],
+          "columns": ["user_id"],
           "isUnique": false
         },
         "worldProgress_worldId_idx": {
           "name": "worldProgress_worldId_idx",
-          "columns": [
-            "world_id"
-          ],
+          "columns": ["world_id"],
           "isUnique": false
         },
         "worldProgress_userId_worldId_idx": {
           "name": "worldProgress_userId_worldId_idx",
-          "columns": [
-            "user_id",
-            "world_id"
-          ],
+          "columns": ["user_id", "world_id"],
           "isUnique": false
         }
       },
@@ -1085,12 +1009,8 @@
           "name": "world_progress_user_id_user_id_fk",
           "tableFrom": "world_progress",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1098,12 +1018,8 @@
           "name": "world_progress_world_id_world_id_fk",
           "tableFrom": "world_progress",
           "tableTo": "world",
-          "columnsFrom": [
-            "world_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["world_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }

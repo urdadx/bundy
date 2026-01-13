@@ -1,5 +1,5 @@
-export { ChatPanel } from "./chat-panel"
-export { ChatHeader } from "./chat-header"
-export { ChatMessage, type ChatMessageProps } from "./chat-message"
-export { ChatMessageList, type Message } from "./chat-message-list"
-export { ChatInput } from "./chat-input"
+export { ChatPanel } from "./chat-panel";
+export { ChatHeader } from "./chat-header";
+export { ChatMessage, type ChatMessageProps } from "./chat-message";
+export { ChatMessageList, type Message } from "./chat-message-list";
+export { ChatInput } from "./chat-input";

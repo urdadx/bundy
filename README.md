@@ -1,4 +1,5 @@
 # bundycrush
+
 An educational word search puzzle game for humans. Play career mode or invite friends to play together.
 
 ## Built with
@@ -21,16 +22,17 @@ First, install the dependencies:
 ```bash
 pnpm install
 ```
+
 ## Database Setup
 
 This project uses SQLite with Drizzle ORM.
 
 1. Make sure you have a SQLite database set up.
 2. Apply the schema to your database:
+
 ```bash
 pnpm run db:push
 ```
-
 
 Then, run the development server:
 
@@ -76,6 +78,6 @@ For detailed deployment instructionsâ€”including Docker, Dokploy, and VPS setupâ
 
 More deployment platforms will be supported soon.
 
-
 ## Contribution
+
 All contributions are welcomed. Kindly open an issue or submit a PR request

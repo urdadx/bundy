@@ -1,4 +1,7 @@
-export const getValidEndCell = (start: {r: number, c: number}, current: {r: number, c: number}) => {
+export const getValidEndCell = (
+  start: { r: number; c: number },
+  current: { r: number; c: number },
+) => {
   const rowDiff = current.r - start.r;
   const colDiff = current.c - start.c;
 
@@ -11,14 +14,14 @@ export const getValidEndCell = (start: {r: number, c: number}, current: {r: numb
   }
 
   // Snap to the closest valid axis for a better "feel"
-  if (absRowDiff > absColDiff * 2) return { r: current.r, c: start.c }; 
-  if (absColDiff > absRowDiff * 2) return { r: start.r, c: current.c }; 
-  
+  if (absRowDiff > absColDiff * 2) return { r: current.r, c: start.c };
+  if (absColDiff > absRowDiff * 2) return { r: start.r, c: current.c };
+
   // Snap to Diagonal
   const minDiff = Math.min(absRowDiff, absColDiff);
   return {
     r: start.r + (rowDiff > 0 ? minDiff : -minDiff),
-    c: start.c + (colDiff > 0 ? minDiff : -minDiff)
+    c: start.c + (colDiff > 0 ? minDiff : -minDiff),
   };
 };
 

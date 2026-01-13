@@ -75,7 +75,12 @@ export type ClientMessage =
   | { type: "update_avatar"; avatar: string }
   | { type: "cursor_move"; x: number; y: number }
   | { type: "cursor_leave" }
-  | { type: "claim_word"; word: string; start: { r: number; c: number }; end: { r: number; c: number } }
+  | {
+      type: "claim_word";
+      word: string;
+      start: { r: number; c: number };
+      end: { r: number; c: number };
+    }
   | { type: "request_rematch" }
   | { type: "chat_message"; content: string }
   | { type: "typing"; isTyping: boolean }
@@ -92,15 +97,38 @@ export type ServerMessage =
   | { type: "game_started"; puzzle: PuzzleData; startTime: number }
   | { type: "cursor_update"; odId: string; x: number; y: number }
   | { type: "cursor_left"; odId: string }
-  | { type: "word_claimed"; word: string; odId: string; playerName: string; start: { r: number; c: number }; end: { r: number; c: number }; hostScore: number; guestScore: number }
+  | {
+      type: "word_claimed";
+      word: string;
+      odId: string;
+      playerName: string;
+      start: { r: number; c: number };
+      end: { r: number; c: number };
+      hostScore: number;
+      guestScore: number;
+    }
   | { type: "word_claim_rejected"; word: string; reason: string }
-  | { type: "game_ended"; winnerId: string | null; isDraw: boolean; hostScore: number; guestScore: number }
+  | {
+      type: "game_ended";
+      winnerId: string | null;
+      isDraw: boolean;
+      hostScore: number;
+      guestScore: number;
+    }
   | { type: "player_disconnected"; odId: string; odName: string; reconnectTimeout: number }
   | { type: "player_reconnected"; odId: string }
   | { type: "opponent_left"; reason: string }
   | { type: "rematch_requested"; odId: string }
   | { type: "rematch_starting"; countdown: number }
-  | { type: "chat_message"; id: string; senderId: string; senderName: string; senderAvatar: string; content: string; timestamp: number }
+  | {
+      type: "chat_message";
+      id: string;
+      senderId: string;
+      senderName: string;
+      senderAvatar: string;
+      content: string;
+      timestamp: number;
+    }
   | { type: "player_typing"; odId: string; isTyping: boolean }
   | { type: "error"; message: string }
   | { type: "pong" };

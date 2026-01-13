@@ -3,7 +3,7 @@ import type { GameSettings, SerializedRoom } from "./types";
 
 const getApiBase = () => {
   if (env.VITE_WS_URL) {
-    return env.VITE_WS_URL.replace(/^ws/, 'http');
+    return env.VITE_WS_URL.replace(/^ws/, "http");
   }
   return env.VITE_SERVER_URL;
 };

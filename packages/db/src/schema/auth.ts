@@ -5,14 +5,10 @@ export const user = sqliteTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
-  emailVerified: integer("email_verified", { mode: "boolean" })
-    .default(false)
-    .notNull(),
+  emailVerified: integer("email_verified", { mode: "boolean" }).default(false).notNull(),
   image: text("image"),
-  avatar: text("avatar").default("jack-avatar.png"), 
-  isAnonymous: integer("is_anonymous", { mode: "boolean" })
-    .default(false)
-    .notNull(),
+  avatar: text("avatar").default("jack-avatar.png"),
+  isAnonymous: integer("is_anonymous", { mode: "boolean" }).default(false).notNull(),
   createdAt: integer("created_at", { mode: "timestamp_ms" })
     .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
     .notNull(),

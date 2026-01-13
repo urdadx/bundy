@@ -87,7 +87,7 @@ function handleJoinRoom(
   roomId: string,
   odId: string,
   odName: string,
-  avatar: string
+  avatar: string,
 ): void {
   ws.data.odId = odId;
   ws.data.odName = odName;
@@ -120,7 +120,7 @@ export function handleCreateRoom(
   odId: string,
   odName: string,
   odAvatar: string,
-  settings: GameSettings
+  settings: GameSettings,
 ): { roomId: string } {
   const room = createRoom(odId, odName, odAvatar, settings);
   return { roomId: room.id };
@@ -140,19 +140,23 @@ function handleLeaveRoom(ws: WSConnection): void {
 
   // If game was in progress, end it with opponent as winner
   if (room.status === "playing") {
-    const opponent = Array.from(room.players.values()).find(p => p.id !== odId);
+    const opponent = Array.from(room.players.values()).find((p) => p.id !== odId);
     if (opponent) {
       room.winnerId = opponent.id;
       room.isDraw = false;
       room.status = "finished";
       room.gameEndedAt = Date.now();
 
-      broadcastToRoom(roomId, {
-        type: "game_ended",
-        winnerId: opponent.id,
-        isDraw: false,
-        ...getScores(room),
-      }, odId);
+      broadcastToRoom(
+        roomId,
+        {
+          type: "game_ended",
+          winnerId: opponent.id,
+          isDraw: false,
+          ...getScores(room),
+        },
+        odId,
+      );
     }
   }
 
@@ -200,7 +204,7 @@ async function startGameCountdown(roomId: string): Promise<void> {
 
   for (let i = 3; i > 0; i--) {
     broadcastToAll(roomId, { type: "game_starting", countdown: i });
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     const currentRoom = getRoom(roomId);
     if (!currentRoom || currentRoom.status !== "ready") return;
@@ -277,7 +281,7 @@ function handleClaimWord(
   ws: WSConnection,
   word: string,
   start: { r: number; c: number },
-  end: { r: number; c: number }
+  end: { r: number; c: number },
 ): void {
   const { odId, roomId } = ws.data;
   if (!roomId || !odId) return;
@@ -338,7 +342,7 @@ async function startRematchCountdown(roomId: string): Promise<void> {
 
   for (let i = 3; i > 0; i--) {
     broadcastToAll(roomId, { type: "rematch_starting", countdown: i });
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     const currentRoom = getRoom(roomId);
     if (!currentRoom || currentRoom.status !== "ready") return;
@@ -403,14 +407,16 @@ function handleTyping(ws: WSConnection, isTyping: boolean): void {
       odId,
       isTyping,
     },
-    odId
+    odId,
   );
 }
 
 export function handleClose(ws: WSConnection): void {
   const odId = ws.data?.odId;
   const roomId = ws.data?.roomId;
-  console.log(`WebSocket connection closed for user ${odId || 'unknown'} in room ${roomId || 'unknown'}`);
+  console.log(
+    `WebSocket connection closed for user ${odId || "unknown"} in room ${roomId || "unknown"}`,
+  );
 
   if (odId && roomId) {
     handleDisconnect(roomId, odId);

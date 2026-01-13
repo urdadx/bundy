@@ -1,15 +1,15 @@
-import { Button } from '@/components/ui/button'
-import { Link, useLocation, } from '@tanstack/react-router'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import heartIcon from '@/assets/icons/heart.svg'
-import leaderboardIcon from '@/assets/icons/leaderboard.svg'
-import learnIcon from '@/assets/icons/learn.svg'
-import loaderIcon from '@/assets/icons/loader.svg'
-import questsIcon from '@/assets/icons/quests.svg'
-import shopIcon from '@/assets/icons/shop.svg'
-import superIcon from '@/assets/icons/super.svg'
-import xpIcon from '@/assets/icons/xp.svg'
-import { useSession } from '@/lib/auth-client'
+import { Button } from "@/components/ui/button";
+import { Link, useLocation } from "@tanstack/react-router";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import heartIcon from "@/assets/icons/heart.svg";
+import leaderboardIcon from "@/assets/icons/leaderboard.svg";
+import learnIcon from "@/assets/icons/learn.svg";
+import loaderIcon from "@/assets/icons/loader.svg";
+import questsIcon from "@/assets/icons/quests.svg";
+import shopIcon from "@/assets/icons/shop.svg";
+import superIcon from "@/assets/icons/super.svg";
+import xpIcon from "@/assets/icons/xp.svg";
+import { useSession } from "@/lib/auth-client";
 
 const iconMap = {
   heart: heartIcon,
@@ -20,39 +20,38 @@ const iconMap = {
   shop: shopIcon,
   super: superIcon,
   xp: xpIcon,
-}
+};
 
 type SideMenuItemProps = {
-  label: string
-  icon?: keyof typeof iconMap
-  href: any
-  hideLabel?: boolean
-  isProfile?: boolean
-
-}
+  label: string;
+  icon?: keyof typeof iconMap;
+  href: any;
+  hideLabel?: boolean;
+  isProfile?: boolean;
+};
 
 export function SideMenuItem({ href, icon, label, hideLabel, isProfile }: SideMenuItemProps) {
-  const { pathname } = useLocation()
-  const isActive = pathname === href
+  const { pathname } = useLocation();
+  const isActive = pathname === href;
 
-  const { data: session } = useSession()
+  const { data: session } = useSession();
 
-  const userName = session?.user?.name || 'User'
+  const userName = session?.user?.name || "User";
   const profileInitials = userName
-    .split(' ')
+    .split(" ")
     .map((n) => n[0])
-    .join('')
-    .toUpperCase()
-  const profileImage = session?.user?.image || ''
+    .join("")
+    .toUpperCase();
+  const profileImage = session?.user?.image || "";
 
   return (
     <div>
       <Button
-        variant={isActive ? 'active' : 'ghost'}
-        className={`h-14 w-full justify-start py-2 border-b-2 sm:max-lg:w-auto sm:max-lg:px-2 ${isActive ? '' : 'border-transparent text-foreground/85'} ${hideLabel ? 'h-12 w-12 justify-center border-none py-1 p-0' : ''}`}
+        variant={isActive ? "active" : "ghost"}
+        className={`h-14 w-full justify-start py-2 border-b-2 sm:max-lg:w-auto sm:max-lg:px-2 ${isActive ? "" : "border-transparent text-foreground/85"} ${hideLabel ? "h-12 w-12 justify-center border-none py-1 p-0" : ""}`}
         asChild
       >
-        <Link to={href} title={label} {...(hideLabel && { 'aria-label': label })}>
+        <Link to={href} title={label} {...(hideLabel && { "aria-label": label })}>
           {isProfile ? (
             <Avatar size="lg">
               <AvatarImage src={profileImage} alt={label} />
@@ -74,5 +73,5 @@ export function SideMenuItem({ href, icon, label, hideLabel, isProfile }: SideMe
         </Link>
       </Button>
     </div>
-  )
+  );
 }

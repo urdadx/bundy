@@ -45,20 +45,22 @@ export const HealthBar = ({ value, max, label, avatar, className }: HealthBarPro
         )}
 
         {/* The Outer Container (The Groove) */}
-        <div className={cn(
-          "relative h-8 w-full rounded-2xl bg-neutral-200 border-b-4 border-neutral-300 overflow-hidden z-10",
-          avatar && "pl-6"
-        )}>
+        <div
+          className={cn(
+            "relative h-8 w-full rounded-2xl bg-neutral-200 border-b-4 border-neutral-300 overflow-hidden z-10",
+            avatar && "pl-6",
+          )}
+        >
           {/* The Animated Fill */}
           <div
             className={cn(
               "relative h-full transition-all duration-500 ease-out",
               percentage < 20 && "animate-pulse-soft",
-              !avatar && "rounded-l-xl"
+              !avatar && "rounded-l-xl",
             )}
             style={{
               width: `${percentage}%`,
-              backgroundColor: getBarColor()
+              backgroundColor: getBarColor(),
             }}
           >
             {/* The 3D "Glint" - Lighter highlight on the top half */}

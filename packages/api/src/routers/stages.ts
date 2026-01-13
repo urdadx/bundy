@@ -1,6 +1,12 @@
 import { publicProcedure, protectedProcedure, router } from "../index";
 import { db } from "@wordsearch/db";
-import { stage, userStats, stageProgress, worldProgress, world } from "@wordsearch/db/schema/game-schema";
+import {
+  stage,
+  userStats,
+  stageProgress,
+  worldProgress,
+  world,
+} from "@wordsearch/db/schema/game-schema";
 import { eq, asc, and, sql } from "drizzle-orm";
 import { z } from "zod";
 
@@ -17,21 +23,15 @@ export const stagesRouter = router({
       return stages;
     }),
 
-  getById: publicProcedure
-    .input(z.object({ id: z.string() }))
-    .query(async ({ input }) => {
-      const stageData = await db
-        .select()
-        .from(stage)
-        .where(eq(stage.id, input.id))
-        .limit(1);
+  getById: publicProcedure.input(z.object({ id: z.string() })).query(async ({ input }) => {
+    const stageData = await db.select().from(stage).where(eq(stage.id, input.id)).limit(1);
 
-      if (!stageData.length) {
-        throw new Error("Stage not found");
-      }
+    if (!stageData.length) {
+      throw new Error("Stage not found");
+    }
 
-      return stageData[0];
-    }),
+    return stageData[0];
+  }),
 
   // Get stage progress for a user - uses session to get userId
   getProgress: protectedProcedure
@@ -53,12 +53,10 @@ export const stagesRouter = router({
         .where(eq(stageProgress.userId, userId));
 
       // Create a map for quick lookup
-      const progressMap = new Map(
-        progressRecords.map(p => [p.stageId, p])
-      );
+      const progressMap = new Map(progressRecords.map((p) => [p.stageId, p]));
 
       // Merge stages with their progress
-      return stages.map(s => ({
+      return stages.map((s) => ({
         ...s,
         completed: progressMap.get(s.id)?.isCompleted ?? false,
         stars: progressMap.get(s.id)?.stars ?? 0,
@@ -68,19 +66,17 @@ export const stagesRouter = router({
     }),
 
   completeStage: protectedProcedure
-    .input(z.object({
-      stageId: z.string(),
-      completionTime: z.number(),
-      stars: z.number().min(0).max(3).default(3),
-    }))
+    .input(
+      z.object({
+        stageId: z.string(),
+        completionTime: z.number(),
+        stars: z.number().min(0).max(3).default(3),
+      }),
+    )
     .mutation(async ({ input, ctx }) => {
       const userId = ctx.userId;
 
-      const stageData = await db
-        .select()
-        .from(stage)
-        .where(eq(stage.id, input.stageId))
-        .limit(1);
+      const stageData = await db.select().from(stage).where(eq(stage.id, input.stageId)).limit(1);
 
       if (!stageData.length) {
         throw new Error("Stage not found");
@@ -119,12 +115,7 @@ export const stagesRouter = router({
       const existingProgress = await db
         .select()
         .from(stageProgress)
-        .where(
-          and(
-            eq(stageProgress.userId, userId),
-            eq(stageProgress.stageId, input.stageId)
-          )
-        )
+        .where(and(eq(stageProgress.userId, userId), eq(stageProgress.stageId, input.stageId)))
         .limit(1);
 
       const isFirstCompletion = !existingProgress.length || !existingProgress[0]!.isCompleted;
@@ -184,10 +175,7 @@ export const stagesRouter = router({
           .select()
           .from(worldProgress)
           .where(
-            and(
-              eq(worldProgress.userId, userId),
-              eq(worldProgress.worldId, currentStage.worldId)
-            )
+            and(eq(worldProgress.userId, userId), eq(worldProgress.worldId, currentStage.worldId)),
           )
           .limit(1);
 
@@ -222,29 +210,21 @@ export const stagesRouter = router({
         .where(eq(stage.worldId, currentStage.worldId))
         .orderBy(asc(stage.stageNumber));
 
-      const currentStageIndex = allStagesInWorld.findIndex(s => s.id === input.stageId);
+      const currentStageIndex = allStagesInWorld.findIndex((s) => s.id === input.stageId);
       const nextStage = allStagesInWorld[currentStageIndex + 1] || null;
 
       // If we completed the last stage in the world, unlock the next world
       if (!nextStage && isFirstCompletion) {
-        const allWorlds = await db
-          .select()
-          .from(world)
-          .orderBy(asc(world.order));
+        const allWorlds = await db.select().from(world).orderBy(asc(world.order));
 
-        const currentWorldIndex = allWorlds.findIndex(w => w.id === currentStage.worldId);
+        const currentWorldIndex = allWorlds.findIndex((w) => w.id === currentStage.worldId);
         const nextWorld = allWorlds[currentWorldIndex + 1] || null;
 
         if (nextWorld) {
           const nextWorldProgress = await db
             .select()
             .from(worldProgress)
-            .where(
-              and(
-                eq(worldProgress.userId, userId),
-                eq(worldProgress.worldId, nextWorld.id)
-              )
-            )
+            .where(and(eq(worldProgress.userId, userId), eq(worldProgress.worldId, nextWorld.id)))
             .limit(1);
 
           if (!nextWorldProgress.length) {

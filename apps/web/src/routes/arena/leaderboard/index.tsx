@@ -7,8 +7,9 @@ export const Route = createFileRoute("/arena/leaderboard/")({
 
 function RouteComponent() {
   return (
-    <div>
+    <div className="p-2 sm:p-0">
       <LeaderboardTable />
+      <div className="h-14" />
     </div>
   );
 }

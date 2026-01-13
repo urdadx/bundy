@@ -31,5 +31,11 @@ if (!rootElement) {
 
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
-  root.render(<ColorThemeProvider><ThemeProvider><RouterProvider router={router} /></ThemeProvider></ColorThemeProvider>);
+  root.render(
+    <ColorThemeProvider>
+      <ThemeProvider>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </ColorThemeProvider>,
+  );
 }

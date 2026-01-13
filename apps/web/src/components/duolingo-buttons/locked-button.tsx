@@ -1,24 +1,24 @@
-import type { ComponentProps } from 'react'
-import { Popover, PopoverContent, PopoverTrigger, Arrow } from '@radix-ui/react-popover'
-import { Button } from '@/components/ui/button'
-import { ButtonBase } from './button-base'
+import type { ComponentProps } from "react";
+import { Popover, PopoverContent, PopoverTrigger, Arrow } from "@radix-ui/react-popover";
+import { Button } from "@/components/ui/button";
+import { ButtonBase } from "./button-base";
 
 type LockedButtonProps = {
-  title: string
-  prompt: string
-  icon: ComponentProps<typeof ButtonBase>['icon']
-  ariaLabel?: string
-}
+  title: string;
+  prompt: string;
+  icon: ComponentProps<typeof ButtonBase>["icon"];
+  ariaLabel?: string;
+};
 
 export function LockedButton({
   icon,
   title,
   prompt,
-  ariaLabel = 'Locked Lesson',
+  ariaLabel = "Locked Lesson",
 }: LockedButtonProps) {
   return (
     <Popover>
-      <PopoverTrigger >
+      <PopoverTrigger>
         <ButtonBase icon={icon} variant="locked" aria-label={ariaLabel} />
       </PopoverTrigger>
       <PopoverContent className="z-50 border-2 bg-background rounded-lg p-0 text-disabled-foreground shadow-none">
@@ -32,5 +32,5 @@ export function LockedButton({
         <Arrow className="fill-background" />
       </PopoverContent>
     </Popover>
-  )
+  );
 }

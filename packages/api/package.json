@@ -10,18 +10,18 @@
     }
   },
   "scripts": {},
-  "devDependencies": {
-    "typescript": "catalog:",
-    "@wordsearch/config": "workspace:*"
-  },
   "dependencies": {
-    "@trpc/server": "catalog:",
     "@trpc/client": "catalog:",
-    "hono": "catalog:",
-    "dotenv": "catalog:",
-    "zod": "catalog:",
-    "drizzle-orm": "^0.45.1",
+    "@trpc/server": "catalog:",
+    "@wordsearch/auth": "workspace:*",
     "@wordsearch/db": "workspace:*",
-    "@wordsearch/auth": "workspace:*"
+    "dotenv": "catalog:",
+    "drizzle-orm": "^0.45.1",
+    "hono": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@wordsearch/config": "workspace:*",
+    "typescript": "catalog:"
   }
 }

@@ -1,7 +1,7 @@
-// components/ui/side-menu.tsx
 import { Link } from "@tanstack/react-router";
 import { SideMenuItem } from "./side-menu-item";
 import { SideMenuThemeButton } from "./side-menu-theme-button";
+import MascotImage from "@/assets/rewards/mascot.png";
 
 export function SideMenu() {
   return (
@@ -9,8 +9,9 @@ export function SideMenu() {
       <div className="hidden lg:flex flex-col justify-between w-64 border-r-2 pt-6 pb-4 bg-white">
         <nav className="flex flex-col gap-6 px-4">
           <Link to="/" className="focus-visible self-start rounded-xl">
-            <span className="flex items-center gap-2 px-4">
-              <span className="font-display text-primary-depth text-3xl font-bold">bundycrush</span>
+            <span className="flex items-center px-4">
+              <img src={MascotImage} alt="Bundy Mascot" className="w-12 h-12 object-contain" />
+              <span className="font-display text-primary-depth text-3xl font-bold">bundy</span>
             </span>
           </Link>
 

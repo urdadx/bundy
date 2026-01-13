@@ -6,12 +6,7 @@ export const authClient = createAuthClient({
   plugins: [anonymousClient()],
 });
 
-export const {
-  signIn,
-  signUp,
-  signOut,
-  useSession,
-} = authClient;
+export const { signIn, signUp, signOut, useSession } = authClient;
 
 /**
  * Link a guest account to a Google account.

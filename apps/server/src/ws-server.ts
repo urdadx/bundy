@@ -61,7 +61,7 @@ app.post("/api/multiplayer/rooms", async (c) => {
         gridSize: 10,
         wordCount: 7,
         timeLimit: 600,
-      }
+      },
     );
 
     return c.json({ roomId: result.roomId });
@@ -112,7 +112,7 @@ app.get(
         handleError(ws as any, new Error("WebSocket error"));
       },
     };
-  })
+  }),
 );
 
 const port = parseInt(process.env.WS_PORT || "3003", 10);

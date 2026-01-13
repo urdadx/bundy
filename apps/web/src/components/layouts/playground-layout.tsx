@@ -8,6 +8,7 @@ import { GameSettingsUI } from "../game-settings-ui";
 import { Dialog, DialogTrigger } from "../ui/dialog";
 import { useNavigate } from "@tanstack/react-router";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import jerryLaughing from "@/assets/jerry-laughing.gif";
 
 interface Player {
@@ -128,7 +129,7 @@ function HintButton({
     }
   };
 
-  return (
+  const button = (
     <Button
       className="w-full"
       onClick={handleHintClick}
@@ -139,6 +140,19 @@ function HintButton({
       <Lightbulb className="h-5 w-5 ml-1" />
     </Button>
   );
+
+  if (canUseHint === false) {
+    return (
+      <Tooltip>
+        <TooltipTrigger>{button}</TooltipTrigger>
+        <TooltipContent className="bg-white border text-base border-slate-200 shadow-md text-black p-2">
+          <p>You need atleast 5 diamonds to use hint</p>
+        </TooltipContent>
+      </Tooltip>
+    );
+  }
+
+  return button;
 }
 
 export function GameActionsPanel({ onRequestHint, canUseHint }: GameActionsPanelProps = {}) {
@@ -147,7 +161,7 @@ export function GameActionsPanel({ onRequestHint, canUseHint }: GameActionsPanel
 
   return (
     <GameInfoPanel>
-      <div className="flex gap-2">
+      <div className="flex flex-col sm:flex-row gap-2">
         <HintButton onRequestHint={onRequestHint} canUseHint={canUseHint} />
         <Button className="w-full" onClick={() => setShowResignDialog(true)} variant="highlight">
           Resign <Flag className="h-5 w-5 ml-1" />
@@ -180,7 +194,7 @@ export function GameActionsPanelMultiplayer({ onResign }: { onResign?: () => voi
 
   return (
     <GameInfoPanel>
-      <div className="flex gap-2">
+      <div className="flex flex-col sm:flex-row gap-2">
         <Popover>
           <PopoverTrigger>
             <Button className="w-full" variant="primary">

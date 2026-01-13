@@ -53,7 +53,11 @@ export function useMultiplayerGame(options: UseMultiplayerGameOptions = {}) {
 
   useEffect(() => {
     if (session?.user && (!odId || !odName)) {
-      setUser(session.user.id, session.user.name || "Player", session.user.image || "jack-avatar.png");
+      setUser(
+        session.user.id,
+        session.user.name || "Player",
+        session.user.image || "jack-avatar.png",
+      );
     }
   }, [session?.user, odId, odName, setUser]);
 
@@ -101,21 +105,21 @@ export function useMultiplayerGame(options: UseMultiplayerGameOptions = {}) {
     (ready: boolean) => {
       send({ type: "player_ready", ready });
     },
-    [send]
+    [send],
   );
 
   const updateAvatar = useCallback(
     (avatar: string) => {
       send({ type: "update_avatar", avatar });
     },
-    [send]
+    [send],
   );
 
   const moveCursor = useCallback(
     (x: number, y: number) => {
       send({ type: "cursor_move", x, y });
     },
-    [send]
+    [send],
   );
 
   const leaveCursor = useCallback(() => {
@@ -126,7 +130,7 @@ export function useMultiplayerGame(options: UseMultiplayerGameOptions = {}) {
     (word: string, start: { r: number; c: number }, end: { r: number; c: number }) => {
       send({ type: "claim_word", word, start, end });
     },
-    [send]
+    [send],
   );
 
   const requestRematch = useCallback(() => {
@@ -139,21 +143,21 @@ export function useMultiplayerGame(options: UseMultiplayerGameOptions = {}) {
         send({ type: "chat_message", content: content.trim() });
       }
     },
-    [send]
+    [send],
   );
 
   const sendTyping = useCallback(
     (isTyping: boolean) => {
       send({ type: "typing", isTyping });
     },
-    [send]
+    [send],
   );
 
   const sendMessage = useCallback(
     (message: ClientMessage) => {
       send(message);
     },
-    [send]
+    [send],
   );
 
   return {

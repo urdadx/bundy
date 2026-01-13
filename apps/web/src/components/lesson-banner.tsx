@@ -1,4 +1,4 @@
-import { ArrowLeft, NotebookText } from "lucide-react";
+import { MoveLeftIcon, NotebookText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
@@ -32,12 +32,12 @@ export function BattleBanner({ name, color, description, stageId, order }: Battl
     >
       <div className="space-y-1">
         <div className="flex items-center gap-2">
-          <ArrowLeft onClick={() => window.history.back()} className="size-5" />
+          <MoveLeftIcon onClick={() => window.history.back()} className="size-6" />
           <h3 className="text-xl font-bold ">
             World {order || 1}: <span className="capitalize">{name}</span>
           </h3>
         </div>
-        {description && <p className="text-lg opacity-90">{description}</p>}
+        {description && <p className="text-base sm:text-lg opacity-90">{description}</p>}
       </div>
       <Button variant="immersive" className="max-xl:px-4" size="lg" asChild disabled={!stageId}>
         <Link to="/arena/playground" search={{ stageId }}>

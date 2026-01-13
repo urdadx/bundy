@@ -12,11 +12,11 @@ The application is split into 3 services:
 
 ## Dockerfiles
 
-| Service | Dockerfile | Port | Build Context |
-|---------|------------|------|---------------|
-| Web | `apps/web/Dockerfile` | 80 | Root (`.`) |
-| API Server | `apps/server/Dockerfile` | 3000 | Root (`.`) |
-| WebSocket | `apps/server/Dockerfile.websocket` | 3003 | Root (`.`) |
+| Service    | Dockerfile                         | Port | Build Context |
+| ---------- | ---------------------------------- | ---- | ------------- |
+| Web        | `apps/web/Dockerfile`              | 80   | Root (`.`)    |
+| API Server | `apps/server/Dockerfile`           | 3000 | Root (`.`)    |
+| WebSocket  | `apps/server/Dockerfile.websocket` | 3003 | Root (`.`)    |
 
 ## Local Development with Docker
 
@@ -35,6 +35,7 @@ docker-compose up -d --build
 ```
 
 Services will be available at:
+
 - Web: http://localhost:3001
 - API: http://localhost:3000
 - WebSocket: http://localhost:3003
@@ -42,6 +43,7 @@ Services will be available at:
 ## Deploying to Dokploy
 
 Dokploy uses **Traefik** as its reverse proxy, which automatically handles:
+
 - SSL/TLS termination (Let's Encrypt)
 - Routing based on domains
 - WebSocket connection upgrades (native support)
@@ -52,6 +54,7 @@ Dokploy uses **Traefik** as its reverse proxy, which automatically handles:
 Create 3 separate **Application** services in Dokploy:
 
 #### 1. Web Client Service
+
 - **Name**: `wordsearch-web`
 - **Source**: Git repository
 - **Dockerfile Path**: `apps/web/Dockerfile`
@@ -63,6 +66,7 @@ Create 3 separate **Application** services in Dokploy:
   - `VITE_WS_URL`: `https://ws.yourdomain.com`
 
 #### 2. API Server Service
+
 - **Name**: `wordsearch-api`
 - **Source**: Git repository
 - **Dockerfile Path**: `apps/server/Dockerfile`
@@ -76,6 +80,7 @@ Create 3 separate **Application** services in Dokploy:
   - `CORS_ORIGIN`: `https://yourdomain.com`
 
 #### 3. WebSocket Server Service
+
 - **Name**: `wordsearch-ws`
 - **Source**: Git repository
 - **Dockerfile Path**: `apps/server/Dockerfile.websocket`
@@ -91,6 +96,7 @@ Create 3 separate **Application** services in Dokploy:
 Traefik in Dokploy handles WebSocket upgrades automatically. No special configuration needed!
 
 When you set a domain in Dokploy, it automatically:
+
 1. Creates Traefik router rules
 2. Configures SSL via Let's Encrypt
 3. Handles WebSocket `Upgrade` and `Connection` headers
@@ -99,9 +105,9 @@ When you set a domain in Dokploy, it automatically:
 
 ### Step 3: Database Setup
 
-This project uses SQLite for database (the repo contains a `sqlite.db`). 
+This project uses SQLite for database (the repo contains a `sqlite.db`).
 
-### SQLite 
+### SQLite
 
 - The codebase includes SQLite support via `packages/db` and a `sqlite.db` file can be used as the single-file database for development or small-scale deployments.
 - For Docker development we recommend mounting a host folder into the container so the DB file persists across restarts.
@@ -136,50 +142,53 @@ services:
 
 ### API Server
 
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `BETTER_AUTH_SECRET` | Auth signing secret | Random 32+ char string |
-| `BETTER_AUTH_URL` | Auth base URL | `https://api.yourdomain.com` |
-| `CORS_ORIGIN` | Allowed CORS origin | `https://yourdomain.com` |
-| `PORT` | Server port (optional) | `3000` |
+| Variable             | Description            | Example                      |
+| -------------------- | ---------------------- | ---------------------------- |
+| `BETTER_AUTH_SECRET` | Auth signing secret    | Random 32+ char string       |
+| `BETTER_AUTH_URL`    | Auth base URL          | `https://api.yourdomain.com` |
+| `CORS_ORIGIN`        | Allowed CORS origin    | `https://yourdomain.com`     |
+| `PORT`               | Server port (optional) | `3000`                       |
 
 ### WebSocket Server
 
-| Variable | Description | Example |
-|----------|-------------|---------|
+| Variable      | Description         | Example                  |
+| ------------- | ------------------- | ------------------------ |
 | `CORS_ORIGIN` | Allowed CORS origin | `https://yourdomain.com` |
-| `WS_PORT` | WebSocket port | `3003` |
+| `WS_PORT`     | WebSocket port      | `3003`                   |
 
 ### Web Client (Build Args)
 
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `VITE_SERVER_URL` | API server URL | `https://api.yourdomain.com` |
-| `VITE_WS_URL` | WebSocket server URL | `https://ws.yourdomain.com` |
+| Variable          | Description          | Example                      |
+| ----------------- | -------------------- | ---------------------------- |
+| `VITE_SERVER_URL` | API server URL       | `https://api.yourdomain.com` |
+| `VITE_WS_URL`     | WebSocket server URL | `https://ws.yourdomain.com`  |
 
 > **Note**: Use `https://` for both URLs. The client automatically uses `wss://` for WebSocket connections.
 
 ## Health Checks
 
 All services have health check endpoints:
+
 - API: `GET /health`
 - WebSocket: `GET /health`
 
 ## Troubleshooting
 
 ### Build Fails
+
 - Ensure Docker build context is set to repository root (`.`)
 - Check that all workspace packages are copied in Dockerfile
 - Review build logs in Dokploy
 
 ### WebSocket Connection Issues
+
 - Verify domain is correctly set in Dokploy for the WS service
 - Check CORS_ORIGIN matches your web client domain exactly (including `https://`)
 - Traefik handles upgrades automatically, but check Dokploy logs if issues persist
 - Test with: `wscat -c wss://ws.yourdomain.com/ws/multiplayer`
 
-
 ### CORS Errors
+
 - Ensure `CORS_ORIGIN` exactly matches your frontend URL (protocol + domain)
 - No trailing slash in the URL
 

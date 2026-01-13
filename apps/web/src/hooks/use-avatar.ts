@@ -21,14 +21,14 @@ export function useAvatar(options: UseAvatarOptions = {}) {
   const updateAvatarMutation = useMutation(
     trpc.user.updateAvatar.mutationOptions({
       onSuccess: (data: { success: boolean; avatar: AvatarId }) => {
-        queryClient.invalidateQueries({ queryKey: ['user', 'getProfile'] });
+        queryClient.invalidateQueries({ queryKey: ["user", "getProfile"] });
         refetchProfile();
         onSuccess?.(data.avatar);
       },
       onError: (error: unknown) => {
         onError?.(error instanceof Error ? error : new Error(String(error)));
       },
-    })
+    }),
   );
 
   const currentAvatar = (profile?.avatar ?? "jack-avatar.png") as AvatarId;
@@ -37,7 +37,7 @@ export function useAvatar(options: UseAvatarOptions = {}) {
     (avatar: AvatarId) => {
       updateAvatarMutation.mutate({ avatar });
     },
-    [updateAvatarMutation]
+    [updateAvatarMutation],
   );
 
   return {
@@ -51,9 +51,7 @@ export function useAvatar(options: UseAvatarOptions = {}) {
 }
 
 export function useLocalAvatar(initialAvatar?: AvatarId) {
-  const [localAvatar, setLocalAvatar] = useState<AvatarId>(
-    initialAvatar ?? "jack-avatar.png"
-  );
+  const [localAvatar, setLocalAvatar] = useState<AvatarId>(initialAvatar ?? "jack-avatar.png");
 
   useEffect(() => {
     if (initialAvatar) {
