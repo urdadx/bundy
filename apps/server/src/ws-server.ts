@@ -37,7 +37,6 @@ app.get("/health", (c) => {
 
 // ============ Multiplayer API Endpoints ============
 
-// Create a new multiplayer room
 app.post("/api/multiplayer/rooms", async (c) => {
   try {
     const body = await c.req.json();
@@ -72,7 +71,6 @@ app.post("/api/multiplayer/rooms", async (c) => {
   }
 });
 
-// Get room info
 app.get("/api/multiplayer/rooms/:roomId", (c) => {
   const roomId = c.req.param("roomId");
   const room = getRoom(roomId);
