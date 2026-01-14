@@ -30,9 +30,11 @@ const StatCard = ({ label, value, iconSrc, colorClass }: StatCardProps) => (
 
 export const ProfileStatistics = () => {
   const { data: userStats } = useQuery(trpc.user.getStats.queryOptions());
+  const { data: userRank } = useQuery(trpc.user.getUserRank.queryOptions());
   const points = userStats?.totalXp || 10;
   const diamonds = userStats?.diamonds || 0;
   const league = userStats?.league || "Bronze";
+  const rank = userRank?.rank;
 
   const stats = [
     {
@@ -49,7 +51,7 @@ export const ProfileStatistics = () => {
     },
     {
       label: "Current Rank",
-      value: "#14",
+      value: rank ? `#${rank}` : "#--",
       iconSrc: RankingIcon,
       colorClass: "bg-rose-100/50",
     },

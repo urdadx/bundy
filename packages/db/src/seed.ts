@@ -1,5 +1,5 @@
 import { db } from "./index";
-import { world, stage } from "./schema/game-schema";
+import { world, stage, shopItem } from "./schema/game-schema";
 
 const THEME_WORDS = {
   animals: [
@@ -193,6 +193,7 @@ async function seed() {
   console.log("🧹 Clearing existing data...");
   await db.delete(stage);
   await db.delete(world);
+  await db.delete(shopItem);
 
   // Define all 6 worlds
   const worlds = [
@@ -325,10 +326,73 @@ async function seed() {
     console.log(`✅ Created stages for ${w.name}`);
   }
 
+  // Create shop items
+  console.log("🛍️ Creating shop items...");
+  const shopItems = [
+    {
+      id: "freeze-potion",
+      name: "Freeze Potion",
+      description: "Tame the cold time itself",
+      image: "/rewards/freeze-potion.png",
+      price: 5,
+      category: "powerup",
+      sortOrder: 1,
+    },
+    {
+      id: "golden-heart",
+      name: "Golden Heart",
+      description: "Heart of the pale queen of the frost",
+      image: "/rewards/rare-heart.png",
+      price: 5,
+      category: "powerup",
+      sortOrder: 2,
+    },
+    {
+      id: "diamond-danes",
+      name: "Diamond of the Danes",
+      description: "A rare diamond with mystical powers",
+      image: "/rewards/ruby.png",
+      price: 30,
+      category: "bundle",
+      sortOrder: 3,
+    },
+    {
+      id: "hints-10",
+      name: "10 Hints",
+      description: "Get 10 hints to help you solve puzzles faster",
+      image: "/rewards/hint.png",
+      price: 5,
+      category: "powerup",
+      sortOrder: 4,
+    },
+    {
+      id: "heavyweight-champ",
+      name: "Heavyweight Champ",
+      description: "A mascot skin for the ultimate champion",
+      image: "/rewards/wrestler.png",
+      price: 10,
+      category: "cosmetic",
+      sortOrder: 5,
+    },
+    {
+      id: "bracelet-cyclla",
+      name: "Bracelet of Cyclla",
+      description: "A mystical bracelet from the ages",
+      image: "/rewards/rare-bracelets.png",
+      price: 20,
+      category: "cosmetic",
+      sortOrder: 6,
+    },
+  ];
+  
+  await db.insert(shopItem).values(shopItems);
+  console.log(`✅ Created ${shopItems.length} shop items`);
+
   console.log("\n📊 Seed Summary:");
   console.log(`   Worlds: ${worlds.length}`);
   console.log(`   Stages per World: 5`);
   console.log(`   Total Stages: ${worlds.length * 5}`);
+  console.log(`   Shop Items: ${shopItems.length}`);
   console.log("\n🎉 Database seed completed successfully!");
 }
 

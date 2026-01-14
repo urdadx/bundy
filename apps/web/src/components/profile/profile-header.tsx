@@ -3,6 +3,7 @@ import { useSession } from "@/lib/auth-client";
 import femaleIdle from "@/assets/characters/female-idle.png";
 import maleIdle from "@/assets/characters/male-idle.png";
 import { normalizeAvatar } from "@/lib/avatars";
+import { AvatarChangeDialog } from "./avatar-change-dialog";
 
 export function ProfileHeader() {
   const { data: session } = useSession();
@@ -20,9 +21,11 @@ export function ProfileHeader() {
           className="absolute inset-0 w-full h-full object-contain p-4"
         />
 
-        <button className="absolute top-4 right-4 p-2 bg-white/80 rounded-xl border-2 border-slate-200 ">
-          <Edit2 className="size-5 text-slate-600" />
-        </button>
+        <AvatarChangeDialog>
+          <button className="absolute top-4 right-4 p-2 bg-white/80 rounded-xl border-2 border-slate-200 hover:bg-white/90 transition-colors">
+            <Edit2 className="size-5 text-slate-600" />
+          </button>
+        </AvatarChangeDialog>
       </div>
 
       <div className="mt-3 relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6">

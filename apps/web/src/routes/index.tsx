@@ -38,9 +38,17 @@ function HomeComponent() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <div className="container mx-auto max-w-3xl px-4 py-2">
-        <h1 className="mb-4 text-3xl font-bold">Welcome to Wordsearch!</h1>
+    <div
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+      className="flex min-h-screen items-center justify-center"
+    >
+      <div className=" mx-auto max-w-2xl flex justify-center flex-col items-center px-4 py-2">
+        <h1 className="mb-6 text-4xl font-semibold">Welcome to BundyCrush</h1>
         <Button variant="primary" onClick={() => setOpen(true)}>
           PLAY GAME
         </Button>

@@ -2,7 +2,7 @@ import { protectedProcedure, router } from "../index";
 import { db } from "@wordsearch/db";
 import { userStats } from "@wordsearch/db/schema/game-schema";
 import { user } from "@wordsearch/db/schema/auth";
-import { eq, desc, asc } from "drizzle-orm";
+import { eq, desc, asc, gt, sql } from "drizzle-orm";
 import { z } from "zod";
 
 const VALID_AVATARS = ["jack-avatar.png", "marie-avatar.png", "rudeus-avatar.png"] as const;
@@ -133,6 +133,37 @@ export const userRouter = router({
 
       return { success: true, diamonds: newDiamonds };
     }),
+
+  getUserRank: protectedProcedure.query(async ({ ctx }) => {
+    const userId = ctx.userId;
+
+    const userXpQuery = await db
+      .select({ totalXp: userStats.totalXp })
+      .from(userStats)
+      .where(eq(userStats.userId, userId))
+      .limit(1);
+
+    if (!userXpQuery.length) {
+      return { rank: null, totalUsers: 0 };
+    }
+
+    const userXp = userXpQuery[0]!.totalXp;
+
+    // Count users with higher XP
+    const usersWithHigherXp = await db
+      .select({ count: sql<number>`COUNT(*)`.as('count') })
+      .from(userStats)
+      .where(gt(userStats.totalXp, userXp));
+
+    const totalUsersQuery = await db
+      .select({ count: sql<number>`COUNT(*)`.as('count') })
+      .from(userStats);
+
+    const rank = (usersWithHigherXp[0]?.count ?? 0) + 1;
+    const totalUsers = totalUsersQuery[0]?.count ?? 0;
+
+    return { rank, totalUsers };
+  }),
 
   getLeaderboard: protectedProcedure
     .input(

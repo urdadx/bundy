@@ -1,79 +1,82 @@
 import { ShopItemCard, type ShopItemType } from "./shop-item-card";
-import FreezePotionImg from "@/assets/rewards/freeze-potion.png";
-import GoldenHeart from "@/assets/rewards/rare-heart.png";
-import RareDiamond from "@/assets/rewards/ruby.png";
-import MascotSkinImg from "@/assets/rewards/wrestler.png";
-import RareBracelet from "@/assets/rewards/rare-bracelets.png";
-import HintBulb from "@/assets/rewards/hint.png";
-
-const MOCK_SHOP_ITEMS: ShopItemType[] = [
-  {
-    id: "1",
-    name: "Freeze Potion",
-    description: "Tame the cold time itself",
-    image: FreezePotionImg,
-    price: 150,
-    currency: "diamonds",
-    category: "powerup",
-  },
-  {
-    id: "2",
-    name: "Golden Heart",
-    description: "Heart of the pale queen of the frost",
-    image: GoldenHeart,
-    price: 200,
-    currency: "diamonds",
-    category: "powerup",
-    isOwned: true,
-  },
-  {
-    id: "3",
-    name: "Diamond of the Danes",
-    description: "A rare diamond with mystical powers",
-    image: RareDiamond,
-    price: 400,
-    currency: "diamonds",
-    category: "bundle",
-  },
-  {
-    id: "4",
-    name: "10 Hints",
-    description: "Get 10 hints to help you solve puzzles faster",
-    image: HintBulb,
-    price: 200,
-    currency: "diamonds",
-    category: "powerup",
-    isOwned: true,
-  },
-
-  {
-    id: "4",
-    name: "Heavyweight Champ",
-    description: "A mascot skin for the ultimate champion",
-    image: MascotSkinImg,
-    price: 350,
-    currency: "diamonds",
-    category: "cosmetic",
-    isLocked: false,
-  },
-  {
-    id: "5",
-    name: "Bracelet of Cyclla",
-    description: "A mystical bracelet from the ages",
-    image: RareBracelet,
-    price: 300,
-    currency: "diamonds",
-    category: "cosmetic",
-    isLocked: false,
-  },
-];
+import { trpc, trpcClient } from "@/utils/trpc";
+import { Loader } from "@/components/loader";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 export default function ShopPage() {
+  const queryClient = useQueryClient();
+  const { data: items, isLoading, error } = useQuery(trpc.shop.getItems.queryOptions());
+
+  const buyItemMutation = useMutation({
+    mutationFn: async (params: { itemId: string }) => {
+      return trpcClient.shop.buyItem.mutate(params);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: trpc.shop.getItems.queryKey() });
+      toast.success(`Item Purchased!`, {
+        description: "It has been added to your inventory.",
+      });
+    },
+    onError: (error) => {
+      toast.warning("Purchase Failed", {
+        description: error.message || "Unable to complete purchase",
+      });
+    },
+  });
+
+  const handleBuyItem = async (item: ShopItemType) => {
+    try {
+      await buyItemMutation.mutateAsync({ itemId: item.id });
+    } catch (error) {
+      console.error("Failed to buy item:", error);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="space-y-8">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="space-y-1">
+            <h1 className="text-2xl font-black text-slate-800 uppercase tracking-tight">Shop</h1>
+            <p className="text-base sm:text-lg font-bold text-slate-500">
+              Browse and purchase items to expand your collection
+            </p>
+          </div>
+        </div>
+        <div className="flex justify-center py-12">
+          <Loader />
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-8">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="space-y-1">
+            <h1 className="text-2xl font-black text-slate-800 uppercase tracking-tight">Shop</h1>
+            <p className="text-base sm:text-lg font-bold text-slate-500">
+              Browse and purchase items to expand your collection
+            </p>
+          </div>
+        </div>
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>Failed to load shop items. Please try again later.</AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row justify-between items-center gap-4">
         <div className="space-y-1">
-          <h1 className="text-2xl  font-black text-slate-800 uppercase tracking-tight">Shop</h1>
+          <h1 className="text-2xl font-black text-slate-800 uppercase tracking-tight">Shop</h1>
           <p className="text-base sm:text-lg font-bold text-slate-500">
             Browse and purchase items to expand your collection
           </p>
@@ -81,12 +84,8 @@ export default function ShopPage() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        {MOCK_SHOP_ITEMS.map((item) => (
-          <ShopItemCard
-            key={item.id}
-            item={item}
-            // onBuy={(boughtItem) => console.log("Bought:", boughtItem)}
-          />
+        {items?.map((item) => (
+          <ShopItemCard key={item.id} item={item} onBuy={handleBuyItem} />
         ))}
       </div>
     </div>

@@ -102,7 +102,7 @@ export function WorldSelector() {
                 onClick={() => handleSelect(world.id, isLocked)}
                 className={cn(
                   "cursor-pointer flex  flex-col items-center justify-center gap-4 transition-all hover:bg-slate-50 active:translate-y-1 active:border-b-4",
-                  isSelected && "border-green-500 ring-2 ring-green-500/20 bg-green-50/30",
+                  isSelected && "border-green-500 ring-2 ring-green-500/20 bg-green-50",
                   isLocked &&
                     "grayscale cursor-not-allowed hover:bg-white active:translate-y-0 active:border-b-8",
                 )}

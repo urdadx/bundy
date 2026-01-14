@@ -2,19 +2,19 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Lock } from "lucide-react";
 import { useState } from "react";
-import { toast } from "sonner";
 import DiamondItem from "@/assets/icons/diamond.svg";
 
 export type ShopItemType = {
   id: string;
   name: string;
-  description: string;
+  description: string | null;
   image: string;
   price: number;
-  currency: "diamonds" | "coins";
+  isAvailable: boolean;
+  sortOrder: number;
   isOwned?: boolean;
   isLocked?: boolean;
-  category?: "powerup" | "cosmetic" | "bundle";
+  currency?: "diamonds" | "coins";
 };
 
 interface ShopItemCardProps {
@@ -26,18 +26,17 @@ export function ShopItemCard({ item, onBuy }: ShopItemCardProps) {
   const [_isHovered, setIsHovered] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleBuyClick = () => {
+  const handleBuyClick = async () => {
     if (item.isOwned || item.isLocked) return;
 
     setIsLoading(true);
-    setTimeout(() => {
+    try {
+      await onBuy?.(item);
+    } catch (error) {
+      console.error("Purchase failed:", error);
+    } finally {
       setIsLoading(false);
-      onBuy?.(item);
-
-      toast.success(`${item.name} Purchased!`, {
-        description: "It has been added to your inventory.",
-      });
-    }, 1000);
+    }
   };
 
   return (
@@ -77,7 +76,7 @@ export function ShopItemCard({ item, onBuy }: ShopItemCardProps) {
           {item.name}
         </h3>
         <p className="text-sm font-bold text-slate-500 leading-tight line-clamp-2">
-          {item.description}
+          {item.description || "No description available"}
         </p>
       </div>
 
@@ -90,7 +89,7 @@ export function ShopItemCard({ item, onBuy }: ShopItemCardProps) {
             ? "bg-slate-100 text-slate-400 border-slate-200 cursor-default"
             : item.isLocked
               ? "bg-slate-200 text-slate-500 border-slate-300 cursor-not-allowed"
-              : "bg-sky-500 hover:bg-sky-400 text-white  active:border-b-0 active:translate-y-1",
+              : "bg-sky-500 hover:bg-sky-400 text-white active:border-b-0 active:translate-y-1",
         )}
       >
         {isLoading ? (

@@ -1,6 +1,5 @@
 import { WordSearch } from "@/components/playground/board/word-search";
 import { WordListPanel, GameActionsPanel } from "@/components/layouts/playground-layout";
-import { ChatPanel, type Message } from "@/components/playground/chat";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
 import { z } from "zod";
@@ -16,8 +15,8 @@ import { useHint } from "@/hooks/use-hint";
 import { ColorThemeProvider, useColorTheme } from "@/contexts/color-theme-context";
 
 import jackAvatar from "@/assets/avatars/jack-avatar.png";
-import marieAvatar from "@/assets/avatars/marie-avatar.png";
 import { CareerGameHeader } from "@/components/playground/career-game-header";
+import { GameTips } from "@/components/game-tips";
 
 const playgroundSearchSchema = z.object({
   stageId: z.string().optional(),
@@ -39,7 +38,6 @@ function RouteComponent() {
   const queryClient = useQueryClient();
   const [gameKey, setGameKey] = useState(0);
   const [foundWords, setFoundWords] = useState<Set<string>>(new Set());
-  const [messages, setMessages] = useState<Message[]>([]);
   const [placedWords, setPlacedWords] = useState<string[]>([]);
   const [placedWordsData, setPlacedWordsData] = useState<
     Array<{
@@ -62,6 +60,11 @@ function RouteComponent() {
   const { data: stage, isLoading: stageLoading } = useQuery({
     ...trpc.stages.getById.queryOptions({ id: stageId || "" }),
     enabled: !!stageId,
+  });
+
+  const { data: world, isLoading: worldLoading } = useQuery({
+    ...trpc.worlds.getById.queryOptions({ id: stage?.worldId || "" }),
+    enabled: !!stage?.worldId,
   });
 
   const { data: stats, isLoading: statsLoading } = useQuery({
@@ -135,13 +138,6 @@ function RouteComponent() {
     isCurrentTurn: true,
   };
 
-  const player2 = {
-    name: "Opponent",
-    avatar: marieAvatar,
-    score: 3,
-    isCurrentTurn: false,
-  };
-
   const handleWordFound = (word: string) => {
     setFoundWords((prev) => new Set([...prev, word]));
   };
@@ -177,7 +173,6 @@ function RouteComponent() {
   const handleReplayLevel = () => {
     setGameKey((prev) => prev + 1);
     setFoundWords(new Set());
-    setMessages([]);
     setIncompleteDialogOpen(false);
     reset();
   };
@@ -202,21 +197,7 @@ function RouteComponent() {
     }
   };
 
-  const handleSendMessage = (message: string) => {
-    const newMessage: Message = {
-      id: crypto.randomUUID(),
-      message,
-      sender: {
-        name: player1.name,
-        avatar: player1.avatar,
-      },
-      isOwn: true,
-      timestamp: new Date(),
-    };
-    setMessages((prev) => [...prev, newMessage]);
-  };
-
-  if (stageLoading || statsLoading) {
+  if (stageLoading || statsLoading || worldLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen w-full">
         <Loader />
@@ -311,19 +292,7 @@ function RouteComponent() {
               words={placedWords.length > 0 ? placedWords : stageWords}
               foundWords={foundWords}
             />
-            <ChatPanel
-              messages={messages}
-              currentUser={{
-                name: player1.name,
-                avatar: player1.avatar,
-              }}
-              opponent={{
-                name: player2.name,
-                avatar: player2.avatar,
-                isOnline: true,
-              }}
-              onSendMessage={handleSendMessage}
-            />
+            <GameTips worldTheme={world?.theme} />
             <GameActionsPanel
               diamonds={stats?.diamonds}
               foundWords={foundWords}

@@ -16,6 +16,7 @@ function RouteComponent() {
       <div className="border bg-gray-200 w-full" />
       <ProfileStatistics />
       <ProfileCollection />
+      <div className="h-16" />
     </ArenaLayout>
   );
 }

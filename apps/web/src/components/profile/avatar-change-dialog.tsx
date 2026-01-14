@@ -1,0 +1,66 @@
+import { useState } from "react";
+import { authClient } from "@/lib/auth-client";
+import { useSession } from "@/lib/auth-client";
+import { AVATARS } from "@/lib/avatars";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { AvatarChangeCarousel } from "@/components/ui/avatar-change-carousel";
+
+interface AvatarChangeDialogProps {
+  children: React.ReactNode;
+}
+
+export function AvatarChangeDialog({ children }: AvatarChangeDialogProps) {
+  const [open, setOpen] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [selectedAvatarIndex, setSelectedAvatarIndex] = useState(0);
+  const { refetch } = useSession();
+
+  const handleConfirmSelection = async () => {
+    setIsUpdating(true);
+    try {
+      const selectedAvatar = AVATARS[selectedAvatarIndex];
+      await authClient.updateUser({
+        image: selectedAvatar.src,
+      });
+      await refetch();
+      setOpen(false);
+    } catch (error) {
+      console.error("Failed to update avatar:", error);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger>{children}</DialogTrigger>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle className="text-xl text-center uppercase font-semibold">
+            Change Avatar
+          </DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4">
+          <AvatarChangeCarousel onIndexChange={setSelectedAvatarIndex} />
+          <div className="w-full">
+            <Button
+              className="w-full"
+              variant="primary"
+              onClick={handleConfirmSelection}
+              disabled={isUpdating}
+            >
+              {isUpdating ? "Updating..." : "Save Changes"}
+            </Button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
