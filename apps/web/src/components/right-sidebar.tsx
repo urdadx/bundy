@@ -12,7 +12,7 @@ export function RightSidebar() {
     : "Bronze";
   const xp = stats?.totalXp || 0;
 
-  const nextLeagueXp = league === "Bronze" ? 300 : league === "Silver" ? 700 : 0;
+  const nextLeagueXp = league === "Bronze" ? 300 : league === "Silver" ? 500 : 0;
   const xpNeeded = Math.max(nextLeagueXp - xp, 0);
 
   return (

@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { SideMenuItem } from "./side-menu-item";
 import { SideMenuThemeButton } from "./side-menu-theme-button";
-import MascotImage from "@/assets/rewards/mascot.png";
 
 export function SideMenu() {
   return (
@@ -10,8 +9,10 @@ export function SideMenu() {
         <nav className="flex flex-col gap-6 px-4">
           <Link to="/" className="focus-visible self-start rounded-xl">
             <span className="flex items-center px-4">
-              <img src={MascotImage} alt="Bundy Mascot" className="w-12 h-12 object-contain" />
-              <span className="font-display text-primary-depth text-3xl font-bold">bundy</span>
+              {/* <img src={MascotImage} alt="Bundy Mascot" className="w-12 h-12 object-contain" /> */}
+              <span className="font-display tracking-wider text-primary-depth text-3xl font-bold">
+                bundy
+              </span>
             </span>
           </Link>
 

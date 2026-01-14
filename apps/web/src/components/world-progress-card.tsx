@@ -33,8 +33,11 @@ const WORLD_COLORS: Record<string, string> = {
 export function WorldProgressCard() {
   const { data: worlds, isLoading: worldsLoading } = useQuery(trpc.worlds.getAll.queryOptions());
   const { data: stats, isLoading: statsLoading } = useQuery(trpc.user.getStats.queryOptions());
+  const { data: worldProgress, isLoading: progressLoading } = useQuery(
+    trpc.user.getWorldProgress.queryOptions(),
+  );
 
-  if (worldsLoading || statsLoading) {
+  if (worldsLoading || statsLoading || progressLoading) {
     return (
       <div className="flex items-center justify-center w-full min-h-screen">
         <Loader />
@@ -48,26 +51,25 @@ export function WorldProgressCard() {
 
   const userXp = stats?.totalXp || 0;
 
+  const progressMap = new Map(worldProgress?.map((p) => [p.worldId, p]) || []);
+
   return (
     <div className="flex flex-col gap-6">
-      {worlds.map((world, index) => {
+      {worlds.map((world) => {
         const planetImage = WORLD_IMAGES[world.id] || planet01;
         const bgColor = WORLD_COLORS[world.id] || "#1cb0f6";
         const isLocked = userXp < world.requiredXp;
 
         let progress = 0;
-        const nextWorld = worlds[index + 1];
+        const worldData = progressMap.get(world.id);
 
-        if (userXp >= (nextWorld?.requiredXp ?? Infinity)) {
-          progress = 100;
-        } else if (userXp < world.requiredXp) {
-          progress = 0;
-        } else if (nextWorld) {
-          const range = nextWorld.requiredXp - world.requiredXp;
-          const earned = userXp - world.requiredXp;
-          progress = Math.min(100, Math.max(0, (earned / range) * 100));
-        } else {
-          progress = userXp >= world.requiredXp ? 100 : 0;
+        if (worldData) {
+          progress = (worldData.completedStages / 5) * 100;
+        } else if (userXp >= world.requiredXp) {
+          const isFirstWorld = world.requiredXp === 0;
+          if (isFirstWorld) {
+            progress = 0;
+          }
         }
 
         return (

@@ -123,7 +123,7 @@ export const GameTips = ({ worldTheme = "animals" }: GameTipsProps) => {
   useEffect(() => {
     const interval = setInterval(() => {
       showNextTip();
-    }, 8000);
+    }, 10000);
 
     return () => clearInterval(interval);
   }, [currentTipIndex]);

@@ -52,18 +52,30 @@ export const LeagueProgress = ({ league, xpNeeded }: LeagueProgressProps) => {
             <div className="flex-1">
               <div className="flex items-center gap-1.5 mb-1">
                 <Zap className="size-4 fill-yellow-400 text-yellow-400" />
-                <span className="text-xs font-black text-slate-400 uppercase tracking-wide">
-                  Next Goal
-                </span>
+                {league === "Gold" ? (
+                  <span className="text-xs font-black text-yellow-600 uppercase tracking-wide">
+                    New Record
+                  </span>
+                ) : (
+                  <span className="text-xs font-black text-slate-400 uppercase tracking-wide">
+                    Next Goal
+                  </span>
+                )}
               </div>
-              <p className="text-sm font-bold text-slate-600 leading-tight">
-                Gain <span className="text-sky-500">{xpNeeded} XP</span> more to unlock the
-                <span className="font-black text-slate-700">
-                  {" "}
-                  {leagueAssets[league].next} League
-                </span>{" "}
-                rewards!
-              </p>
+              {league === "Gold" ? (
+                <p className="text-sm font-bold text-slate-600 leading-tight">
+                  You have reached the pinnacle of human intelligence. Congrats!
+                </p>
+              ) : (
+                <p className="text-sm font-bold text-slate-600 leading-tight">
+                  Gain <span className="text-sky-500">{xpNeeded} XP</span> more to unlock the
+                  <span className="font-black text-slate-700">
+                    {" "}
+                    {leagueAssets[league].next} League
+                  </span>{" "}
+                  rewards!
+                </p>
+              )}
             </div>
           </div>
         </div>

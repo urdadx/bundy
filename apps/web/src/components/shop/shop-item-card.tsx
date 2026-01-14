@@ -23,7 +23,6 @@ interface ShopItemCardProps {
 }
 
 export function ShopItemCard({ item, onBuy }: ShopItemCardProps) {
-  const [_isHovered, setIsHovered] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleBuyClick = async () => {
@@ -31,7 +30,7 @@ export function ShopItemCard({ item, onBuy }: ShopItemCardProps) {
 
     setIsLoading(true);
     try {
-      await onBuy?.(item);
+      onBuy?.(item);
     } catch (error) {
       console.error("Purchase failed:", error);
     } finally {
@@ -47,8 +46,6 @@ export function ShopItemCard({ item, onBuy }: ShopItemCardProps) {
           ? "border-slate-200 bg-slate-50 opacity-70 cursor-not-allowed"
           : "border-slate-200 hover:-translate-y-1",
       )}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
       <div className="absolute top-4 right-4">
         {item.isLocked && (
@@ -95,7 +92,7 @@ export function ShopItemCard({ item, onBuy }: ShopItemCardProps) {
         {isLoading ? (
           <span className="animate-pulse">Processing...</span>
         ) : item.isOwned ? (
-          "Equipped"
+          "Collected"
         ) : item.isLocked ? (
           "Locked"
         ) : (

@@ -37,7 +37,7 @@ export function BattleBanner({ name, color, description, stageId, order }: Battl
             World {order || 1}: <span className="capitalize">{name}</span>
           </h3>
         </div>
-        {description && <p className="text-base sm:text-lg opacity-90">{description}</p>}
+        {description && <p className="text-base sm:text-lg ">{description}</p>}
       </div>
       <Button variant="immersive" className="max-xl:px-4" size="lg" asChild disabled={!stageId}>
         <Link to="/arena/playground" search={{ stageId }}>

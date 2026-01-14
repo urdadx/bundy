@@ -1,6 +1,6 @@
 import { protectedProcedure, router } from "../index";
 import { db } from "@wordsearch/db";
-import { userStats } from "@wordsearch/db/schema/game-schema";
+import { userStats, worldProgress } from "@wordsearch/db/schema/game-schema";
 import { user } from "@wordsearch/db/schema/auth";
 import { eq, desc, asc, gt, sql } from "drizzle-orm";
 import { z } from "zod";
@@ -8,7 +8,7 @@ import { z } from "zod";
 const VALID_AVATARS = ["jack-avatar.png", "marie-avatar.png", "rudeus-avatar.png"] as const;
 
 function calculateLeague(xp: number): string {
-  if (xp >= 600) return "Gold";
+  if (xp >= 500) return "Gold";
   if (xp >= 300) return "Silver";
   return "Bronze";
 }
@@ -40,6 +40,22 @@ export const userRouter = router({
       ...userStat,
       league: calculateLeague(userStat.totalXp),
     };
+  }),
+
+  getWorldProgress: protectedProcedure.query(async ({ ctx }) => {
+    const userId = ctx.userId;
+
+    const progress = await db
+      .select({
+        worldId: worldProgress.worldId,
+        isUnlocked: worldProgress.isUnlocked,
+        isCompleted: worldProgress.isCompleted,
+        completedStages: worldProgress.completedStages,
+      })
+      .from(worldProgress)
+      .where(eq(worldProgress.userId, userId));
+
+    return progress;
   }),
 
   getProfile: protectedProcedure.query(async ({ ctx }) => {
