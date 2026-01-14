@@ -13,7 +13,7 @@ const tips = [
   "A day on Venus is longer than its year!",
   "The Great Barrier Reef is the largest living structure on Earth and can be seen from space!",
   "Your body produces about 25 million new cells every second - that's over 2 trillion per day!",
-  "A formula 1 car can drive upside down if it goes fast enough due to downforce.",
+  "A formula 1 car can drive upside down if it goes fast enough due to the downforce it generates.",
   "The shortest war in history was between Britain and Zanzibar in 1896 - it lasted only 38 minutes!",
   "Water can boil and freeze at the same time in a phenomenon called the 'triple point'",
   "The human eye can distinguish about 10 million different colors!",
@@ -54,7 +54,7 @@ export const TipOfTheDay = () => {
 
   return (
     <div className="w-full">
-      <div className="bg-white border-3 border-slate-200 rounded-3xl p-6">
+      <div className="bg-white border-2 border-slate-200 rounded-3xl p-6">
         <div className="flex justify-center mb-6">
           <span className="bg-slate-100 text-slate-500 text-base font-black px-3 py-1 rounded-full uppercase tracking-widest border border-slate-200">
             Tip of the Day

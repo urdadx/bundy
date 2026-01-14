@@ -9,7 +9,7 @@ export const GameConnectionError = ({ error, onBack }: { error: string; onBack: 
             <span className="text-3xl">😵</span>
           </div>
           <h2 className="text-xl font-black text-slate-700">Connection Error</h2>
-          <p className="text-slate-500">{error}</p>
+          <p className="text-slate-500 text-lg">{error}</p>
           <Button variant="primary" onClick={onBack}>
             Go Back
           </Button>

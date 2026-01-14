@@ -6,9 +6,19 @@ import maleIdle from "@/assets/characters/male-idle.png";
 import multiplayerImg from "@/assets/characters/multiplayer.png";
 import backgroundEmpty from "@/assets/background/backgroundEmpty.png";
 import { useCallback } from "react";
+import { authClient } from "@/lib/auth-client";
+import backgroundImage from "@/assets/background/backgroundCastles.png";
+import { AuthForm } from "@/components/auth-form";
 
 export const Route = createFileRoute("/choose")({
   component: RouteComponent,
+  beforeLoad: async () => {
+    const { data: session } = await authClient.getSession();
+    return {
+      session,
+      isAuthenticated: !!session,
+    };
+  },
 });
 
 function RouteComponent() {
@@ -32,6 +42,24 @@ function RouteComponent() {
     },
     [navigate],
   );
+
+  const { isAuthenticated } = Route.useRouteContext();
+
+  if (!isAuthenticated) {
+    return (
+      <div
+        className="min-h-screen flex flex-col"
+        style={{
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        <AuthForm open={true} onOpenChange={() => {}} />
+      </div>
+    );
+  }
 
   return (
     <div

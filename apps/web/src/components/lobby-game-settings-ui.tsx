@@ -92,7 +92,7 @@ export function LobbyGameSettingsUI({
   const currentTheme = THEMES[theme] || THEMES.animals;
 
   return (
-    <DialogContent className="border-none p-4 sm:p-6 max-w-sm sm:max-w-md w-full">
+    <DialogContent className="border-none p-4 sm:p-6 w-200! sm:max-w-md">
       <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto">
         <DialogHeader className="pb-3">
           <h2 className="text-lg sm:text-xl text-center font-black text-slate-700 uppercase tracking-widest">

@@ -67,7 +67,6 @@ export function WorldProgressCard() {
           const earned = userXp - world.requiredXp;
           progress = Math.min(100, Math.max(0, (earned / range) * 100));
         } else {
-          // Last world
           progress = userXp >= world.requiredXp ? 100 : 0;
         }
 

@@ -10,7 +10,7 @@ const MOCK_SHOP_ITEMS: ShopItemType[] = [
   {
     id: "1",
     name: "Freeze Potion",
-    description: "Stop the timer for 30 seconds",
+    description: "Tame the cold time itself",
     image: FreezePotionImg,
     price: 150,
     currency: "diamonds",
@@ -19,7 +19,7 @@ const MOCK_SHOP_ITEMS: ShopItemType[] = [
   {
     id: "2",
     name: "Golden Heart",
-    description: "A shiny golden heart to boost your morale",
+    description: "Heart of the pale queen of the frost",
     image: GoldenHeart,
     price: 200,
     currency: "diamonds",
@@ -28,8 +28,8 @@ const MOCK_SHOP_ITEMS: ShopItemType[] = [
   },
   {
     id: "3",
-    name: "Ruby",
-    description: "A rare and precious diamond to show off",
+    name: "Diamond of the Danes",
+    description: "A rare diamond with mystical powers",
     image: RareDiamond,
     price: 400,
     currency: "diamonds",
@@ -48,8 +48,8 @@ const MOCK_SHOP_ITEMS: ShopItemType[] = [
 
   {
     id: "4",
-    name: "Ninja Mascot Skin",
-    description: "A stealthy new look for your arena avatar",
+    name: "Heavyweight Champ",
+    description: "A mascot skin for the ultimate champion",
     image: MascotSkinImg,
     price: 350,
     currency: "diamonds",
@@ -58,7 +58,7 @@ const MOCK_SHOP_ITEMS: ShopItemType[] = [
   },
   {
     id: "5",
-    name: "Bracelet of Wisdom",
+    name: "Bracelet of Cyclla",
     description: "A mystical bracelet from the ages",
     image: RareBracelet,
     price: 300,
@@ -72,10 +72,10 @@ export default function ShopPage() {
   return (
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-        <div>
+        <div className="space-y-1">
           <h1 className="text-2xl  font-black text-slate-800 uppercase tracking-tight">Shop</h1>
-          <p className="text-lg font-bold text-slate-500">
-            Browse and purchase items to enhance your gameplay experience.
+          <p className="text-base sm:text-lg font-bold text-slate-500">
+            Browse and purchase items to expand your collection
           </p>
         </div>
       </div>

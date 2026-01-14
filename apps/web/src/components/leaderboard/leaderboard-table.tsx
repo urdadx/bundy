@@ -154,7 +154,7 @@ export function LeaderboardTable() {
           <span className="text-slate-400 text-sm">Top players ranked by XP earned</span>
         </div>
       </div>
-      <div className="border rounded-2xl overflow-hidden">
+      <div className="border-2 border-slate-200 rounded-2xl overflow-hidden">
         <Table>
           <TableBody>
             {table.getRowModel().rows?.length ? (

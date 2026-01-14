@@ -10,16 +10,16 @@ interface LeagueProgressProps {
   xpNeeded: number;
 }
 
-export const LeagueProgress = ({ league, xpNeeded }: LeagueProgressProps) => {
-  const leagueAssets = {
-    Bronze: { img: BronzeReward, next: "Silver", color: "bg-amber-500", text: "text-amber-600" },
-    Silver: { img: SilverReward, next: "Gold", color: "bg-slate-400", text: "text-slate-500" },
-    Gold: { img: GoldReward, next: "Legendary", color: "bg-yellow-400", text: "text-yellow-600" },
-  };
+export const leagueAssets = {
+  Bronze: { img: BronzeReward, next: "Silver", color: "bg-amber-500", text: "text-amber-600" },
+  Silver: { img: SilverReward, next: "Gold", color: "bg-slate-400", text: "text-slate-500" },
+  Gold: { img: GoldReward, next: "Legendary", color: "bg-yellow-400", text: "text-yellow-600" },
+};
 
+export const LeagueProgress = ({ league, xpNeeded }: LeagueProgressProps) => {
   return (
     <div className="w-full">
-      <div className="bg-white border-3 border-slate-200 rounded-3xl p-6 relative overflow-hidden group">
+      <div className="bg-white border-2 border-slate-200 rounded-3xl p-6 relative overflow-hidden group">
         <div
           className={cn(
             "absolute -top-12 -right-12 w-32 h-32 rounded-full blur-3xl opacity-10 transition-colors",
@@ -30,9 +30,6 @@ export const LeagueProgress = ({ league, xpNeeded }: LeagueProgressProps) => {
         <div className="flex flex-col gap-4">
           <div className="flex justify-between items-center">
             <div className="space-y-0.5">
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                Your Ranking
-              </p>
               <h2 className={cn("text-xl font-black uppercase", leagueAssets[league].text)}>
                 {league} League
               </h2>
@@ -47,7 +44,7 @@ export const LeagueProgress = ({ league, xpNeeded }: LeagueProgressProps) => {
 
           <div className="flex items-center gap-4 bg-slate-50/50 rounded-2xl p-2 border-2 border-dashed border-slate-100">
             <img
-              className="w-20 h-20 object-contain drop-shadow-lg"
+              className="w-20 h-20 object-contain "
               src={leagueAssets[league].img}
               alt={`${league} Medal`}
             />
