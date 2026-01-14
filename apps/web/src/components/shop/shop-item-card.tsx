@@ -41,10 +41,10 @@ export function ShopItemCard({ item, onBuy }: ShopItemCardProps) {
   return (
     <div
       className={cn(
-        "group relative bg-white rounded-3xl border-2 border-gray-200 p-4 transition-transform duration-200 ease-out",
+        "group relative bg-white rounded-2xl border-2 border-gray-200 p-4 transition-transform duration-200 ease-out",
         item.isLocked
           ? "border-slate-200 bg-slate-50 opacity-70 cursor-not-allowed"
-          : "border-slate-200 hover:-translate-y-1",
+          : "border-slate-200 ",
       )}
     >
       <div className="absolute top-4 right-4">

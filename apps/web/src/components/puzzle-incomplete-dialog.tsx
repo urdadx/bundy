@@ -7,8 +7,11 @@ import {
 } from "@/components/ui/alert-dialog";
 import maleSad from "@/assets/characters/male-sad.png";
 import femaleSad from "@/assets/characters/female-sad.png";
+import RobotSad from "@/assets/characters/robot_sad.png";
 import { motion } from "motion/react";
 import { Button } from "./ui/button";
+import { useSession } from "@/lib/auth-client";
+import { normalizeAvatar } from "@/lib/avatars";
 
 interface PuzzleInCompletionDialogProps {
   open: boolean;
@@ -21,7 +24,19 @@ export function PuzzleInCompletionDialog({
   onOpenChange,
   onReplayLevel,
 }: PuzzleInCompletionDialogProps) {
-  const characterGender = localStorage.getItem("characterGender") as string;
+  const { data: session } = useSession();
+
+  const normalizedAvatar = normalizeAvatar(session?.user?.image || "");
+
+  let profileImage;
+
+  if (normalizedAvatar.includes("rudeus-avatar.png")) {
+    profileImage = RobotSad;
+  } else if (normalizedAvatar.includes("jack-avatar.png")) {
+    profileImage = maleSad;
+  } else {
+    profileImage = femaleSad;
+  }
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
@@ -34,7 +49,7 @@ export function PuzzleInCompletionDialog({
             className="w-48 h-48 mb-4 mx-auto"
           >
             <img
-              src={characterGender === "male" ? maleSad : femaleSad}
+              src={profileImage}
               alt="Celebration"
               className="w-full h-full object-contain "
               loading="lazy"

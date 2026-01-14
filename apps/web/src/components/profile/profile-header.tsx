@@ -2,6 +2,7 @@ import { Edit2, Calendar } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
 import femaleIdle from "@/assets/characters/female-idle.png";
 import maleIdle from "@/assets/characters/male-idle.png";
+import RobotIdle from "@/assets/characters/robot_idle.png";
 import { normalizeAvatar } from "@/lib/avatars";
 import { AvatarChangeDialog } from "./avatar-change-dialog";
 
@@ -10,7 +11,16 @@ export function ProfileHeader() {
   const userName = session?.user?.name || "User";
 
   const normalizedAvatar = normalizeAvatar(session?.user?.image || "");
-  const profileImage = normalizedAvatar.includes("jack-avatar.png") ? maleIdle : femaleIdle;
+
+  let profileImage;
+
+  if (normalizedAvatar.includes("rudeus-avatar.png")) {
+    profileImage = RobotIdle;
+  } else if (normalizedAvatar.includes("jack-avatar.png")) {
+    profileImage = maleIdle;
+  } else {
+    profileImage = femaleIdle;
+  }
 
   return (
     <div className="w-full max-w-3xl mx-auto pt-2">

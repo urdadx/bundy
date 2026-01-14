@@ -17,6 +17,7 @@ import goldMedal from "@/assets/medals/gold-medal.png";
 import silverMedal from "@/assets/medals/silver-medal.png";
 import bronzeMedal from "@/assets/medals/bronze-medal.png";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { Loader } from "../loader";
 
 type LeaderboardEntry = {
   id: string;
@@ -137,8 +138,10 @@ export function LeaderboardTable() {
 
   if (isLoading) {
     return (
-      <div className="w-full max-w-2xl mx-auto space-y-6 mb-10">
-        <div className="text-center text-slate-500">Loading leaderboard...</div>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="flex flex-col items-center gap-4">
+          <Loader />
+        </div>
       </div>
     );
   }
@@ -149,7 +152,9 @@ export function LeaderboardTable() {
         <div className="relative">
           <img src={trophyCabinet} alt="Trophy Cabinet" className="w-40 h-40 object-contain" />
         </div>
-        <h2 className="text-3xl text-balance font-black text-slate-800">Global Leaderboard</h2>
+        <h2 className="text-3xl tracking-wide text-balance font-black text-slate-800">
+          Global Leaderboard
+        </h2>
         <div className="flex items-center gap-2 text-sm font-bold">
           <span className="text-slate-400 text-sm">Top players ranked by XP earned</span>
         </div>

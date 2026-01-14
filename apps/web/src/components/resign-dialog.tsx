@@ -6,9 +6,12 @@ import {
   AlertDialogFooter,
 } from "@/components/ui/alert-dialog";
 import maleSad from "@/assets/characters/male-sad.png";
+import RobotSad from "@/assets/characters/robot_sad.png";
 import femaleSad from "@/assets/characters/female-sad.png";
 import { motion } from "motion/react";
 import { Button } from "./ui/button";
+import { useSession } from "@/lib/auth-client";
+import { normalizeAvatar } from "@/lib/avatars";
 
 interface ResignDialogProps {
   open: boolean;
@@ -18,8 +21,19 @@ interface ResignDialogProps {
 }
 
 export function ResignDialog({ open, onOpenChange, onConfirm }: ResignDialogProps) {
-  const characterGender = localStorage.getItem("characterGender") as string;
+  const { data: session } = useSession();
 
+  const normalizedAvatar = normalizeAvatar(session?.user?.image || "");
+
+  let profileImage;
+
+  if (normalizedAvatar.includes("rudeus-avatar.png")) {
+    profileImage = RobotSad;
+  } else if (normalizedAvatar.includes("jack-avatar.png")) {
+    profileImage = maleSad;
+  } else {
+    profileImage = femaleSad;
+  }
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent className="sm:max-w-md! w-200! p-3 sm:p-4 border-none bg-white">
@@ -31,7 +45,7 @@ export function ResignDialog({ open, onOpenChange, onConfirm }: ResignDialogProp
             className="w-32 h-32 sm:w-48 sm:h-48 mb-4 mx-auto"
           >
             <img
-              src={characterGender === "male" ? maleSad : femaleSad}
+              src={profileImage}
               alt="Sad Character"
               className="w-full h-full object-contain"
               loading="lazy"
