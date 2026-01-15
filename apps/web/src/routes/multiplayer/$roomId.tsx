@@ -186,10 +186,10 @@ function MultiplayerGamePage() {
       <div className="flex overflow-x-hidden">
         <SideMenu />
         <div className="min-h-screen w-full bg-slate-50 overflow-x-hidden">
-          <div className="flex justify-center items-start w-full min-h-screen py-6 px-4 overflow-x-hidden">
-            <div className="flex gap-6 max-w-7xl w-full overflow-x-hidden">
-              <div className="flex-3 flex flex-col items-center gap-4">
-                <div className="w-full">
+          <div className="flex justify-center items-start w-full min-h-screen py-4 sm:py-6 px-2 sm:px-4 overflow-x-hidden">
+            <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 max-w-7xl w-full overflow-x-hidden">
+              <div className="flex-1 flex flex-col items-center gap-3 lg:gap-4 w-full">
+                <div className="w-full max-w-2xl">
                   <MultiplayerGameHeader
                     player1={{
                       score: myScore,
@@ -205,7 +205,7 @@ function MultiplayerGamePage() {
                   />
                 </div>
 
-                <div className="shrink-0">
+                <div className="shrink-0 w-full flex justify-center">
                   <MultiplayerWordSearch
                     puzzle={puzzle}
                     players={players}
@@ -262,7 +262,7 @@ function MultiplayerGamePage() {
                 </div>
               </div>
 
-              <div className="hidden lg:flex flex-2 flex-col gap-3">
+              <div className="hidden lg:flex flex-1 lg:max-w-sm flex-col gap-3">
                 <WordListPanel words={puzzle.words.map((w) => w.word)} foundWords={foundWordsSet} />
 
                 <ChatPanel
