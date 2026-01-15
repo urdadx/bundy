@@ -22,7 +22,7 @@ COPY packages ./packages
 
 RUN pnpm -r run build || true
 
-# Stage 2: Production - USE ALPINE BUN IMAGE
+# Stage 2: Production
 FROM oven/bun:1-alpine AS production
 
 WORKDIR /app
@@ -34,6 +34,10 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/apps/server ./apps/server
 COPY --from=builder /app/packages ./packages
 
+# Copy entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 ENV NODE_ENV=production
 ENV PORT=3000
 ENV SQLITE_PATH=/data/sqlite.db
@@ -42,4 +46,5 @@ EXPOSE 3000
 RUN mkdir -p /data && chmod 0777 /data
 VOLUME ["/data"]
 
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["bun", "run", "apps/server/dist/index.mjs"]
