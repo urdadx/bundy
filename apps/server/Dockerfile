@@ -34,8 +34,14 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/apps/server ./apps/server
 COPY --from=builder /app/packages ./packages
 
-# Install Node.js for migrations
-RUN apk add --no-cache nodejs npm
+# 1. Install Node.js AND build tools (needed for recompilation)
+RUN apk add --no-cache nodejs npm python3 make g++
+
+# 2. Rebuild better-sqlite3 against the current system's Node.js version
+RUN npm rebuild better-sqlite3
+
+# 3. (Optional) Remove build tools to keep image small
+RUN apk del python3 make g++
 
 # Copy entrypoint script
 COPY entrypoint.sh /entrypoint.sh
