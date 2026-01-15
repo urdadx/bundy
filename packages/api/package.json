@@ -9,7 +9,9 @@
       "default": "./src/*.ts"
     }
   },
-  "scripts": {},
+  "scripts": {
+    "build": "tsc -b"
+  },
   "dependencies": {
     "@trpc/client": "catalog:",
     "@trpc/server": "catalog:",

@@ -88,8 +88,8 @@ export const multiplayerSession = sqliteTable(
   },
   (table) => [
     index("multiplayerSession_roomId_idx").on(table.roomId),
-    index("multiplayerSession_userId_idx").on(table.odId),
-    index("multiplayerSession_roomId_userId_idx").on(table.roomId, table.odId),
+    index("multiplayerSession_userId_idx").on(table.userId),
+    index("multiplayerSession_roomId_userId_idx").on(table.roomId, table.userId),
   ],
 );
 

@@ -24,7 +24,7 @@ RUN pnpm install --frozen-lockfile
 # Copy source code and build
 COPY apps/server ./apps/server
 COPY packages ./packages
-RUN pnpm --filter server build
+RUN pnpm --filter @wordsearch/api build && pnpm --filter server build
 
 # Stage 2: Production
 FROM oven/bun:1-slim AS production
