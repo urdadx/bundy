@@ -74,7 +74,6 @@ Create 3 separate **Application** services in Dokploy:
 - **Port**: `3000`
 - **Domain**: `api.yourdomain.com`
 - **Environment Variables**:
-  - `DATABASE_URL`: Your PostgreSQL connection string
   - `BETTER_AUTH_SECRET`: A secure random string (32+ chars)
   - `BETTER_AUTH_URL`: `https://api.yourdomain.com`
   - `CORS_ORIGIN`: `https://yourdomain.com`
