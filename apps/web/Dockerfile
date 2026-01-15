@@ -15,11 +15,7 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 # Copy all package.json files for workspace resolution
 COPY apps/web/package.json ./apps/web/
-COPY packages/api/package.json ./packages/api/
-COPY packages/auth/package.json ./packages/auth/
-COPY packages/db/package.json ./packages/db/
-COPY packages/env/package.json ./packages/env/
-COPY packages/config/package.json ./packages/config/
+COPY packages/ ./packages/
 
 # Install dependencies
 RUN pnpm install --frozen-lockfile
