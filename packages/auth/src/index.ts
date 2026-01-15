@@ -37,7 +37,6 @@ const options = {
         try {
           console.log("Linking anonymous account:", anonymousUser.user.id, "to new user:", newUser.user.id);
         
-          
           const anonymousUserId = anonymousUser.user.id;
           const newUserId = newUser.user.id;
           
