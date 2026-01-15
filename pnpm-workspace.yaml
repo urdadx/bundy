@@ -15,8 +15,3 @@ catalog:
   drizzle-kit: ^0.31.8
 onlyBuiltDependencies:
   - better-sqlite3
-
-packageExtensions:
-  'drizzle-kit@*':
-    dependencies:
-      better-sqlite3: '*'
