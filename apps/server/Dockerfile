@@ -47,6 +47,7 @@ COPY --from=builder /app/packages ./packages
 
 ENV NODE_ENV=production
 ENV PORT=3000
+ENV SQLITE_PATH=/data/sqlite.db
 EXPOSE 3000
 
 RUN mkdir -p /data && chmod 0777 /data

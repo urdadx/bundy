@@ -117,14 +117,12 @@ Example `docker-compose.yml` service (local):
 services:
   server:
     environment:
-      - DATABASE_URL=file:/data/sqlite.db
       - SQLITE_PATH=/data/sqlite.db
     volumes:
       - ./data:/data
 ```
 
-- `DATABASE_URL`: set to `file:/data/sqlite.db` so libs that read `file:` URLs work out of the box.
-- `SQLITE_PATH`: an explicit path the bundled DB package also reads; set it to `/data/sqlite.db` to ensure the runtime code finds the file.
+- `SQLITE_PATH`: path to the SQLite database file; set it to `/data/sqlite.db` to ensure the runtime code finds the file.
 - The container images now expose `/data` as a volume; bind-mount `./data` from the host to persist the DB file across container restarts.
 
 - Ensure the container can write to `/data`. Dockerfiles create `/data` and set permissive permissions, and `docker-compose.yml` mounts `./data` by default for local setups.
