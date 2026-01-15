@@ -86,7 +86,7 @@ export function MultiplayerResultDialog({
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="w-full max-w-sm! sm:max-w-md! p-4 sm:p-6 border-none bg-white ">
+      <AlertDialogContent className="w-200! p-4 border-none bg-white">
         <div className="">
           <AlertDialogHeader className="w-full justify-center">
             <AlertDialogTitle className="text-2xl sm:text-3xl uppercase text-center font-black text-slate-800 tracking-tight">

@@ -24,8 +24,8 @@ const THEMES: Record<string, { name: string; icon: string }> = {
 
 const DIFFICULTY_CONFIG = {
   easy: { gridSizeRange: [8, 10], wordCountRange: [5, 7] },
-  medium: { gridSizeRange: [10, 12], wordCountRange: [7, 10] },
-  hard: { gridSizeRange: [12, 15], wordCountRange: [10, 15] },
+  medium: { gridSizeRange: [10, 11], wordCountRange: [7, 10] },
+  hard: { gridSizeRange: [11, 11], wordCountRange: [10, 15] },
 };
 
 function randomInRange(min: number, max: number): number {

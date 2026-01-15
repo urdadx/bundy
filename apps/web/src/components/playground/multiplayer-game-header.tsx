@@ -50,7 +50,7 @@ export function MultiplayerGameHeader({ player1, player2, timeRemaining }: GameH
             <p className="text-xs uppercase font-bold text-slate-600 leading-tight truncate">
               {player1.name}
             </p>
-            <p className="text-2xl truncate font-black text-[#1cb0f6] leading-none text-center">
+            <p className="text-2xl  font-black text-[#1cb0f6] leading-none text-center">
               {player1.score}
             </p>
           </div>
@@ -77,7 +77,7 @@ export function MultiplayerGameHeader({ player1, player2, timeRemaining }: GameH
 
         <div className="flex items-center gap-2">
           <div className="flex flex-col items-end">
-            <p className="text-xs uppercase font-bold text-slate-600 leading-tight">
+            <p className="text-xs truncate uppercase font-bold text-slate-600 leading-tight">
               {player2.name}
             </p>
             <p className="text-2xl font-black text-hp-red leading-none text-center self-center">
