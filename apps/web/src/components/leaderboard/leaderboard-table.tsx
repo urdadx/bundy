@@ -124,10 +124,9 @@ export function LeaderboardTable() {
   });
 
   if (error) {
-    console.error("Leaderboard error:", error);
     return (
       <div className="w-full max-w-2xl mx-auto space-y-6 mb-10">
-        <div className="text-center text-red-500">
+        <div className="text-center text-lg text-red-500">
           {error.message.includes("UNAUTHORIZED")
             ? "Please log in to view the leaderboard"
             : `Error loading leaderboard: ${error.message}`}
@@ -152,7 +151,7 @@ export function LeaderboardTable() {
         <div className="relative">
           <img src={trophyCabinet} alt="Trophy Cabinet" className="w-40 h-40 object-contain" />
         </div>
-        <h2 className="text-3xl tracking-wide text-balance font-black text-slate-800">
+        <h2 className="text-3xl tracking-wider text-balance font-black text-slate-800">
           Global Leaderboard
         </h2>
         <div className="flex items-center gap-2 text-sm font-bold">

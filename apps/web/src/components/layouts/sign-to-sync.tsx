@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { Button } from "../ui/button";
 import { GoogleSVG } from "../ui/google-svg";
 import { signIn, useSession, isGuestUser } from "@/lib/auth-client";
@@ -12,7 +13,7 @@ const TwitterIcon = () => (
 export const GoogleSyncCard = () => {
   const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const isGuest = isGuestUser(session?.user || null);
 
   const handleGoogleSignIn = async () => {
@@ -23,6 +24,7 @@ export const GoogleSyncCard = () => {
         callbackURL: window.location.href,
       });
     } catch (error) {
+      toast.warning("Failed to sign in with Google. Please try again.");
       console.error("Google sign-in error:", error);
     } finally {
       setIsLoading(false);

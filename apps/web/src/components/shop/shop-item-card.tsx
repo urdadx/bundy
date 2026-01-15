@@ -58,7 +58,7 @@ export function ShopItemCard({ item, onBuy }: ShopItemCardProps) {
       <div
         className={cn(
           "relative h-36 w-full flex items-center justify-center mb-2 rounded-2xl transition-transform duration-200",
-          item.isLocked ? "grayscale" : "bg-sky-50/50",
+          item.isLocked ? "grayscale" : "",
         )}
       >
         <img
@@ -86,7 +86,7 @@ export function ShopItemCard({ item, onBuy }: ShopItemCardProps) {
             ? "bg-slate-100 text-slate-400 border-slate-200 cursor-default"
             : item.isLocked
               ? "bg-slate-200 text-slate-500 border-slate-300 cursor-not-allowed"
-              : "bg-sky-500 hover:bg-sky-400 text-white active:border-b-0 active:translate-y-1",
+              : "bg-sky-500 hover:bg-sky-400 text-white",
         )}
       >
         {isLoading ? (
