@@ -1,6 +1,6 @@
 # bundycrush
 
-An educational word search puzzle game for humans. Play career mode or invite friends to play together.
+An educational word search puzzle adventure game. Play career mode or invite friends to play together.
 
 ## Built with
 

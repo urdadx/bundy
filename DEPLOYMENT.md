@@ -55,7 +55,7 @@ Create 3 separate **Application** services in Dokploy:
 
 #### 1. Web Client Service
 
-- **Name**: `wordsearch-web`
+- **Name**: `bundy-web`
 - **Source**: Git repository
 - **Dockerfile Path**: `apps/web/Dockerfile`
 - **Build Context**: `.` (root)
@@ -67,7 +67,7 @@ Create 3 separate **Application** services in Dokploy:
 
 #### 2. API Server Service
 
-- **Name**: `wordsearch-api`
+- **Name**: `bundy-api`
 - **Source**: Git repository
 - **Dockerfile Path**: `apps/server/Dockerfile`
 - **Build Context**: `.` (root)
@@ -81,7 +81,7 @@ Create 3 separate **Application** services in Dokploy:
 
 #### 3. WebSocket Server Service
 
-- **Name**: `wordsearch-ws`
+- **Name**: `bundy-ws`
 - **Source**: Git repository
 - **Dockerfile Path**: `apps/server/Dockerfile.websocket`
 - **Build Context**: `.` (root)
@@ -199,11 +199,11 @@ All services have health check endpoints:
 docker build -f apps/web/Dockerfile \
   --build-arg VITE_SERVER_URL=https://api.yourdomain.com \
   --build-arg VITE_WS_URL=https://ws.yourdomain.com \
-  -t wordsearch-web .
+  -t bundy-web .
 
 # Build API server
-docker build -f apps/server/Dockerfile -t wordsearch-api .
+docker build -f apps/server/Dockerfile -t bundy-api .
 
 # Build WebSocket server
-docker build -f apps/server/Dockerfile.websocket -t wordsearch-ws .
+docker build -f apps/server/Dockerfile.websocket -t bundy-ws .
 ```
