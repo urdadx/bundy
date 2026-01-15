@@ -35,17 +35,22 @@ ENV VITE_WS_URL=$VITE_WS_URL
 WORKDIR /app/apps/web
 RUN pnpm build
 
-# Stage 2: Production with nginx
-FROM nginx:alpine AS production
+# Stage 2: Production with Node.js server
+FROM node:22-alpine AS production
 
-# Copy custom nginx config
-COPY apps/web/nginx.conf /etc/nginx/conf.d/default.conf
+WORKDIR /app
 
 # Copy built assets from builder
-COPY --from=builder /app/apps/web/dist /usr/share/nginx/html
+COPY --from=builder /app/apps/web/dist ./dist
 
-# Expose port 80
-EXPOSE 80
+# Copy package.json for serve package
+COPY apps/web/package.json ./package.json
 
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Install serve to host static files
+RUN npm install -g serve
+
+# Expose port 3001 (different from server)
+EXPOSE 3001
+
+# Start the static file server
+CMD ["serve", "-s", "dist", "-l", "3001"]
