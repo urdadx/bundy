@@ -34,6 +34,9 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/apps/server ./apps/server
 COPY --from=builder /app/packages ./packages
 
+# Install Node.js for migrations
+RUN apk add --no-cache nodejs npm
+
 # Copy entrypoint script
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
