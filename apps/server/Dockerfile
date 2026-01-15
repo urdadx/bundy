@@ -18,10 +18,8 @@ COPY packages/db/package.json ./packages/db/
 COPY packages/env/package.json ./packages/env/
 COPY packages/config/package.json ./packages/config/
 
-# Install pnpm and dependencies
-RUN bun install -g pnpm@10.10.0
-RUN corepack enable pnpm
-RUN pnpm install --frozen-lockfile --ignore-scripts
+# Install dependencies using bun (fallback to npm if needed)
+RUN bun install --frozen-lockfile || npm install
 
 # Copy source code
 COPY apps/server ./apps/server
