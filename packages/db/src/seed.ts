@@ -17,8 +17,8 @@ const THEME_WORDS = {
     "BUTTERFLY",
     "LEOPARD",
     "CHEETAH",
-    "RHINOCEROS",
-    "HIPPOPOTAMUS",
+    "URCHIN",
+    "URCHIN",
     "CROCODILE",
     "GORILLA",
   ],
@@ -160,9 +160,9 @@ const THEME_WORDS = {
 
 // Add difficulty constraints matching the word search generator
 const DIFFICULTY_CONFIG = {
-  easy: { minWordLength: 4, maxWordLength: 7 },
+  easy: { minWordLength: 4, maxWordLength: 8 },
   medium: { minWordLength: 4, maxWordLength: 10 },
-  hard: { minWordLength: 5, maxWordLength: 12 },
+  hard: { minWordLength: 5, maxWordLength: 11 },
 };
 
 function getRandomWords(

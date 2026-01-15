@@ -154,22 +154,29 @@ const DIFFICULTY_CONFIG: Record<
 > = {
   easy: {
     minWordLength: 4,
-    maxWordLength: 7,
+    maxWordLength: 8,
     directions: ["horizontal", "vertical"],
   },
   medium: {
     minWordLength: 4,
-    maxWordLength: 8,
+    maxWordLength: 10,
     directions: ["horizontal", "vertical", "diagonal"],
   },
   hard: {
     minWordLength: 5,
-    maxWordLength: 10,
-    directions: ["horizontal", "vertical", "diagonal", "horizontal-reverse", "vertical-reverse"],
+    maxWordLength: 11,
+    directions: [
+      "horizontal",
+      "vertical",
+      "diagonal",
+      "horizontal-reverse",
+      "vertical-reverse",
+      "diagonal-reverse",
+    ],
   },
   expert: {
     minWordLength: 5,
-    maxWordLength: 12,
+    maxWordLength: 11,
     directions: [
       "horizontal",
       "vertical",

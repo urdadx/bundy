@@ -46,7 +46,7 @@ const THEME_WORDS: Record<Theme, string[]> = {
     "LEOPARD",
     "CHEETAH",
     "RHINOCEROS",
-    "HIPPOPOTAMUS",
+    "URCHIN",
     "CROCODILE",
     "GORILLA",
   ],
@@ -192,8 +192,8 @@ const DIFFICULTY_CONFIG = {
     maxSize: 10,
     wordCount: 5,
     minWordLength: 4,
-    maxWordLength: 7,
-    directions: ["horizontal", "vertical"], // Only right and down
+    maxWordLength: 8,
+    directions: ["horizontal", "vertical"],
   },
   medium: {
     minSize: 8,
@@ -201,15 +201,22 @@ const DIFFICULTY_CONFIG = {
     wordCount: 7,
     minWordLength: 4,
     maxWordLength: 10,
-    directions: ["horizontal", "vertical", "diagonal"], // Right, down, and diagonal-down-right
+    directions: ["horizontal", "vertical", "diagonal"],
   },
   hard: {
     minSize: 10,
     maxSize: 12,
     wordCount: 10,
     minWordLength: 5,
-    maxWordLength: 12,
-    directions: ["horizontal", "vertical", "diagonal", "horizontal-reverse", "vertical-reverse"],
+    maxWordLength: 11,
+    directions: [
+      "horizontal",
+      "vertical",
+      "diagonal",
+      "horizontal-reverse",
+      "vertical-reverse",
+      "diagonal-reverse",
+    ],
   },
   expert: {
     minSize: 15,
