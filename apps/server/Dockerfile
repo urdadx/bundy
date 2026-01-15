@@ -1,59 +1,33 @@
-# ============================================
-# API Server Dockerfile (Hono + tRPC + Bun)
-# ============================================
-
 # Stage 1: Build
 FROM node:20-alpine AS builder
-
+RUN npm install -g pnpm@10.10.0
 WORKDIR /app
 
-# Copy workspace configuration
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-
-# Copy all package.json files for workspace resolution
 COPY apps/server/package.json ./apps/server/
-COPY packages/api/package.json ./packages/api/
-COPY packages/auth/package.json ./packages/auth/
-COPY packages/db/package.json ./packages/db/
-COPY packages/env/package.json ./packages/env/
-COPY packages/config/package.json ./packages/config/
+COPY packages ./packages 
+# (Simplifying copy for brevity, keep your specific COPYs if preferred)
 
-# Install pnpm and dependencies
-RUN npm install -g pnpm@10.10.0
-RUN pnpm install --frozen-lockfile --ignore-scripts
+RUN pnpm install --frozen-lockfile
 
-# Copy source code
 COPY apps/server ./apps/server
-COPY packages ./packages
+RUN pnpm --filter server build
 
-# Build the server
-WORKDIR /app/apps/server
-RUN pnpm build
+# --- NEW STEP: Isolate the server for production ---
+# This creates a standalone folder at /prod/server with only prod deps
+RUN pnpm --filter server --prod deploy /prod/server
 
 # Stage 2: Production
 FROM oven/bun:1-slim AS production
-
 WORKDIR /app
 
-# Copy built files and node_modules from builder
-COPY --from=builder /app/apps/server/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/apps/server/node_modules ./apps/server/node_modules
+# Copy the "deployed" standalone folder
+COPY --from=builder /prod/server . 
+# This folder now contains its own flat node_modules and your built dist
 
-# Environment variables
 ENV NODE_ENV=production
 ENV PORT=3000
-
-# Expose port
 EXPOSE 3000
 
-# Create data directory for SQLite and make it writable
-RUN mkdir -p /data && chmod 0777 /data
-VOLUME ["/data"]
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:3000/health || exit 1
-
-# Start the server
+# Since 'pnpm deploy' includes the package.json, we run the start script
 CMD ["bun", "run", "dist/index.mjs"]
