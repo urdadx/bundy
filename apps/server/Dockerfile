@@ -50,6 +50,7 @@ RUN chmod +x /entrypoint.sh
 ENV NODE_ENV=production
 ENV PORT=3000
 ENV SQLITE_PATH=/data/sqlite.db
+ENV DATABASE_URL=file:/data/sqlite.db
 EXPOSE 3000
 
 RUN mkdir -p /data && chmod 0777 /data

@@ -7,8 +7,7 @@ import * as schema from "./schema";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-
-const envPath = process.env.SQLITE_PATH;
+const envPath = process.env.SQLITE_PATH || process.env.DATABASE_URL;
 
 const defaultPath = join(__dirname, "..", "sqlite.db");
 const dbPath = envPath || defaultPath;
