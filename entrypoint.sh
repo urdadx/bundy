@@ -2,10 +2,11 @@
 set -e
 
 echo "Running database migrations..."
-bun run db:migrate
+cd /app/packages/db && bun run drizzle-kit migrate
 
 echo "Running database seed..."
-bun run db:seed || echo "Seed failed or already run"
+cd /app/packages/db && bun run seed || echo "Seed failed or already run"
 
 echo "Starting application..."
+cd /app
 exec "$@"
