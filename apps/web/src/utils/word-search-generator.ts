@@ -351,8 +351,8 @@ export function generateWordSearch(config: WordSearchConfig): WordSearchPuzzle {
   const wordCount = config.wordCount || (config.words ? config.words.length : diffConfig.wordCount);
   let selectedWords = shuffled.slice(0, Math.min(wordCount, shuffled.length));
 
-  // Sort words by length (longest first) to improve placement success rate
-  selectedWords = [...selectedWords].sort((a, b) => b.length - a.length);
+  // Remove duplicates and sort words by length (longest first) to improve placement success rate
+  selectedWords = [...new Set(selectedWords)].sort((a, b) => b.length - a.length);
 
   const placedWords: Array<{
     word: string;

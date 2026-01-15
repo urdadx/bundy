@@ -18,7 +18,6 @@ const THEME_WORDS = {
     "LEOPARD",
     "CHEETAH",
     "URCHIN",
-    "URCHIN",
     "CROCODILE",
     "GORILLA",
   ],
@@ -183,7 +182,8 @@ function getRandomWords(
       word.length <= gridSize,
   );
 
-  const shuffled = [...validWords].sort(() => Math.random() - 0.5);
+  const uniqueWords = [...new Set(validWords)];
+  const shuffled = [...uniqueWords].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, count).join(",");
 }
 

@@ -289,7 +289,8 @@ export function generatePuzzle(settings: GameSettings): PuzzleData {
       word.length <= gridSize,
   );
 
-  const shuffled = [...filteredWords].sort(() => Math.random() - 0.5);
+  const uniqueWords = [...new Set(filteredWords)];
+  const shuffled = [...uniqueWords].sort(() => Math.random() - 0.5);
 
   const placedWords: Array<{
     word: string;
