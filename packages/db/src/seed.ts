@@ -200,7 +200,7 @@ async function seed() {
     {
       id: "meadow",
       name: "Meadow",
-      description: "A peaceful grassy field where majestic animals roam free.",
+      description: "A peaceful grassy field",
       color: "primary",
       requiredXp: 0,
       theme: "animals",
@@ -209,7 +209,7 @@ async function seed() {
     {
       id: "relic",
       name: "Relic",
-      description: "Forgotten ruins filled with ancient culinary secrets.",
+      description: "Forgotten ruins ",
       color: "secondary",
       requiredXp: 100,
       theme: "food",
@@ -218,7 +218,7 @@ async function seed() {
     {
       id: "volcano",
       name: "Volcano",
-      description: "Test your knowledge amidst the heat of flowing magma.",
+      description: "Test your knowledge .",
       color: "danger",
       requiredXp: 200,
       theme: "science",
@@ -227,7 +227,7 @@ async function seed() {
     {
       id: "cyber",
       name: "Cyber",
-      description: "A digital landscape where words are the building blocks of reality.",
+      description: "Building blocks of reality.",
       color: "super",
       requiredXp: 300,
       theme: "vocabulary",
@@ -236,7 +236,7 @@ async function seed() {
     {
       id: "void",
       name: " Void",
-      description: "The ultimate challenge at the edge of the universe.",
+      description: "Edge of the universe.",
       color: "highlight",
       requiredXp: 400,
       theme: "sports",
@@ -245,7 +245,7 @@ async function seed() {
     {
       id: "malyka",
       name: "Malyka",
-      description: "A journey through the cultures and languages of the world.",
+      description: "A journey through the cultures",
       color: "golden",
       requiredXp: 500,
       theme: "countries",
@@ -384,7 +384,7 @@ async function seed() {
       sortOrder: 6,
     },
   ];
-  
+
   await db.insert(shopItem).values(shopItems);
   console.log(`✅ Created ${shopItems.length} shop items`);
 

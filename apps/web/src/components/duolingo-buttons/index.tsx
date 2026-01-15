@@ -35,7 +35,7 @@ export function LearnButton({
 
   const isLast = index === totalCount - 1;
   const isCheckPoint = (index + 1) % 5 === 0;
-  const label = `Lesson ${index + 1}`;
+  const label = `Lesson ${index + 1} of ${totalCount}`;
 
   // Calculate next position for the connecting line
   const nextCycleIndex = (index + 1) % cycleLength;
@@ -79,7 +79,7 @@ export function LearnButton({
             percentage={Number.isNaN(percentage) ? 0 : percentage}
             href={`/arena/playground?stageId=${id}`}
             hrefText={completed ? "Practice" : "Start"}
-            prompt={completed ? "Level Up!" : label}
+            prompt={completed ? "Completed!" : label}
             ariaLabel={label}
           />
         ) : (

@@ -23,7 +23,6 @@ import { Route as ArenaPlaygroundIndexRouteImport } from './routes/arena/playgro
 import { Route as ArenaLessonsIndexRouteImport } from './routes/arena/lessons/index'
 import { Route as ArenaLeaderboardIndexRouteImport } from './routes/arena/leaderboard/index'
 import { Route as ArenaLessonsLessonNameIndexRouteImport } from './routes/arena/lessons/$lessonName/index'
-import { Route as ArenaLessonsLessonNameLevelRouteImport } from './routes/arena/lessons/$lessonName/$level'
 
 const WorldsRoute = WorldsRouteImport.update({
   id: '/worlds',
@@ -96,12 +95,6 @@ const ArenaLessonsLessonNameIndexRoute =
     path: '/$lessonName/',
     getParentRoute: () => ArenaLessonsRouteRoute,
   } as any)
-const ArenaLessonsLessonNameLevelRoute =
-  ArenaLessonsLessonNameLevelRouteImport.update({
-    id: '/$lessonName/$level',
-    path: '/$lessonName/$level',
-    getParentRoute: () => ArenaLessonsRouteRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -117,7 +110,6 @@ export interface FileRoutesByFullPath {
   '/arena/leaderboard': typeof ArenaLeaderboardIndexRoute
   '/arena/lessons/': typeof ArenaLessonsIndexRoute
   '/arena/playground': typeof ArenaPlaygroundIndexRoute
-  '/arena/lessons/$lessonName/$level': typeof ArenaLessonsLessonNameLevelRoute
   '/arena/lessons/$lessonName': typeof ArenaLessonsLessonNameIndexRoute
 }
 export interface FileRoutesByTo {
@@ -133,7 +125,6 @@ export interface FileRoutesByTo {
   '/arena/leaderboard': typeof ArenaLeaderboardIndexRoute
   '/arena/lessons': typeof ArenaLessonsIndexRoute
   '/arena/playground': typeof ArenaPlaygroundIndexRoute
-  '/arena/lessons/$lessonName/$level': typeof ArenaLessonsLessonNameLevelRoute
   '/arena/lessons/$lessonName': typeof ArenaLessonsLessonNameIndexRoute
 }
 export interface FileRoutesById {
@@ -151,7 +142,6 @@ export interface FileRoutesById {
   '/arena/leaderboard/': typeof ArenaLeaderboardIndexRoute
   '/arena/lessons/': typeof ArenaLessonsIndexRoute
   '/arena/playground/': typeof ArenaPlaygroundIndexRoute
-  '/arena/lessons/$lessonName/$level': typeof ArenaLessonsLessonNameLevelRoute
   '/arena/lessons/$lessonName/': typeof ArenaLessonsLessonNameIndexRoute
 }
 export interface FileRouteTypes {
@@ -170,7 +160,6 @@ export interface FileRouteTypes {
     | '/arena/leaderboard'
     | '/arena/lessons/'
     | '/arena/playground'
-    | '/arena/lessons/$lessonName/$level'
     | '/arena/lessons/$lessonName'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -186,7 +175,6 @@ export interface FileRouteTypes {
     | '/arena/leaderboard'
     | '/arena/lessons'
     | '/arena/playground'
-    | '/arena/lessons/$lessonName/$level'
     | '/arena/lessons/$lessonName'
   id:
     | '__root__'
@@ -203,7 +191,6 @@ export interface FileRouteTypes {
     | '/arena/leaderboard/'
     | '/arena/lessons/'
     | '/arena/playground/'
-    | '/arena/lessons/$lessonName/$level'
     | '/arena/lessons/$lessonName/'
   fileRoutesById: FileRoutesById
 }
@@ -317,25 +304,16 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ArenaLessonsLessonNameIndexRouteImport
       parentRoute: typeof ArenaLessonsRouteRoute
     }
-    '/arena/lessons/$lessonName/$level': {
-      id: '/arena/lessons/$lessonName/$level'
-      path: '/$lessonName/$level'
-      fullPath: '/arena/lessons/$lessonName/$level'
-      preLoaderRoute: typeof ArenaLessonsLessonNameLevelRouteImport
-      parentRoute: typeof ArenaLessonsRouteRoute
-    }
   }
 }
 
 interface ArenaLessonsRouteRouteChildren {
   ArenaLessonsIndexRoute: typeof ArenaLessonsIndexRoute
-  ArenaLessonsLessonNameLevelRoute: typeof ArenaLessonsLessonNameLevelRoute
   ArenaLessonsLessonNameIndexRoute: typeof ArenaLessonsLessonNameIndexRoute
 }
 
 const ArenaLessonsRouteRouteChildren: ArenaLessonsRouteRouteChildren = {
   ArenaLessonsIndexRoute: ArenaLessonsIndexRoute,
-  ArenaLessonsLessonNameLevelRoute: ArenaLessonsLessonNameLevelRoute,
   ArenaLessonsLessonNameIndexRoute: ArenaLessonsLessonNameIndexRoute,
 }
 

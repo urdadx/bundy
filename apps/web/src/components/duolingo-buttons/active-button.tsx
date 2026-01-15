@@ -49,10 +49,10 @@ type ActiveButtonContentProps = {
 function ActiveButtonContent({ variant, title, prompt, href, hrefText }: ActiveButtonContentProps) {
   return (
     <div className="p-2">
-      <h3 className="mb-2 text-xl font-bold" style={{ color: `hsl(var(--${variant}))` }}>
+      <h3 className="mb-1 text-lg font-bold" style={{ color: `hsl(var(--${variant}))` }}>
         {title}
       </h3>
-      <p className="mb-3 text-lg">{prompt}</p>
+      <p className="mb-3 text-base">{prompt}</p>
       <Button variant={variant} className="w-full" asChild>
         <Link to={href}>{hrefText}</Link>
       </Button>
@@ -82,7 +82,7 @@ export function ActiveButton({
         <PopoverTrigger>
           {renderTrigger({ variant, current, completed, percentage, ariaLabel })}
         </PopoverTrigger>
-        <PopoverContent className="border-2 rounded-lg shadow-none">
+        <PopoverContent className="border-2 ease-in-out duration-75 mt-5 rounded-xl shadow-none">
           <ActiveButtonContent
             variant={variant}
             title={title}

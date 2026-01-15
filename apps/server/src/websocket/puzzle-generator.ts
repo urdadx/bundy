@@ -1,6 +1,5 @@
 import type { GameSettings, PuzzleData } from "./types";
 
-// Theme word lists
 const THEME_WORDS: Record<string, string[]> = {
   animals: [
     "LION",
@@ -145,7 +144,6 @@ const THEME_WORDS: Record<string, string[]> = {
   ],
 };
 
-// Difficulty configurations
 const DIFFICULTY_CONFIG: Record<
   string,
   {
@@ -161,17 +159,17 @@ const DIFFICULTY_CONFIG: Record<
   },
   medium: {
     minWordLength: 4,
-    maxWordLength: 10,
+    maxWordLength: 8,
     directions: ["horizontal", "vertical", "diagonal"],
   },
   hard: {
     minWordLength: 5,
-    maxWordLength: 12,
+    maxWordLength: 10,
     directions: ["horizontal", "vertical", "diagonal", "horizontal-reverse", "vertical-reverse"],
   },
   expert: {
     minWordLength: 5,
-    maxWordLength: 15,
+    maxWordLength: 12,
     directions: [
       "horizontal",
       "vertical",
@@ -275,10 +273,8 @@ export function generatePuzzle(settings: GameSettings): PuzzleData {
     .fill(null)
     .map(() => Array(gridSize).fill(""));
 
-  // Get available words for theme
   const themeWords = THEME_WORDS[theme] ?? THEME_WORDS.general ?? [];
 
-  // Filter words by constraints
   const filteredWords = themeWords.filter(
     (word) =>
       word.length >= diffConfig.minWordLength &&
@@ -286,7 +282,6 @@ export function generatePuzzle(settings: GameSettings): PuzzleData {
       word.length <= gridSize,
   );
 
-  // Shuffle words
   const shuffled = [...filteredWords].sort(() => Math.random() - 0.5);
 
   const placedWords: Array<{

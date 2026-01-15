@@ -45,7 +45,7 @@ function RouteComponent() {
 
   return (
     <div className="flex w-full space-y-4 sm:space-y-0 flex-col gap-x-12">
-      <div className="flex-1 space-y-5">
+      <div className=" w-full space-y-5">
         <BattleBanner
           name={worldData?.name || lessonName}
           description={worldData?.description ?? undefined}
@@ -58,7 +58,6 @@ function RouteComponent() {
           unit={dummyUnit}
           lessons={lessons}
           activeLessonId={activeLesson?.id || ""}
-          activeLessonPercentage={0} // We can track this later
           variant={(worldData?.color as any) || "primary"}
         />
       </div>

@@ -78,7 +78,7 @@ export function WordSearch({
 
   const gridSize = puzzle.grid.length;
   const gap = gridSize <= 10 ? 4 : 2;
-  const padding = 40;
+  const padding = typeof window !== "undefined" && window.innerWidth < 768 ? 12 : 40;
 
   const getCellSize = useCallback(() => {
     if (typeof window === "undefined") return 48;

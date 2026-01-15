@@ -25,19 +25,18 @@ export function BattleBanner({ name, color, description, stageId, order }: Battl
 
   return (
     <header
-      className={cn(
-        "flex w-full gap-3 items-center justify-between rounded-xl p-5 text-white",
-        bgClass,
-      )}
+      className={cn("flex w-full items-center justify-between rounded-xl p-5 text-white", bgClass)}
     >
       <div className="space-y-1">
         <div className="flex items-center gap-2">
-          <MoveLeftIcon onClick={() => window.history.back()} className="size-6" />
-          <h3 className="text-xl font-bold ">
-            World {order || 1}: <span className="capitalize">{name}</span>
+          <MoveLeftIcon onClick={() => window.history.back()} className="size-5" />
+          <h3 className="text-sm uppercase font-bold text-white/90">
+            World {order || 1}: <span className="uppercase">{name}</span>
           </h3>
         </div>
-        {description && <p className="text-base sm:text-lg ">{description}</p>}
+        {description && (
+          <p className="text-base tracking-wider font-semibold sm:text-lg ">{description}</p>
+        )}
       </div>
       <Button variant="immersive" className="max-xl:px-4" size="lg" asChild disabled={!stageId}>
         <Link to="/arena/playground" search={{ stageId }}>

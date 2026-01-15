@@ -131,11 +131,11 @@ export function WorldSelector() {
         })}
       </div>
 
-      <div className="mt-12 w-full max-w-md">
+      <div className="mt-6 sm:mt-10 w-full max-w-md">
         <Button
           variant="super"
           size="lg"
-          className="w-full text-xl h-16 shadow-xl"
+          className="w-full text-xl h-14 shadow-xl"
           disabled={!selectedWorld}
           onClick={handleContinue}
         >

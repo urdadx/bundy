@@ -160,32 +160,36 @@ export function GameActionsPanel({ onRequestHint, canUseHint }: GameActionsPanel
   const navigate = useNavigate();
 
   return (
-    <GameInfoPanel>
-      <div className="flex flex-col sm:flex-row gap-2">
-        <HintButton onRequestHint={onRequestHint} canUseHint={canUseHint} />
-        <Button className="w-full" onClick={() => setShowResignDialog(true)} variant="highlight">
-          Resign <Flag className="h-5 w-5 ml-1" />
-        </Button>
-        <Dialog>
-          <DialogTrigger>
-            <Button className="w-full" variant="super">
-              Settings <Settings className="h-5 w-5 ml-1" />
-            </Button>
-          </DialogTrigger>
-          <GameSettingsUI />
-        </Dialog>
-      </div>
-      <ResignDialog
-        open={showResignDialog}
-        onOpenChange={setShowResignDialog}
-        onConfirm={() => {
-          setShowResignDialog(false);
-          navigate({
-            to: "/arena/lessons",
-          });
-        }}
-      />
-    </GameInfoPanel>
+    <>
+      {" "}
+      <GameInfoPanel>
+        <div className="flex flex-col sm:flex-row gap-2">
+          <HintButton onRequestHint={onRequestHint} canUseHint={canUseHint} />
+          <Button className="w-full" onClick={() => setShowResignDialog(true)} variant="highlight">
+            Resign <Flag className="h-5 w-5 ml-1" />
+          </Button>
+          <Dialog>
+            <DialogTrigger>
+              <Button className="w-full" variant="super">
+                Settings <Settings className="h-5 w-5 ml-1" />
+              </Button>
+            </DialogTrigger>
+            <GameSettingsUI />
+          </Dialog>
+        </div>
+        <ResignDialog
+          open={showResignDialog}
+          onOpenChange={setShowResignDialog}
+          onConfirm={() => {
+            setShowResignDialog(false);
+            navigate({
+              to: "/arena/lessons",
+            });
+          }}
+        />
+      </GameInfoPanel>
+      <div className="h-14" />
+    </>
   );
 }
 
@@ -235,6 +239,7 @@ export function GameActionsPanelMultiplayer({ onResign }: { onResign?: () => voi
           onResign?.();
         }}
       />
+      <div className="h-14" />
     </GameInfoPanel>
   );
 }
