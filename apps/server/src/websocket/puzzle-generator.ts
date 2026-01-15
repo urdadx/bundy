@@ -17,7 +17,7 @@ const THEME_WORDS: Record<string, string[]> = {
     "LEOPARD",
     "CHEETAH",
     "RHINOCEROS",
-    "HIPPOPOTAMUS",
+    "URCHIN",
     "CROCODILE",
     "GORILLA",
   ],
