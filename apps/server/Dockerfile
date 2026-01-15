@@ -3,31 +3,41 @@ FROM node:20-alpine AS builder
 RUN npm install -g pnpm@10.10.0
 WORKDIR /app
 
+# Copy workspace configs
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+# Copy all package.json files
 COPY apps/server/package.json ./apps/server/
-COPY packages ./packages 
-# (Simplifying copy for brevity, keep your specific COPYs if preferred)
+COPY packages ./packages/
 
+# Install ALL dependencies (including devDeps for building)
 RUN pnpm install --frozen-lockfile
 
+# Copy source and build
 COPY apps/server ./apps/server
 RUN pnpm --filter server build
 
-# --- NEW STEP: Isolate the server for production ---
-# This creates a standalone folder at /prod/server with only prod deps
-RUN pnpm --filter server --prod deploy /prod/server
-
-# Stage 2: Production
+# --- Stage 2: Production ---
 FROM oven/bun:1-slim AS production
 WORKDIR /app
 
-# Copy the "deployed" standalone folder
-COPY --from=builder /prod/server . 
-# This folder now contains its own flat node_modules and your built dist
+# 1. Copy the ROOT node_modules (This contains the .pnpm virtual store)
+COPY --from=builder /app/node_modules ./node_modules
 
+# 2. Copy the server's node_modules (This contains the symlinks)
+COPY --from=builder /app/apps/server/node_modules ./apps/server/node_modules
+
+# 3. Copy the built code and the server's package.json
+COPY --from=builder /app/apps/server/dist ./dist
+COPY --from=builder /app/apps/server/package.json ./package.json
+
+# Environment variables
 ENV NODE_ENV=production
 ENV PORT=3000
 EXPOSE 3000
 
-# Since 'pnpm deploy' includes the package.json, we run the start script
+# SQLite setup
+RUN mkdir -p /data && chmod 0777 /data
+VOLUME ["/data"]
+
+# Use Bun to run the compiled mjs file
 CMD ["bun", "run", "dist/index.mjs"]
