@@ -36,7 +36,7 @@ export function MultiplayerGameHeader({ player1, player2, timeRemaining }: GameH
   };
 
   return (
-    <div className="w-full bg-white border-2 border-b-4 border-slate-200 rounded-xl p-5">
+    <div className="w-full bg-white border-2 border-b-4 border-slate-200 rounded-xl p-3 sm:p-5">
       <div className="flex items-center justify-between gap-6">
         <div className="flex items-center gap-2">
           <div className="w-12 h-12 rounded-full overflow-hidden border-3 border-[#1cb0f6] bg-[#ddf4ff] p-1 shrink-0">
@@ -47,10 +47,10 @@ export function MultiplayerGameHeader({ player1, player2, timeRemaining }: GameH
             />
           </div>
           <div className="flex flex-col">
-            <p className="text-xs uppercase font-bold text-slate-600 leading-tight">
+            <p className="text-xs uppercase font-bold text-slate-600 leading-tight truncate">
               {player1.name}
             </p>
-            <p className="text-2xl font-black text-[#1cb0f6] leading-none text-center">
+            <p className="text-2xl truncate font-black text-[#1cb0f6] leading-none text-center">
               {player1.score}
             </p>
           </div>

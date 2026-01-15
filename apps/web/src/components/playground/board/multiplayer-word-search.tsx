@@ -56,28 +56,14 @@ export function MultiplayerWordSearch({
     if (typeof window === "undefined") return 48;
 
     const isLargeScreen = window.innerWidth >= 1024;
-    const isTablet = window.innerWidth >= 768;
-    
-    let maxWidth: number;
-    if (isLargeScreen) {
-      maxWidth = 700;
-    } else if (isTablet) {
-      maxWidth = Math.min(window.innerWidth - 64, 600);
-    } else {
-      maxWidth = Math.min(window.innerWidth - 24, 500);
-    }
-    
-    const viewportHeight = window.innerHeight;
-    const headerHeight = 120;
-    const mobileBottomPadding = window.innerWidth < 768 ? 140 : 80;
-    const maxHeight = viewportHeight - headerHeight - mobileBottomPadding;
+    const maxWidth = isLargeScreen ? 700 : Math.min(window.innerWidth - 32, 800);
+    const maxHeight = window.innerHeight - 100;
     const maxSize = Math.min(maxWidth, maxHeight);
 
     const totalGaps = gap * (gridSize - 1);
     const availableSpace = maxSize - padding * 2 - totalGaps;
 
-    const minCellSize = window.innerWidth < 768 ? 24 : 28;
-    return Math.max(Math.floor(availableSpace / gridSize), minCellSize);
+    return Math.max(Math.floor(availableSpace / gridSize), 28);
   }, [gridSize, gap]);
 
   const [cellSize, _setCellSize] = useState(getCellSize);
@@ -193,9 +179,9 @@ export function MultiplayerWordSearch({
   );
 
   return (
-    <div className="flex items-center justify-center w-full h-full relative">
+    <div className="flex items-center justify-center w-full h-full min-h-100 relative">
       <div
-        className="bg-white rounded-xl lg:rounded-3xl border-2 lg:border-4 border-slate-200 shadow-sm sm:shadow-xl select-none touch-none relative max-w-full overflow-hidden"
+        className="bg-white rounded-xl lg:rounded-3xl border-2 lg:border-4 border-slate-200 shadow-sm sm:shadow-xl select-none touch-none relative"
         style={{ padding }}
         onMouseLeave={handleMouseLeave}
         onMouseUp={handleSelectionEnd}

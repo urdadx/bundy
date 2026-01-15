@@ -197,49 +197,50 @@ export function GameActionsPanelMultiplayer({ onResign }: { onResign?: () => voi
   const [showResignDialog, setShowResignDialog] = useState(false);
 
   return (
-    <GameInfoPanel>
-      <div className="flex flex-col sm:flex-row gap-2">
-        <Popover>
-          <PopoverTrigger>
-            <Button className="w-full" variant="primary">
-              Hint
-              <Lightbulb className="h-5 w-5 ml-1" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-60 p-0">
-            <img
-              src={jerryLaughing}
-              alt="Jerry laughing"
-              loading="lazy"
-              className="w-full h-50 rounded"
-            />
-            <p className="text-center text-base uppercase font-bold pb-2">
-              You can't use hint in multiplayer mode
-            </p>
-          </PopoverContent>
-        </Popover>
-        <Button className="w-full" variant="highlight" onClick={() => setShowResignDialog(true)}>
-          Resign <Flag className="h-5 w-5 ml-1" />
-        </Button>
-        <Dialog>
-          <DialogTrigger>
-            <Button className="w-full" variant="super">
-              Settings <Settings className="h-5 w-5 ml-1" />
-            </Button>
-          </DialogTrigger>
-          <GameSettingsUI />
-        </Dialog>
-      </div>
+    <>
+      <GameInfoPanel>
+        <div className="flex flex-col sm:flex-row gap-2">
+          <Popover>
+            <PopoverTrigger>
+              <Button className="w-full" variant="primary">
+                Hint
+                <Lightbulb className="h-5 w-5 ml-1" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-60 p-0">
+              <img
+                src={jerryLaughing}
+                alt="Jerry laughing"
+                loading="lazy"
+                className="w-full h-50 rounded"
+              />
+              <p className="text-center text-base uppercase font-bold pb-2">
+                You can't use hint in multiplayer mode
+              </p>
+            </PopoverContent>
+          </Popover>
+          <Button className="w-full" variant="highlight" onClick={() => setShowResignDialog(true)}>
+            Resign <Flag className="h-5 w-5 ml-1" />
+          </Button>
+          <Dialog>
+            <DialogTrigger>
+              <Button className="w-full" variant="super">
+                Settings <Settings className="h-5 w-5 ml-1" />
+              </Button>
+            </DialogTrigger>
+            <GameSettingsUI />
+          </Dialog>
+        </div>
 
-      <ResignDialog
-        open={showResignDialog}
-        onOpenChange={setShowResignDialog}
-        onConfirm={() => {
-          setShowResignDialog(false);
-          onResign?.();
-        }}
-      />
-      <div className="h-14" />
-    </GameInfoPanel>
+        <ResignDialog
+          open={showResignDialog}
+          onOpenChange={setShowResignDialog}
+          onConfirm={() => {
+            setShowResignDialog(false);
+            onResign?.();
+          }}
+        />
+      </GameInfoPanel>
+    </>
   );
 }
