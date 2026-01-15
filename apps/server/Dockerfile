@@ -20,7 +20,8 @@ COPY packages/config/package.json ./packages/config/
 
 # Install pnpm and dependencies
 RUN bun install -g pnpm@10.10.0
-RUN pnpm install --frozen-lockfile
+RUN corepack enable pnpm
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
 # Copy source code
 COPY apps/server ./apps/server

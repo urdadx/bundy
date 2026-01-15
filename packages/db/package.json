@@ -23,7 +23,6 @@
   },
   "devDependencies": {
     "@wordsearch/config": "workspace:*",
-    "bun-types": "latest",
     "drizzle-kit": "^0.31.8",
     "typescript": "catalog:"
   }
