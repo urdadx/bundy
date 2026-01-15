@@ -31,11 +31,28 @@ FROM oven/bun:1-slim AS production
 
 WORKDIR /app
 
-# 3. Copy the flattened node_modules from the root
-# Since we used 'hoisted', all dependencies (including @hono/trpc-server) 
-# are now physically inside this folder.
+# Copy workspace root files
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/pnpm-workspace.yaml ./pnpm-workspace.yaml
+
+# Copy node_modules (hoisted dependencies)
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/apps/server/dist ./dist
+
+# Copy the server's built output
+COPY --from=builder /app/apps/server/dist ./apps/server/dist
+COPY --from=builder /app/apps/server/package.json ./apps/server/package.json
+
+# Copy ALL built packages with their dist folders
+COPY --from=builder /app/packages/api/dist ./packages/api/dist
+COPY --from=builder /app/packages/api/package.json ./packages/api/package.json
+COPY --from=builder /app/packages/auth/dist ./packages/auth/dist
+COPY --from=builder /app/packages/auth/package.json ./packages/auth/package.json
+COPY --from=builder /app/packages/db/dist ./packages/db/dist
+COPY --from=builder /app/packages/db/package.json ./packages/db/package.json
+COPY --from=builder /app/packages/env/dist ./packages/env/dist
+COPY --from=builder /app/packages/env/package.json ./packages/env/package.json
+COPY --from=builder /app/packages/config/dist ./packages/config/dist
+COPY --from=builder /app/packages/config/package.json ./packages/config/package.json
 
 ENV NODE_ENV=production
 ENV PORT=3000
@@ -44,4 +61,4 @@ EXPOSE 3000
 RUN mkdir -p /data && chmod 0777 /data
 VOLUME ["/data"]
 
-CMD ["bun", "run", "dist/index.mjs"]
+CMD ["bun", "run", "apps/server/dist/index.mjs"]
