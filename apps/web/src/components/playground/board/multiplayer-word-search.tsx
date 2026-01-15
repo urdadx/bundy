@@ -44,7 +44,7 @@ export function MultiplayerWordSearch({
 
   const gridSize = puzzle.grid.length;
   const gap = gridSize <= 10 ? 4 : 2;
-  const padding = typeof window !== "undefined" && window.innerWidth < 768 ? 12 : 40;
+  const padding = typeof window !== "undefined" && window.innerWidth < 768 ? 13 : 40;
 
   const myPlayer = players.find((p) => p.id === myPlayerId);
   const isHost = myPlayer?.isHost ?? false;
