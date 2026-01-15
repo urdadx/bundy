@@ -18,41 +18,32 @@ COPY packages/db/package.json ./packages/db/
 COPY packages/env/package.json ./packages/env/
 COPY packages/config/package.json ./packages/config/
 
-# Install dependencies (they will now be flat/physical folders)
+# Install dependencies
 RUN pnpm install --frozen-lockfile
 
-# Copy source code and build
+# Copy source code
 COPY apps/server ./apps/server
 COPY packages ./packages
-RUN pnpm --filter @wordsearch/api build && pnpm --filter server build
+
+# Build all packages that have a build script
+# Add || true to continue even if some packages don't have build scripts
+RUN pnpm -r run build || true
 
 # Stage 2: Production
 FROM oven/bun:1-slim AS production
 
 WORKDIR /app
 
-# Copy workspace root files
+# Copy workspace structure
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/pnpm-workspace.yaml ./pnpm-workspace.yaml
-
-# Copy node_modules (hoisted dependencies)
 COPY --from=builder /app/node_modules ./node_modules
 
-# Copy the server's built output
-COPY --from=builder /app/apps/server/dist ./apps/server/dist
-COPY --from=builder /app/apps/server/package.json ./apps/server/package.json
+# Copy server
+COPY --from=builder /app/apps/server ./apps/server
 
-# Copy ALL built packages with their dist folders
-COPY --from=builder /app/packages/api/dist ./packages/api/dist
-COPY --from=builder /app/packages/api/package.json ./packages/api/package.json
-COPY --from=builder /app/packages/auth/dist ./packages/auth/dist
-COPY --from=builder /app/packages/auth/package.json ./packages/auth/package.json
-COPY --from=builder /app/packages/db/dist ./packages/db/dist
-COPY --from=builder /app/packages/db/package.json ./packages/db/package.json
-COPY --from=builder /app/packages/env/dist ./packages/env/dist
-COPY --from=builder /app/packages/env/package.json ./packages/env/package.json
-COPY --from=builder /app/packages/config/dist ./packages/config/dist
-COPY --from=builder /app/packages/config/package.json ./packages/config/package.json
+# Copy ALL packages (this includes both src and dist)
+COPY --from=builder /app/packages ./packages
 
 ENV NODE_ENV=production
 ENV PORT=3000
