@@ -3,7 +3,7 @@
 # ============================================
 
 # Stage 1: Build
-FROM oven/bun:1 AS builder
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
@@ -18,8 +18,9 @@ COPY packages/db/package.json ./packages/db/
 COPY packages/env/package.json ./packages/env/
 COPY packages/config/package.json ./packages/config/
 
-# Install dependencies using bun (fallback to npm if needed)
-RUN bun install --frozen-lockfile || npm install
+# Install pnpm and dependencies
+RUN npm install -g pnpm@10.10.0
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
 # Copy source code
 COPY apps/server ./apps/server
