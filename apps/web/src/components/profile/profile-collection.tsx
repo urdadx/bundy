@@ -3,6 +3,7 @@ import { Loader } from "@/components/loader";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 
 export const ProfileCollection = () => {
   const { data: inventory, isLoading, error } = useQuery(trpc.shop.getInventory.queryOptions());
@@ -36,16 +37,17 @@ export const ProfileCollection = () => {
         <h2 className="text-xl font-semibold text-slate-800 capitalize tracking-tight">
           Your Collection
         </h2>
-        {/* <button className="text-sky-500 font-black text-sm uppercase tracking-widest hover:opacity-70 transition-opacity">
-          View All
-        </button> */}
       </div>
 
       <div className="bg-white border-2 border-slate-200 rounded-2xl overflow-hidden">
         {inventory?.length === 0 ? (
           <div className="p-8 text-center">
             <p className="text-slate-500 text-lg font-bold">No items in your collection yet.</p>
-            <p className="text-slate-400 text-sm mt-2">Visit the shop to purchase items!</p>
+            <Link to="/arena/shop">
+              <button className="text-sky-500 mt-2 font-black text-sm uppercase tracking-widest hover:opacity-70 transition-opacity">
+                GO TO SHOP
+              </button>
+            </Link>
           </div>
         ) : (
           inventory?.map((inventoryItem, index) => (
@@ -86,6 +88,7 @@ export const ProfileCollection = () => {
           ))
         )}
       </div>
+      <div className="h-14" />
     </div>
   );
 };

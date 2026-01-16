@@ -5,6 +5,7 @@ import maleIdle from "@/assets/characters/male-idle.png";
 import RobotIdle from "@/assets/characters/robot_idle.png";
 import { normalizeAvatar } from "@/lib/avatars";
 import { AvatarChangeDialog } from "./avatar-change-dialog";
+import { env } from "@wordsearch/env/web";
 
 export function ProfileHeader() {
   const { data: session } = useSession();
@@ -12,14 +13,16 @@ export function ProfileHeader() {
 
   const normalizedAvatar = normalizeAvatar(session?.user?.image || "");
 
+  const isProduction = env.VITE_NODE_ENV === "production";
+
   let profileImage;
 
   if (normalizedAvatar.includes("rudeus-avatar.png")) {
-    profileImage = RobotIdle;
+    profileImage = isProduction ? `${env.VITE_R2_BUCKET}characters/robot_idle.png` : RobotIdle;
   } else if (normalizedAvatar.includes("jack-avatar.png")) {
-    profileImage = maleIdle;
+    profileImage = isProduction ? `${env.VITE_R2_BUCKET}characters/male-idle.png` : maleIdle;
   } else {
-    profileImage = femaleIdle;
+    profileImage = isProduction ? `${env.VITE_R2_BUCKET}characters/female-idle.png` : femaleIdle;
   }
 
   return (
