@@ -68,7 +68,7 @@ export default function ShopPage() {
         <div className="space-y-1">
           <h1 className="text-2xl font-black text-slate-800 uppercase tracking-tight">Shop</h1>
           <p className="text-base sm:text-lg font-bold text-slate-500">
-            Expand your collection by purchasing unique items!
+            Expand your collection with unique items!
           </p>
         </div>
       </div>

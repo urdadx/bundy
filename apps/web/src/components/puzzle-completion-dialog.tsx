@@ -13,6 +13,8 @@ import XpIcon from "@/assets/icons/xp.svg";
 import { motion } from "motion/react";
 import { Button } from "./ui/button";
 import { Link } from "@tanstack/react-router";
+import { useSoundEffect } from "@/hooks/use-sound-effect";
+import levelCompletedSound from "@/assets/sounds/level_completed.mp3";
 
 interface PuzzleCompletionDialogProps {
   open: boolean;
@@ -30,6 +32,7 @@ export function PuzzleCompletionDialog({
   onNextStage,
 }: PuzzleCompletionDialogProps) {
   const characterGender = localStorage.getItem("characterGender") as string;
+  useSoundEffect(levelCompletedSound, open);
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>

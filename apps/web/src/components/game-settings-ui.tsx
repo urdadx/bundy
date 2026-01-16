@@ -4,6 +4,7 @@ import { DialogContent, DialogHeader, DialogClose } from "./ui/dialog";
 import { Switch } from "./ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { useColorTheme } from "@/contexts/color-theme-context";
+import { useAudioSettings } from "@/contexts/audio-settings-context";
 
 const colorThemes = [
   { name: "Default", value: "default", color: "bg-slate-200" },
@@ -15,6 +16,8 @@ const colorThemes = [
 export function GameSettingsUI() {
   const [error, _setError] = useState<string | null>(null);
   const { colorTheme, setColorTheme } = useColorTheme();
+  const { musicEnabled, soundEffectsEnabled, setMusicEnabled, setSoundEffectsEnabled } =
+    useAudioSettings();
 
   return (
     <DialogContent className="border-none p-4 sm:p-6 w-200! sm:max-w-md">
@@ -28,7 +31,7 @@ export function GameSettingsUI() {
           <div className="space-y-8">
             <div className="flex items-center justify-between">
               <p className="font-black text-slate-700 uppercase text-sm tracking-wide">Music</p>
-              <Switch defaultChecked />
+              <Switch checked={musicEnabled} onCheckedChange={setMusicEnabled} />
             </div>
             <div className="flex items-center justify-between">
               <p className="font-black text-slate-700 uppercase text-sm tracking-wide">
@@ -52,7 +55,7 @@ export function GameSettingsUI() {
             </div>
             <div className="flex items-center justify-between">
               <p className="font-black text-slate-700 uppercase text-sm tracking-wide">Sound FX</p>
-              <Switch defaultChecked />
+              <Switch checked={soundEffectsEnabled} onCheckedChange={setSoundEffectsEnabled} />
             </div>
 
             {error && (

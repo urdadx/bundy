@@ -15,6 +15,9 @@ import { normalizeAvatar } from "@/lib/avatars";
 import trophy from "@/assets/rewards/trophy.png";
 import handshake from "@/assets/rewards/handshake.png";
 import sadBunny from "@/assets/rewards/sad.png";
+import { useSoundEffect } from "@/hooks/use-sound-effect";
+import levelCompletedSound from "@/assets/sounds/level_completed.mp3";
+import levelLostSound from "@/assets/sounds/level_lost.mp3";
 
 const PLAYER_COLORS = {
   host: "#1cb0f6",
@@ -55,6 +58,9 @@ export function MultiplayerResultDialog({
 
   const hasRequestedRematch = rematchRequestedBy === myPlayerId;
   const opponentRequestedRematch = rematchRequestedBy && rematchRequestedBy !== myPlayerId;
+
+  useSoundEffect(levelCompletedSound, open && result === "win");
+  useSoundEffect(levelLostSound, open && result === "lose");
 
   const getResultConfig = () => {
     switch (result) {

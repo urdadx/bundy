@@ -189,12 +189,6 @@ function getRandomWords(
 
 async function seed() {
   console.log("🌱 Starting database seed...");
-
-  console.log("🧹 Clearing existing data...");
-  await db.delete(stage);
-  await db.delete(world);
-  await db.delete(shopItem);
-
   const worlds = [
     {
       id: "meadow",
@@ -350,23 +344,23 @@ async function seed() {
       name: "Diamond of the Danes",
       description: "A rare diamond with mystical powers",
       image: "/rewards/ruby.png",
-      price: 30,
+      price: 70,
       category: "bundle",
       sortOrder: 3,
     },
     {
-      id: "hints-10",
-      name: "10 Hints",
-      description: "Get 10 hints to help you solve puzzles faster",
-      image: "/rewards/hint.png",
-      price: 5,
+      id: "treasure-zion",
+      name: "Treasure of Zion",
+      description: "Ancient treasure of untold value",
+      image: "/rewards/treasure.png",
+      price: 100,
       category: "powerup",
       sortOrder: 4,
     },
     {
       id: "heavyweight-champ",
-      name: "Heavyweight Champ",
-      description: "A mascot skin for the ultimate champion",
+      name: "Maestro",
+      description: "Belt of Don de Maestro",
       image: "/rewards/wrestler.png",
       price: 25,
       category: "cosmetic",
@@ -375,7 +369,7 @@ async function seed() {
     {
       id: "bracelet-cyclla",
       name: "Bracelet of Cyclla",
-      description: "A mystical bracelet from the ages",
+      description: "A mystical bracelet from the ages of yore",
       image: "/rewards/rare-bracelets.png",
       price: 60,
       category: "cosmetic",

@@ -5,16 +5,10 @@ type UnitProps = {
   unit: any;
   lessons: (any & { id: string; completed: boolean })[];
   activeLessonId: string;
-  activeLessonPercentage: number;
   variant?: ComponentProps<typeof LearnButton>["variant"];
 };
 
-export function BattleMap({
-  variant = "primary",
-  lessons,
-  activeLessonId,
-  activeLessonPercentage,
-}: UnitProps) {
+export function BattleMap({ variant = "primary", lessons, activeLessonId }: UnitProps) {
   const getStageTitle = (stageId: string): string => {
     const worldStageMap: Record<string, string[]> = {
       meadow: [
@@ -83,7 +77,6 @@ export function BattleMap({
                 title={getStageTitle(id)}
                 current={id === activeLessonId}
                 completed={completed}
-                percentage={activeLessonPercentage}
                 variant={variant}
               />
             </li>

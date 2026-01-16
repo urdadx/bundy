@@ -8,7 +8,7 @@ type LearnButtonProps = {
   title: string;
   index: number;
   totalCount: number;
-  percentage: number;
+  percentage?: number;
   locked?: boolean;
   current?: boolean;
   completed?: boolean;

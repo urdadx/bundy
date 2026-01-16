@@ -60,6 +60,7 @@ function RouteComponent() {
           activeLessonId={activeLesson?.id || ""}
           variant={(worldData?.color as any) || "primary"}
         />
+        <div className="h-10" />
       </div>
     </div>
   );

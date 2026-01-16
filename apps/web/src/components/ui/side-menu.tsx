@@ -24,9 +24,9 @@ export function SideMenu() {
           </div>
         </nav>
 
-        <div className="border-t-2 px-4 pt-4">
+        {/* <div className="border-t-2 px-4 pt-4">
           <SideMenuThemeButton />
-        </div>
+        </div> */}
       </div>
 
       <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t-2 py-2 flex justify-around z-50">

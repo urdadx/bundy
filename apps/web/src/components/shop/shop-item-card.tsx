@@ -31,7 +31,6 @@ export function ShopItemCard({ item, onBuy }: ShopItemCardProps) {
     setIsLoading(true);
     try {
       onBuy?.(item);
-      
     } catch (error) {
       console.error("Purchase failed:", error);
     } finally {
@@ -62,11 +61,7 @@ export function ShopItemCard({ item, onBuy }: ShopItemCardProps) {
           item.isLocked ? "grayscale" : "",
         )}
       >
-        <img
-          src={item.image}
-          alt={item.name}
-          className="h-32 w-32 object-contain relative z-10 drop-shadow-lg"
-        />
+        <img src={item.image} alt={item.name} className="h-32 w-32 object-contain relative z-10 " />
       </div>
 
       <div className="text-center mb-3 space-y-1">

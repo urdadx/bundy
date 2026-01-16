@@ -13,6 +13,8 @@ import { Button } from "./ui/button";
 import { useSession } from "@/lib/auth-client";
 import { normalizeAvatar } from "@/lib/avatars";
 import { Link } from "@tanstack/react-router";
+import { useSoundEffect } from "@/hooks/use-sound-effect";
+import levelLostSound from "@/assets/sounds/level_lost.mp3";
 
 interface PuzzleInCompletionDialogProps {
   open: boolean;
@@ -26,6 +28,7 @@ export function PuzzleInCompletionDialog({
   onReplayLevel,
 }: PuzzleInCompletionDialogProps) {
   const { data: session } = useSession();
+  useSoundEffect(levelLostSound, open);
 
   const normalizedAvatar = normalizeAvatar(session?.user?.image || "");
 

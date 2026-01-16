@@ -9,6 +9,7 @@ import { createRoom } from "@/lib/multiplayer/api";
 import type { GameSettings } from "@/lib/multiplayer/types";
 import { Loader2 } from "lucide-react";
 import { Switch } from "./ui/switch";
+import { useAudioSettings } from "@/contexts/audio-settings-context";
 
 const THEMES: Record<string, { name: string; icon: string }> = {
   animals: { name: "Animals", icon: "🐾" },
@@ -42,6 +43,7 @@ export function LobbyGameSettingsUI({
   onNavigateToLobby,
 }: LobbyGameSettingsUIProps) {
   const { data: session } = useSession();
+  const { musicEnabled, setMusicEnabled } = useAudioSettings();
   const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard">("medium");
   const [theme, setTheme] = useState("animals");
   const [isCreatingRoom, setIsCreatingRoom] = useState(false);
@@ -141,7 +143,7 @@ export function LobbyGameSettingsUI({
             </div>
             <div className="flex items-center justify-between">
               <p className="font-black text-slate-700 uppercase text-sm tracking-wide">Music</p>
-              <Switch defaultChecked />
+              <Switch checked={musicEnabled} onCheckedChange={setMusicEnabled} />
             </div>
 
             {error && (

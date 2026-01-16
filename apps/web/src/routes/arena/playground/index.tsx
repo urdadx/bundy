@@ -1,7 +1,7 @@
 import { WordSearch } from "@/components/playground/board/word-search";
 import { WordListPanel, GameActionsPanel } from "@/components/layouts/playground-layout";
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { z } from "zod";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { trpc, trpcClient } from "@/utils/trpc";
@@ -15,8 +15,10 @@ import { useHint } from "@/hooks/use-hint";
 import { ColorThemeProvider, useColorTheme } from "@/contexts/color-theme-context";
 
 import jackAvatar from "@/assets/avatars/jack-avatar.png";
+import backgroundMusic from "@/assets/sounds/background.mp3";
 import { CareerGameHeader } from "@/components/playground/career-game-header";
 import { GameTips } from "@/components/game-tips";
+import { useBackgroundAudio } from "@/hooks/use-background-audio";
 
 const playgroundSearchSchema = z.object({
   stageId: z.string().optional(),
@@ -36,6 +38,7 @@ function RouteComponent() {
   const { data: session } = useSession();
   const { colorTheme } = useColorTheme();
   const queryClient = useQueryClient();
+
   const [gameKey, setGameKey] = useState(0);
   const [foundWords, setFoundWords] = useState<Set<string>>(new Set());
   const [placedWords, setPlacedWords] = useState<string[]>([]);
@@ -196,6 +199,27 @@ function RouteComponent() {
       navigate({ to: "/arena/lessons" });
     }
   };
+
+  const isPlaying =
+    timeLeft > 0 && timeLeft < (stage?.timeLimit || 300) && foundWords.size < placedWords.length;
+  const { play } = useBackgroundAudio(backgroundMusic, isPlaying);
+
+  useEffect(() => {
+    const handleUserInteraction = async () => {
+      await play();
+
+      document.removeEventListener("click", handleUserInteraction);
+      document.removeEventListener("keydown", handleUserInteraction);
+    };
+
+    document.addEventListener("click", handleUserInteraction);
+    document.addEventListener("keydown", handleUserInteraction);
+
+    return () => {
+      document.removeEventListener("click", handleUserInteraction);
+      document.removeEventListener("keydown", handleUserInteraction);
+    };
+  }, [play]);
 
   if (stageLoading || statsLoading || worldLoading) {
     return (

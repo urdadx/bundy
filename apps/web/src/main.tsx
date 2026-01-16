@@ -3,6 +3,7 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 import ReactDOM from "react-dom/client";
 import { ThemeProvider } from "./components/theme-provider";
 import { ColorThemeProvider } from "./contexts/color-theme-context";
+import { AudioSettingsProvider } from "./contexts/audio-settings-context";
 import { routeTree } from "./routeTree.gen";
 import { queryClient, trpc } from "./utils/trpc";
 import { Loader } from "./components/loader";
@@ -34,7 +35,9 @@ if (!rootElement.innerHTML) {
   root.render(
     <ColorThemeProvider>
       <ThemeProvider>
-        <RouterProvider router={router} />
+        <AudioSettingsProvider>
+          <RouterProvider router={router} />
+        </AudioSettingsProvider>
       </ThemeProvider>
     </ColorThemeProvider>,
   );
