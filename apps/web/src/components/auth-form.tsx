@@ -7,6 +7,7 @@ import { CharacterStage } from "./character-stage";
 import femaleAvatar from "@/assets/avatars/marie-avatar.png";
 import maleAvatar from "@/assets/avatars/jack-avatar.png";
 import { DialogContent, DialogHeader, Dialog } from "./ui/dialog";
+import { env } from "@wordsearch/env/web";
 
 export const AuthForm = ({
   open,
@@ -22,6 +23,7 @@ export const AuthForm = ({
   const [selectedCharacter, setSelectedCharacter] = useState<"male" | "female" | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const isProduction = env.VITE_NODE_ENV === "production";
 
   const handleContinueToCharacter = () => {
     if (!battleName.trim()) return;
@@ -49,9 +51,15 @@ export const AuthForm = ({
         },
       });
 
+      const imageUrl = isProduction
+        ? `${env.VITE_R2_BUCKET}avatars/${selectedCharacter === "male" ? "jack-avatar.png" : "marie-avatar.png"}`
+        : selectedCharacter === "male"
+          ? maleAvatar
+          : femaleAvatar;
+
       await authClient.updateUser({
         name: battleName.trim(),
-        image: selectedCharacter === "male" ? maleAvatar : femaleAvatar,
+        image: imageUrl,
       });
 
       localStorage.setItem("characterGender", selectedCharacter);

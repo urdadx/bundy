@@ -7,6 +7,7 @@ import { CharacterStage } from "./character-stage";
 import femaleAvatar from "@/assets/avatars/marie-avatar.png";
 import maleAvatar from "@/assets/avatars/jack-avatar.png";
 import { AlertDialog, AlertDialogContent, AlertDialogHeader } from "./ui/alert-dialog";
+import { env } from "@wordsearch/env/web";
 
 export const LobbyAuthForm = ({
   open,
@@ -50,9 +51,16 @@ export const LobbyAuthForm = ({
         fetchOptions: {},
       });
 
+      const imageUrl =
+        env.VITE_NODE_ENV === "production"
+          ? `${env.VITE_R2_BUCKET}avatars/${selectedCharacter === "male" ? "jack-avatar.png" : "marie-avatar.png"}`
+          : selectedCharacter === "male"
+            ? maleAvatar
+            : femaleAvatar;
+
       await authClient.updateUser({
         name: battleName.trim(),
-        image: selectedCharacter === "male" ? maleAvatar : femaleAvatar,
+        image: imageUrl,
       });
 
       await authClient.getSession();

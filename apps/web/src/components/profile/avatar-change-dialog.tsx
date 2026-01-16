@@ -41,17 +41,17 @@ export function AvatarChangeDialog({ children }: AvatarChangeDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="max-w-[90vw] sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-xl text-center uppercase font-semibold">
-            Change Avatar
+          <DialogTitle className="text-lg sm:text-xl text-center uppercase font-semibold">
+            Change Player
           </DialogTitle>
         </DialogHeader>
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <AvatarChangeCarousel onIndexChange={setSelectedAvatarIndex} />
           <div className="w-full">
             <Button
-              className="w-full"
+              className="w-full text-sm sm:text-base"
               variant="primary"
               onClick={handleConfirmSelection}
               disabled={isUpdating}

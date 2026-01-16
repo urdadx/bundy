@@ -166,7 +166,7 @@ export function GameActionsPanel({ onRequestHint, canUseHint }: GameActionsPanel
         <div className="flex flex-col sm:flex-row gap-2">
           <HintButton onRequestHint={onRequestHint} canUseHint={canUseHint} />
           <Button className="w-full" onClick={() => setShowResignDialog(true)} variant="highlight">
-            Resign <Flag className="h-5 w-5 ml-1" />
+            Quit <Flag className="h-5 w-5 ml-1" />
           </Button>
           <Dialog>
             <DialogTrigger>
@@ -220,7 +220,7 @@ export function GameActionsPanelMultiplayer({ onResign }: { onResign?: () => voi
             </PopoverContent>
           </Popover>
           <Button className="w-full" variant="highlight" onClick={() => setShowResignDialog(true)}>
-            Resign <Flag className="h-5 w-5 ml-1" />
+            Quit <Flag className="h-5 w-5 ml-1" />
           </Button>
           <Dialog>
             <DialogTrigger>

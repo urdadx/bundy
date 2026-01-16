@@ -195,7 +195,6 @@ async function seed() {
   await db.delete(world);
   await db.delete(shopItem);
 
-  // Define all 6 worlds
   const worlds = [
     {
       id: "meadow",
@@ -257,7 +256,6 @@ async function seed() {
   await db.insert(world).values(worlds);
   console.log(`✅ Created ${worlds.length} worlds`);
 
-  // Create 5 stages for each world
   console.log("🎮 Creating stages for all worlds...");
   for (const w of worlds) {
     const worldStages = [
@@ -343,7 +341,7 @@ async function seed() {
       name: "Golden Heart",
       description: "Heart of the pale queen of the frost",
       image: "/rewards/rare-heart.png",
-      price: 5,
+      price: 10,
       category: "powerup",
       sortOrder: 2,
     },
@@ -370,7 +368,7 @@ async function seed() {
       name: "Heavyweight Champ",
       description: "A mascot skin for the ultimate champion",
       image: "/rewards/wrestler.png",
-      price: 10,
+      price: 25,
       category: "cosmetic",
       sortOrder: 5,
     },
@@ -379,7 +377,7 @@ async function seed() {
       name: "Bracelet of Cyclla",
       description: "A mystical bracelet from the ages",
       image: "/rewards/rare-bracelets.png",
-      price: 20,
+      price: 60,
       category: "cosmetic",
       sortOrder: 6,
     },

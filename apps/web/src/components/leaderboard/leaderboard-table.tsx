@@ -146,55 +146,59 @@ export function LeaderboardTable() {
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto space-y-6 mb-10">
-      <div className="flex flex-col items-center justify-center space-y-2">
-        <div className="relative">
-          <img src={trophyCabinet} alt="Trophy Cabinet" className="w-40 h-40 object-contain" />
+    <>
+      {" "}
+      <div className="w-full max-w-2xl mx-auto space-y-6">
+        <div className="flex flex-col items-center justify-center space-y-2">
+          <div className="relative">
+            <img src={trophyCabinet} alt="Trophy Cabinet" className="w-40 h-40 object-contain" />
+          </div>
+          <h2 className="text-3xl tracking-wider text-balance font-black text-slate-800">
+            Global Leaderboard
+          </h2>
+          <div className="flex items-center gap-2 text-sm font-bold">
+            <span className="text-slate-400 text-sm">Top players ranked by XP earned</span>
+          </div>
         </div>
-        <h2 className="text-3xl tracking-wider text-balance font-black text-slate-800">
-          Global Leaderboard
-        </h2>
-        <div className="flex items-center gap-2 text-sm font-bold">
-          <span className="text-slate-400 text-sm">Top players ranked by XP earned</span>
-        </div>
-      </div>
-      <div className="border-2 border-slate-200 rounded-2xl overflow-hidden">
-        <Table>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                  className={cn(
-                    "hover:bg-slate-50 border-slate-100 transition-colors cursor-pointer h-20",
-                    row.original.id === profile?.id && "bg-sky-50 hover:bg-sky-100",
-                  )}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="first:pl-6 last:pr-6 py-4">
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
+        <div className="border-2 border-slate-200 rounded-2xl overflow-hidden">
+          <Table>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                    className={cn(
+                      "hover:bg-slate-50 border-slate-100 transition-colors cursor-pointer h-20",
+                      row.original.id === profile?.id && "bg-sky-50 hover:bg-sky-100",
+                    )}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id} className="first:pl-6 last:pr-6 py-4">
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={columns.length} className="h-24 text-center text-lg">
+                    No players found.
+                  </TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center text-lg">
-                  No players found.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-      {hasNextPage && (
-        <div className="flex justify-center">
-          <Button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
-            {isFetchingNextPage ? "Loading..." : "Load More"}
-          </Button>
+              )}
+            </TableBody>
+          </Table>
         </div>
-      )}
-    </div>
+        {hasNextPage && (
+          <div className="flex justify-center">
+            <Button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
+              {isFetchingNextPage ? "Loading..." : "Load More"}
+            </Button>
+          </div>
+        )}
+      </div>
+      <div className="h-14" />
+    </>
   );
 }

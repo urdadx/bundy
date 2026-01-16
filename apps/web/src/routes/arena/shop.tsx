@@ -10,7 +10,7 @@ function RouteComponent() {
   return (
     <ArenaLayout>
       <ShopPage />
-      <div className="h-14" />
+      <div className="h-20" />
     </ArenaLayout>
   );
 }

@@ -12,6 +12,7 @@ import diamondIcon from "@/assets/icons/diamond.svg";
 import XpIcon from "@/assets/icons/xp.svg";
 import { motion } from "motion/react";
 import { Button } from "./ui/button";
+import { Link } from "@tanstack/react-router";
 
 interface PuzzleCompletionDialogProps {
   open: boolean;
@@ -38,7 +39,7 @@ export function PuzzleCompletionDialog({
             initial={{ scale: 0, rotate: -10 }}
             animate={{ scale: 1, rotate: 0 }}
             transition={{ type: "spring", damping: 12, stiffness: 100 }}
-            className="w-44 h-44 mb-4 mx-auto"
+            className="w-40 h-40 mb-2 mx-auto"
           >
             <img
               src={characterGender === "male" ? maleCheerImg : femaleCheerImg}
@@ -53,14 +54,14 @@ export function PuzzleCompletionDialog({
           </AlertDialogTitle>
 
           <AlertDialogDescription className="w-full">
-            <div className="w-full grid grid-cols-2 gap-4 mt-3">
+            <div className="w-full grid grid-cols-2 gap-4 mt-2">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
                 className="flex flex-row items-center justify-center gap-1 "
               >
-                <img src={XpIcon} alt="XP" className="w-8 h-8 mb-1" />
+                <img src={XpIcon} alt="XP" className="w-8 h-8" />
                 <div className="flex items-baseline gap-1">
                   <span className="text-xl font-black text-amber-600">+</span>
                   <span className="text-2xl font-black text-amber-600">{xpEarned}</span>
@@ -73,7 +74,7 @@ export function PuzzleCompletionDialog({
                 transition={{ delay: 0.5 }}
                 className="flex flex-row items-center justify-center gap-1 "
               >
-                <img src={diamondIcon} alt="Diamond" className="w-8 h-8 mb-1" />
+                <img src={diamondIcon} alt="Diamond" className="w-8 h-8 " />
                 <div className="flex items-baseline gap-1">
                   <span className="text-xl font-black text-sky-600">+</span>
                   <span className="text-2xl font-black text-sky-600">{diamondsEarned}</span>
@@ -83,10 +84,15 @@ export function PuzzleCompletionDialog({
           </AlertDialogDescription>
         </AlertDialogHeader>
 
-        <AlertDialogFooter className="mt-2">
-          <Button variant="primary" className="w-full mb-2" onClick={onNextStage}>
+        <AlertDialogFooter className="mt-1 flex flex-row sm:flex-col gap-2">
+          <Button variant="primary" className="w-full" onClick={onNextStage}>
             Next Level
           </Button>
+          <Link to="/arena/lessons">
+            <Button variant="ghost" className="w-full text-slate-400 hover:text-slate-600">
+              Go to Menu
+            </Button>
+          </Link>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

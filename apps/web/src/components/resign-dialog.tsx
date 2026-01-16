@@ -59,7 +59,7 @@ export function ResignDialog({ open, onOpenChange, onConfirm }: ResignDialogProp
 
         <AlertDialogFooter className="mt-4 flex flex-col gap-2 sm:flex-col">
           <Button variant="primary" className="w-full" onClick={onConfirm}>
-            Yes, Resign
+            Yes, Quit
           </Button>
           <Button
             variant="ghost"

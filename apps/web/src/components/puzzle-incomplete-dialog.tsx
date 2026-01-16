@@ -12,6 +12,7 @@ import { motion } from "motion/react";
 import { Button } from "./ui/button";
 import { useSession } from "@/lib/auth-client";
 import { normalizeAvatar } from "@/lib/avatars";
+import { Link } from "@tanstack/react-router";
 
 interface PuzzleInCompletionDialogProps {
   open: boolean;
@@ -61,10 +62,15 @@ export function PuzzleInCompletionDialog({
           </AlertDialogTitle>
         </AlertDialogHeader>
 
-        <AlertDialogFooter className="mt-2">
-          <Button variant="primary" className="w-full mb-2" onClick={onReplayLevel}>
+        <AlertDialogFooter className="mt-2 flex flex-row sm:flex-col gap-2">
+          <Button variant="primary" className="w-full" onClick={onReplayLevel}>
             Try again
           </Button>
+          <Link to="/arena/lessons">
+            <Button variant="ghost" className="w-full text-slate-400 hover:text-slate-600">
+              Go to Menu
+            </Button>
+          </Link>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

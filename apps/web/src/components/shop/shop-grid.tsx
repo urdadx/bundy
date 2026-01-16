@@ -16,12 +16,13 @@ export default function ShopPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: trpc.shop.getItems.queryKey() });
+      queryClient.invalidateQueries({ queryKey: trpc.user.getStats.queryKey() });
       toast.success(`Item Purchased!`, {
         description: "It has been added to your inventory.",
       });
     },
     onError: (error) => {
-      toast.warning("Purchase Failed", {
+      toast.info("Insufficient diamonds", {
         description: error.message || "Unable to complete purchase",
       });
     },

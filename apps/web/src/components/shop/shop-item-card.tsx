@@ -31,6 +31,7 @@ export function ShopItemCard({ item, onBuy }: ShopItemCardProps) {
     setIsLoading(true);
     try {
       onBuy?.(item);
+      
     } catch (error) {
       console.error("Purchase failed:", error);
     } finally {

@@ -34,11 +34,14 @@ export const LeagueProgress = ({ league, xpNeeded }: LeagueProgressProps) => {
                 {league} League
               </h2>
             </div>
-            <Link
-              to="/arena/leaderboard"
-              className="h-10 w-10 flex items-center justify-center rounded-xl bg-slate-50 border  border-slate-200 text-slate-400 cursor-pointer"
-            >
-              <ChevronRight size={20} strokeWidth={3} />
+            <Link to="/arena/leaderboard">
+              <button
+                className="h-10 w-10 flex items-center justify-center rounded-xl bg-slate-50 border  border-slate-200 text-slate-400 cursor-pointer"
+                type="button"
+                aria-label="Go to Leaderboard"
+              >
+                <ChevronRight size={20} strokeWidth={3} />
+              </button>
             </Link>
           </div>
 

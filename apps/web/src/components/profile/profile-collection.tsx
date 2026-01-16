@@ -36,15 +36,15 @@ export const ProfileCollection = () => {
         <h2 className="text-xl font-semibold text-slate-800 capitalize tracking-tight">
           Your Collection
         </h2>
-        <button className="text-sky-500 font-black text-sm uppercase tracking-widest hover:opacity-70 transition-opacity">
+        {/* <button className="text-sky-500 font-black text-sm uppercase tracking-widest hover:opacity-70 transition-opacity">
           View All
-        </button>
+        </button> */}
       </div>
 
       <div className="bg-white border-2 border-slate-200 rounded-2xl overflow-hidden">
         {inventory?.length === 0 ? (
           <div className="p-8 text-center">
-            <p className="text-slate-500 font-bold">No items in your collection yet.</p>
+            <p className="text-slate-500 text-lg font-bold">No items in your collection yet.</p>
             <p className="text-slate-400 text-sm mt-2">Visit the shop to purchase items!</p>
           </div>
         ) : (
