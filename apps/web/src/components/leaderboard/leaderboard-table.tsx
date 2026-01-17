@@ -102,15 +102,18 @@ export function LeaderboardTable() {
       ),
     );
 
-  const allItems = data?.pages.flatMap((page) => page?.items || []) || [];
-  const leaderboardData: LeaderboardEntry[] = React.useMemo(
-    () =>
-      allItems.map((item, index) => ({
-        ...item,
-        rank: index + 1,
-      })),
-    [allItems],
-  );
+  const leaderboardData = React.useMemo(() => {
+    const flatItems = data?.pages.flatMap((page) => page?.items || []) || [];
+
+    const uniqueItems = flatItems.filter(
+      (item, index, self) => index === self.findIndex((t) => t.id === item.id),
+    );
+
+    return uniqueItems.map((item, index) => ({
+      ...item,
+      rank: index + 1,
+    }));
+  }, [data]);
 
   const table = useReactTable({
     data: leaderboardData,
