@@ -21,7 +21,7 @@ export const GoogleSyncCard = () => {
     try {
       await signIn.social({
         provider: "google",
-        callbackURL: window.location.href,
+        callbackURL: `${window.location.origin}/auth/callback/google`,
       });
     } catch (error) {
       toast.warning("Failed to sign in with Google. Please try again.");
