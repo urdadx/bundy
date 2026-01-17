@@ -5,6 +5,7 @@ import type { trpc } from "@/utils/trpc";
 import { useTheme } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import "../index.css";
+import { seo } from "@/lib/seo";
 
 export interface RouterAppContext {
   trpc: typeof trpc;
@@ -20,13 +21,20 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
       },
       {
         name: "description",
-        content: "Multiplayer word search game for learning and fun!",
+        content: "Wordsearch adventure game for learning and fun!",
       },
+      ...seo({
+        title: "Bundy - Wordsearch adventure game",
+        description:
+          "Play Bundy, an exciting wordsearch adventure game that challenges your vocabulary and spelling skills while having fun!",
+        keywords: "wordsearch, adventure game, vocabulary, spelling, learning, fun",
+        image: "https://bundy.wordsearch.com/og.png",
+      }),
     ],
     links: [
       {
         rel: "icon",
-        href: "/favicon.ico",
+        href: "/favicon/favicon.ico",
       },
     ],
   }),
