@@ -61,14 +61,13 @@ function LobbyPage() {
   const [copiedLink, setCopiedLink] = useState(false);
   const avatarSrc = currentSession?.user?.image || "";
   const [selectedAvatar, setSelectedAvatar] = useState<AvatarId>(
-    avatarSrc.includes("marie-avatar") ? "marie-avatar.png" : "jack-avatar.png",
+    normalizeAvatar(avatarSrc),
   );
 
   useEffect(() => {
     if (roomId && currentSession?.user?.id && isAuthenticated) {
       connect();
-      const newAvatar = avatarSrc.includes("marie-avatar") ? "marie-avatar.png" : "jack-avatar.png";
-      setSelectedAvatar(newAvatar);
+      setSelectedAvatar(normalizeAvatar(avatarSrc));
     }
     return () => disconnect();
   }, [roomId, currentSession?.user?.id, isAuthenticated, connect, disconnect]);

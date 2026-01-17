@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { getAvatarSrc } from "@/lib/avatars";
+import { getAvatarSrc, normalizeAvatar } from "@/lib/avatars";
 
 interface GameHeaderProps {
   player1: {
@@ -29,14 +29,7 @@ export function MultiplayerGameHeader({ player1, player2, timeRemaining }: GameH
 
   const isLowTime = timeRemaining !== undefined && timeRemaining <= 60;
 
-  const normalizeAvatar = (avatar: string | undefined): string => {
-    if (!avatar) return "jack-avatar.png";
-    if (avatar.startsWith("data:")) return "jack-avatar.png";
-    const filename = avatar.split("/").pop()?.split("?")[0];
-    if (filename === "marie-avatar.png") return "marie-avatar.png";
-    if (filename === "rudeus-avatar.png") return "rudeus-avatar.png";
-    return "jack-avatar.png";
-  };
+
 
   return (
     <div className="w-full bg-white border-2 border-b-4 border-slate-200 rounded-xl p-3 sm:p-5">
