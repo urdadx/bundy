@@ -28,7 +28,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
         description:
           "Play Bundy, an exciting wordsearch adventure game that challenges your vocabulary and spelling skills while having fun!",
         keywords: "wordsearch, adventure game, vocabulary, spelling, learning, fun",
-        image: "https://bundy.wordsearch.com/og.png",
+        image: "https://bundy.urdadx.com/og.png",
       }),
     ],
     links: [
