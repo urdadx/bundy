@@ -31,8 +31,11 @@ export function MultiplayerGameHeader({ player1, player2, timeRemaining }: GameH
 
   const normalizeAvatar = (avatar: string | undefined): string => {
     if (!avatar) return "jack-avatar.png";
+    if (avatar.startsWith("data:")) return "jack-avatar.png";
     const filename = avatar.split("/").pop();
-    return filename || "jack-avatar.png";
+    if (filename === "marie-avatar.png") return "marie-avatar.png";
+    if (filename === "rudeus-avatar.png") return "rudeus-avatar.png";
+    return "jack-avatar.png";
   };
 
   return (

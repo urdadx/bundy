@@ -34,6 +34,7 @@ export function getAvatarSrc(avatarId: string | null | undefined): string {
 
 export function normalizeAvatar(avatar: string | undefined): AvatarId {
   if (!avatar) return "jack-avatar.png";
+  if (avatar.startsWith("data:")) return "jack-avatar.png";
   const filename = avatar.split("/").pop();
   if (filename === "marie-avatar.png") return "marie-avatar.png";
   if (filename === "rudeus-avatar.png") return "rudeus-avatar.png";
