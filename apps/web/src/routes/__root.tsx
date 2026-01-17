@@ -24,7 +24,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
         content: "Wordsearch adventure game for learning and fun!",
       },
       ...seo({
-        title: "Bundy - Wordsearch adventure game",
+        title: "Bundy - A wordsearch adventure game",
         description:
           "Play Bundy, an exciting wordsearch adventure game that challenges your vocabulary and spelling skills while having fun!",
         keywords: "wordsearch, adventure game, vocabulary, spelling, learning, fun",
