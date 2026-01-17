@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { ChatPanelMobile } from "@/components/playground/chat/chat-panel-mobile";
 import { sleep } from "@/lib/utils";
 import { ColorThemeProvider, useColorTheme } from "@/contexts/color-theme-context";
+import { useAudioSettings } from "@/contexts/audio-settings-context";
 import { useBackgroundAudio } from "@/hooks/use-background-audio";
 import backgroundMusic from "@/assets/sounds/background.mp3";
 
@@ -31,6 +32,7 @@ function MultiplayerGamePage() {
   const { roomId } = Route.useParams();
   const navigate = useNavigate();
   const { colorTheme } = useColorTheme();
+  const { musicEnabled } = useAudioSettings();
 
   const {
     room,
@@ -152,26 +154,12 @@ function MultiplayerGamePage() {
   }, [leaveRoom, navigate]);
 
   const isPlaying =
-    phase === "playing" && timeRemaining > 0 && foundWords.length < (puzzle?.words?.length ?? 0);
+    phase === "playing" &&
+    timeRemaining > 0 &&
+    foundWords.length < (puzzle?.words?.length ?? 0) &&
+    musicEnabled;
 
-  const { play } = useBackgroundAudio(backgroundMusic, isPlaying);
-
-  useEffect(() => {
-    const handleUserInteraction = async () => {
-      await play();
-
-      document.removeEventListener("click", handleUserInteraction);
-      document.removeEventListener("keydown", handleUserInteraction);
-    };
-
-    document.addEventListener("click", handleUserInteraction);
-    document.addEventListener("keydown", handleUserInteraction);
-
-    return () => {
-      document.removeEventListener("click", handleUserInteraction);
-      document.removeEventListener("keydown", handleUserInteraction);
-    };
-  }, [play]);
+  useBackgroundAudio(backgroundMusic, isPlaying);
 
   if (isConnecting) {
     return (

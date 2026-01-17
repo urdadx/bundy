@@ -1,7 +1,7 @@
 import { WordSearch } from "@/components/playground/board/word-search";
 import { WordListPanel, GameActionsPanel } from "@/components/layouts/playground-layout";
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { z } from "zod";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { trpc, trpcClient } from "@/utils/trpc";
@@ -13,6 +13,7 @@ import { useGameTimer } from "@/hooks/use-game-timer";
 import { useUnmount } from "@/hooks/use-unmount";
 import { useHint } from "@/hooks/use-hint";
 import { ColorThemeProvider, useColorTheme } from "@/contexts/color-theme-context";
+import { useAudioSettings } from "@/contexts/audio-settings-context";
 
 import jackAvatar from "@/assets/avatars/jack-avatar.png";
 import backgroundMusic from "@/assets/sounds/background.mp3";
@@ -37,6 +38,7 @@ function RouteComponent() {
   const { stageId } = Route.useSearch();
   const { data: session } = useSession();
   const { colorTheme } = useColorTheme();
+  const { musicEnabled } = useAudioSettings();
   const queryClient = useQueryClient();
 
   const [gameKey, setGameKey] = useState(0);
@@ -200,26 +202,8 @@ function RouteComponent() {
     }
   };
 
-  const isPlaying =
-    timeLeft > 0 && timeLeft < (stage?.timeLimit || 300) && foundWords.size < placedWords.length;
-  const { play } = useBackgroundAudio(backgroundMusic, isPlaying);
-
-  useEffect(() => {
-    const handleUserInteraction = async () => {
-      await play();
-
-      document.removeEventListener("click", handleUserInteraction);
-      document.removeEventListener("keydown", handleUserInteraction);
-    };
-
-    document.addEventListener("click", handleUserInteraction);
-    document.addEventListener("keydown", handleUserInteraction);
-
-    return () => {
-      document.removeEventListener("click", handleUserInteraction);
-      document.removeEventListener("keydown", handleUserInteraction);
-    };
-  }, [play]);
+  const isPlaying = timeLeft > 0 && foundWords.size < placedWords.length && musicEnabled;
+  useBackgroundAudio(backgroundMusic, isPlaying);
 
   if (stageLoading || statsLoading || worldLoading) {
     return (

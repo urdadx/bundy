@@ -1,11 +1,11 @@
-import { type ComponentProps, useState } from "react";
+import { type ComponentProps, useEffect, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { ButtonBase } from "./button-base";
 import { CurrentButton } from "./current-buttons";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 
 type RenderTriggerProps = {
   variant: ComponentProps<typeof ButtonBase>["variant"];
@@ -82,7 +82,7 @@ export function ActiveButton({
         <PopoverTrigger>
           {renderTrigger({ variant, current, completed, percentage, ariaLabel })}
         </PopoverTrigger>
-        <PopoverContent className="border-2 ease-in-out duration-75 mt-5 rounded-xl shadow-none">
+        <PopoverContent className="border-2 ease-in-out duration-75 mt-2 rounded-xl shadow-none">
           <ActiveButtonContent
             variant={variant}
             title={title}

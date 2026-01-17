@@ -61,28 +61,24 @@ export function MultiplayerResultDialog({
 
   useSoundEffect(levelCompletedSound, open && result === "win");
   useSoundEffect(levelLostSound, open && result === "lose");
+  useSoundEffect(levelCompletedSound, open && result === "draw");
 
   const getResultConfig = () => {
     switch (result) {
       case "win":
         return {
           title: "YOU WON",
-          bgGradient: "bg-gradient-to-b from-yellow-50 to-amber-50",
-          accentColor: "text-yellow-600",
           icon: trophy,
         };
       case "lose":
         return {
           title: "YOU LOST ",
           bgGradient: "bg-gradient-to-b from-slate-50 to-gray-50",
-          accentColor: "text-slate-600",
           icon: sadBunny,
         };
       case "draw":
         return {
           title: "IT'S A DRAW",
-          bgGradient: "bg-gradient-to-b from-blue-50 to-cyan-50",
-          accentColor: "text-blue-600",
           icon: handshake,
         };
     }
@@ -178,7 +174,7 @@ export function MultiplayerResultDialog({
           </motion.div>
         )}
 
-        <AlertDialogFooter className=" flex gap-3">
+        <AlertDialogFooter className="flex flex-col sm:flex-row gap-3">
           <Button
             variant="default"
             size="lg"

@@ -87,7 +87,7 @@ export function PuzzleCompletionDialog({
           </AlertDialogDescription>
         </AlertDialogHeader>
 
-        <AlertDialogFooter className="mt-1 flex flex-row sm:flex-col gap-2">
+        <AlertDialogFooter className="mt-1 flex flex-col sm:flex-col gap-2">
           <Button variant="primary" className="w-full" onClick={onNextStage}>
             Next Level
           </Button>

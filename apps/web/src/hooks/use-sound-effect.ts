@@ -1,74 +1,38 @@
 import { useEffect, useRef } from "react";
+import { Howl } from "howler";
+import { useAudioSettings } from "@/contexts/audio-settings-context";
 
 export function useSoundEffect(audioPath: string, trigger: boolean) {
-  const audioContextRef = useRef<AudioContext | null>(null);
-  const audioBufferRef = useRef<AudioBuffer | null>(null);
+  const { soundEffectsEnabled } = useAudioSettings();
+  const howlRef = useRef<Howl | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const initAudio = async () => {
-      try {
-        if (!audioContextRef.current) {
-          audioContextRef.current = new (
-            window.AudioContext || (window as any).webkitAudioContext
-          )();
-        }
-
-        const response = await fetch(audioPath);
-        const arrayBuffer = await response.arrayBuffer();
-        audioBufferRef.current = await audioContextRef.current.decodeAudioData(arrayBuffer);
-      } catch (error) {
-        console.error("Failed to load sound effect:", error);
-      }
-    };
-
-    initAudio();
+    howlRef.current = new Howl({
+      src: [audioPath],
+      volume: 0.5,
+      preload: true,
+    });
 
     return () => {
-      if (audioContextRef.current) {
-        audioContextRef.current.close();
+      if (howlRef.current) {
+        howlRef.current.unload();
       }
     };
   }, [audioPath]);
 
   useEffect(() => {
-    if (!audioContextRef.current || !audioBufferRef.current || !trigger) return;
+    if (!howlRef.current || !trigger || !soundEffectsEnabled) return;
 
-    try {
-      const source = audioContextRef.current.createBufferSource();
-      source.buffer = audioBufferRef.current;
-      
-      const gainNode = audioContextRef.current.createGain();
-      gainNode.gain.value = 0.5;
-      
-      source.connect(gainNode);
-      gainNode.connect(audioContextRef.current.destination);
-      
-      source.start(0);
-    } catch (error) {
-      console.error("Failed to play sound effect:", error);
-    }
-  }, [trigger]);
+    howlRef.current.play();
+  }, [trigger, soundEffectsEnabled]);
 
   return {
     play: () => {
-      if (!audioContextRef.current || !audioBufferRef.current) return;
-      
-      try {
-        const source = audioContextRef.current.createBufferSource();
-        source.buffer = audioBufferRef.current;
-        
-        const gainNode = audioContextRef.current.createGain();
-        gainNode.gain.value = 0.5;
-        
-        source.connect(gainNode);
-        gainNode.connect(audioContextRef.current.destination);
-        
-        source.start(0);
-      } catch (error) {
-        console.error("Failed to play sound effect:", error);
+      if (howlRef.current && soundEffectsEnabled) {
+        howlRef.current.play();
       }
-    }
+    },
   };
 }

@@ -178,6 +178,9 @@ importers:
       embla-carousel-react:
         specifier: ^8.6.0
         version: 8.6.0(react@19.2.3)
+      howler:
+        specifier: ^2.2.4
+        version: 2.2.4
       lucide-react:
         specifier: ^0.473.0
         version: 0.473.0(react@19.2.3)
@@ -251,6 +254,9 @@ importers:
       '@tanstack/router-plugin':
         specifier: ^1.141.1
         version: 1.143.6(@tanstack/react-router@1.143.6(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(vite@6.4.1(@types/node@22.19.3)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0))
+      '@types/howler':
+        specifier: ^2.2.12
+        version: 2.2.12
       '@types/node':
         specifier: ^22.13.13
         version: 22.19.3
@@ -2351,6 +2357,9 @@ packages:
   '@types/hast@3.0.4':
     resolution: {integrity: sha512-WPs+bbQw5aCj+x6laNGWLH3wviHtoCv/P3+otBhbOhJgG8qtpdAMlTCxLtsTWA7LH1Oh/bFCHsBn0TPS5m30EQ==}
 
+  '@types/howler@2.2.12':
+    resolution: {integrity: sha512-hy769UICzOSdK0Kn1FBk4gN+lswcj1EKRkmiDtMkUGvFfYJzgaDXmVXkSShS2m89ERAatGIPnTUlp2HhfkVo5g==}
+
   '@types/katex@0.16.7':
     resolution: {integrity: sha512-HMwFiRujE5PjrgwHQ25+bsLJgowjGjm5Z8FVSf0N6PwgJrwxH0QxzHYDcKsTfV3wva0vzrpqMTJS2jXPr5BMEQ==}
 
@@ -3504,6 +3513,9 @@ packages:
 
   hookable@5.5.3:
     resolution: {integrity: sha512-Yc+BQe8SvoXH1643Qez1zqLRmbA5rCL+sSmk6TVos0LWVfNIB7PGncdlId77WzLGSIB5KaWgTaNTs2lNVEI6VQ==}
+
+  howler@2.2.4:
+    resolution: {integrity: sha512-iARIBPgcQrwtEr+tALF+rapJ8qSc+Set2GJQl7xT1MQzWaVkFebdJhR3alVlSiUf5U7nAANKuj3aWpwerocD5w==}
 
   html-url-attributes@3.0.1:
     resolution: {integrity: sha512-ol6UPyBWqsrO6EJySPz2O7ZSr856WDrEzM5zMqp+FJJLGMW35cLYmmZnl0vztAZxRUoNZJFTCohfjuIJ8I4QBQ==}
@@ -6982,6 +6994,8 @@ snapshots:
     dependencies:
       '@types/unist': 3.0.3
 
+  '@types/howler@2.2.12': {}
+
   '@types/katex@0.16.7': {}
 
   '@types/mdast@4.0.4':
@@ -8182,6 +8196,8 @@ snapshots:
   hono@4.11.1: {}
 
   hookable@5.5.3: {}
+
+  howler@2.2.4: {}
 
   html-url-attributes@3.0.1: {}
 

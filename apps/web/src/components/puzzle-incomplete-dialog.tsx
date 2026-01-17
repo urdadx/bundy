@@ -65,7 +65,7 @@ export function PuzzleInCompletionDialog({
           </AlertDialogTitle>
         </AlertDialogHeader>
 
-        <AlertDialogFooter className="mt-2 flex flex-row sm:flex-col gap-2">
+        <AlertDialogFooter className="mt-2 flex flex-col sm:flex-col gap-2">
           <Button variant="primary" className="w-full" onClick={onReplayLevel}>
             Try again
           </Button>
