@@ -68,7 +68,7 @@ export const AuthForm = ({
         to: "/choose",
       });
     } catch (error) {
-      console.error("Failed to create guest account:", error);
+      console.error("Failed to create guest account ", error);
     } finally {
       setIsLoading(false);
     }
