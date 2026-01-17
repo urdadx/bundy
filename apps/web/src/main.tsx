@@ -11,7 +11,11 @@ import { Loader } from "./components/loader";
 const router = createRouter({
   routeTree,
   defaultPreload: "intent",
-  defaultPendingComponent: () => <Loader />,
+  defaultPendingComponent: () => (
+    <div className="flex items-center justify-center min-h-screen">
+      <Loader />
+    </div>
+  ),
   context: { trpc, queryClient },
   Wrap: function WrapComponent({ children }: { children: React.ReactNode }) {
     return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;

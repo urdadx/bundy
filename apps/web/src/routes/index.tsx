@@ -25,7 +25,7 @@ function HomeComponent() {
   if (!isAuthenticated) {
     return (
       <div
-        className="min-h-screen flex flex-col"
+        className="min-h-screen items-center justify-center flex flex-col"
         style={{
           backgroundImage: `url(${backgroundImage})`,
           backgroundSize: "cover",
