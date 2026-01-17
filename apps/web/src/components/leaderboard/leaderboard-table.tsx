@@ -118,6 +118,7 @@ export function LeaderboardTable() {
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     onSortingChange: setSorting,
+    getRowId: (row) => row.id,
     state: {
       sorting,
     },
@@ -170,7 +171,7 @@ export function LeaderboardTable() {
                     data-state={row.getIsSelected() && "selected"}
                     className={cn(
                       "hover:bg-slate-50 border-slate-100 transition-colors cursor-pointer h-20",
-                      row.original.id === profile?.id && "bg-sky-50 hover:bg-sky-100",
+                      row.original?.id === profile?.id && "bg-sky-50 hover:bg-sky-100",
                     )}
                   >
                     {row.getVisibleCells().map((cell) => (
