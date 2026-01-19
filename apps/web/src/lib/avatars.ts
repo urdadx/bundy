@@ -9,17 +9,17 @@ export const AVATARS = [
   {
     id: "jack-avatar.png",
     name: "Jack",
-    src: isProduction ? `${env.VITE_R2_BUCKET}avatars/jack-avatar.png` : jackAvatar,
+    src: isProduction ? `${env.VITE_R2_BUCKET}/avatars/jack-avatar.png` : jackAvatar,
   },
   {
     id: "marie-avatar.png",
     name: "Marie",
-    src: isProduction ? `${env.VITE_R2_BUCKET}avatars/marie-avatar.png` : marieAvatar,
+    src: isProduction ? `${env.VITE_R2_BUCKET}/avatars/marie-avatar.png` : marieAvatar,
   },
   {
     id: "rudeus-avatar.png",
     name: "Rudeus",
-    src: isProduction ? `${env.VITE_R2_BUCKET}avatars/rudeus-avatar.png` : rudeusAvatar,
+    src: isProduction ? `${env.VITE_R2_BUCKET}/avatars/rudeus-avatar.png` : rudeusAvatar,
   },
 ] as const;
 
@@ -28,7 +28,7 @@ export type AvatarId = (typeof AVATARS)[number]["id"];
 export function getAvatarSrc(avatarId: string | null | undefined): string {
   const avatar = AVATARS.find((a) => a.id === avatarId);
   return (
-    avatar?.src ?? (isProduction ? `${env.VITE_R2_BUCKET}avatars/jack-avatar.png` : jackAvatar)
+    avatar?.src ?? (isProduction ? `${env.VITE_R2_BUCKET}/avatars/jack-avatar.png` : jackAvatar)
   );
 }
 

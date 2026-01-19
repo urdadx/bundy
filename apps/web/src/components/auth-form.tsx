@@ -52,7 +52,7 @@ export const AuthForm = ({
       });
 
       const imageUrl = isProduction
-        ? `${env.VITE_R2_BUCKET}avatars/${selectedCharacter === "male" ? "jack-avatar.png" : "marie-avatar.png"}`
+        ? `${env.VITE_R2_BUCKET}/avatars/${selectedCharacter === "male" ? "jack-avatar.png" : "marie-avatar.png"}`
         : selectedCharacter === "male"
           ? maleAvatar
           : femaleAvatar;

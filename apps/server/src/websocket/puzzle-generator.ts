@@ -160,7 +160,7 @@ const DIFFICULTY_CONFIG: Record<
   medium: {
     minWordLength: 4,
     maxWordLength: 10,
-    directions: ["horizontal", "vertical", "diagonal"],
+    directions: ["horizontal", "vertical", "diagonal", "horizontal-reverse"],
   },
   hard: {
     minWordLength: 5,
@@ -275,7 +275,6 @@ export function generatePuzzle(settings: GameSettings): PuzzleData {
   const { theme, difficulty, gridSize, wordCount } = settings;
   const diffConfig = DIFFICULTY_CONFIG[difficulty] ?? DIFFICULTY_CONFIG.medium!;
 
-  // Initialize empty grid
   const grid: string[][] = Array(gridSize)
     .fill(null)
     .map(() => Array(gridSize).fill(""));
@@ -301,7 +300,7 @@ export function generatePuzzle(settings: GameSettings): PuzzleData {
   const directions = diffConfig.directions as Direction[];
   const maxAttempts = 100;
 
-  // Try to place words
+  // Place words
   for (const word of shuffled) {
     if (placedWords.length >= wordCount) break;
 

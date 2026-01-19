@@ -29,7 +29,7 @@ export function AvatarChangeDialog({ children }: AvatarChangeDialogProps) {
       const selectedAvatar = AVATARS[selectedAvatarIndex];
       const imageUrl =
         env.VITE_NODE_ENV === "production"
-          ? `${env.VITE_R2_BUCKET}avatars/${selectedAvatar.id}`
+          ? `${env.VITE_R2_BUCKET}/avatars/${selectedAvatar.id}`
           : selectedAvatar.src;
       await authClient.updateUser({
         image: imageUrl,

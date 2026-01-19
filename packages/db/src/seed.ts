@@ -188,7 +188,13 @@ function getRandomWords(
 }
 
 async function seed() {
+  console.log("🧹 Clearing existing data...");
+  await db.delete(stage);
+  await db.delete(world);
+  await db.delete(shopItem);
+
   console.log("🌱 Starting database seed...");
+
   const worlds = [
     {
       id: "meadow",
@@ -260,7 +266,7 @@ async function seed() {
         difficulty: "easy",
         gridSize: 8,
         wordCount: 5,
-        timeLimit: 180,
+        timeLimit: 60,
         xpReward: 10,
         diamondReward: 5,
         words: getRandomWords(w.theme, 5, 8, "easy"),
@@ -272,7 +278,7 @@ async function seed() {
         difficulty: "easy",
         gridSize: 10,
         wordCount: 6,
-        timeLimit: 240,
+        timeLimit: 90,
         xpReward: 15,
         diamondReward: 8,
         words: getRandomWords(w.theme, 6, 10, "easy"),
@@ -284,7 +290,7 @@ async function seed() {
         difficulty: "medium",
         gridSize: 10,
         wordCount: 7,
-        timeLimit: 300,
+        timeLimit: 120,
         xpReward: 20,
         diamondReward: 10,
         words: getRandomWords(w.theme, 7, 10, "medium"),
@@ -296,7 +302,7 @@ async function seed() {
         difficulty: "medium",
         gridSize: 11,
         wordCount: 8,
-        timeLimit: 360,
+        timeLimit: 150,
         xpReward: 25,
         diamondReward: 12,
         words: getRandomWords(w.theme, 8, 11, "medium"),
@@ -308,7 +314,7 @@ async function seed() {
         difficulty: "hard",
         gridSize: 11,
         wordCount: 10,
-        timeLimit: 420,
+        timeLimit: 180,
         xpReward: 30,
         diamondReward: 15,
         words: getRandomWords(w.theme, 10, 11, "hard"),

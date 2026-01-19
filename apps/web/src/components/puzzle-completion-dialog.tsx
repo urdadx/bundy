@@ -9,12 +9,15 @@ import {
 import maleCheerImg from "@/assets/characters/male-cheer.png";
 import femaleCheerImg from "@/assets/characters/female-cheer.png";
 import diamondIcon from "@/assets/icons/diamond.svg";
+import RobotCheer from "@/assets/characters/robot_cheer.png";
 import XpIcon from "@/assets/icons/xp.svg";
 import { motion } from "motion/react";
 import { Button } from "./ui/button";
 import { Link } from "@tanstack/react-router";
 import { useSoundEffect } from "@/hooks/use-sound-effect";
 import levelCompletedSound from "@/assets/sounds/level_completed.mp3";
+import { useSession } from "@/lib/auth-client";
+import { normalizeAvatar } from "@/lib/avatars";
 
 interface PuzzleCompletionDialogProps {
   open: boolean;
@@ -31,7 +34,20 @@ export function PuzzleCompletionDialog({
   diamondsEarned,
   onNextStage,
 }: PuzzleCompletionDialogProps) {
-  const characterGender = localStorage.getItem("characterGender") as string;
+  const { data: session } = useSession();
+
+  const normalizedAvatar = normalizeAvatar(session?.user?.image || "");
+
+  let profileImage;
+
+  if (normalizedAvatar.includes("rudeus-avatar.png")) {
+    profileImage = RobotCheer;
+  } else if (normalizedAvatar.includes("jack-avatar.png")) {
+    profileImage = maleCheerImg;
+  } else {
+    profileImage = femaleCheerImg;
+  }
+
   useSoundEffect(levelCompletedSound, open);
 
   return (
@@ -45,7 +61,7 @@ export function PuzzleCompletionDialog({
             className="w-40 h-40 mb-2 mx-auto"
           >
             <img
-              src={characterGender === "male" ? maleCheerImg : femaleCheerImg}
+              src={profileImage}
               alt="Celebration"
               className="w-full h-full object-contain "
               loading="lazy"
