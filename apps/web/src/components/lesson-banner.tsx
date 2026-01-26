@@ -22,6 +22,8 @@ export function BattleBanner({ name, color, description, stageId, order }: Battl
       golden: "bg-[#ffc800]",
       locked: "bg-[#e5e5e5]",
     }[color || "primary"] || "bg-[#58cc02]";
+    
+    const navigate = useRouter()
 
   return (
     <header
@@ -29,7 +31,7 @@ export function BattleBanner({ name, color, description, stageId, order }: Battl
     >
       <div className="space-y-1">
         <div className="flex items-center gap-2">
-          <MoveLeftIcon onClick={() => window.history.back()} className="size-5" />
+          <MoveLeftIcon onClick={() => navigate({ to: "/arena/lessons"})} className="size-5" />
           <h3 className="text-sm uppercase font-bold text-white/90">
             World {order || 1}: <span className="uppercase">{name}</span>
           </h3>
