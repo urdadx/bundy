@@ -157,7 +157,6 @@ const THEME_WORDS = {
   ],
 };
 
-// Add difficulty constraints matching the word search generator
 const DIFFICULTY_CONFIG = {
   easy: { minWordLength: 4, maxWordLength: 8 },
   medium: { minWordLength: 4, maxWordLength: 10 },
@@ -174,7 +173,6 @@ function getRandomWords(
   const diffConfig =
     DIFFICULTY_CONFIG[difficulty as keyof typeof DIFFICULTY_CONFIG] || DIFFICULTY_CONFIG.easy;
 
-  // Filter by both grid size AND difficulty constraints
   const validWords = words.filter(
     (word) =>
       word.length >= diffConfig.minWordLength &&
