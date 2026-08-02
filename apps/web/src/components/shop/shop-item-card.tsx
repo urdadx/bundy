@@ -61,7 +61,11 @@ export function ShopItemCard({ item, onBuy }: ShopItemCardProps) {
           item.isLocked ? "grayscale" : "",
         )}
       >
-        <img src={item.image} alt={item.name} className="h-32 w-32 object-contain relative z-10 " />
+        <img
+          src={item.image.replace(/^(\/rewards\/.*)\.png$/, "$1.avif")}
+          alt={item.name}
+          className="h-32 w-32 object-contain relative z-10 "
+        />
       </div>
 
       <div className="text-center mb-3 space-y-1">

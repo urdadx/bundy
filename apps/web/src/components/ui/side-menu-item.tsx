@@ -1,30 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "@tanstack/react-router";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import heartIcon from "@/assets/icons/heart.svg";
-import leaderboardIcon from "@/assets/icons/leaderboard.svg";
-import learnIcon from "@/assets/icons/learn.svg";
-import loaderIcon from "@/assets/icons/loader.svg";
-import questsIcon from "@/assets/icons/quests.svg";
-import shopIcon from "@/assets/icons/shop.svg";
-import superIcon from "@/assets/icons/super.svg";
-import xpIcon from "@/assets/icons/xp.svg";
 import { useSession } from "@/lib/auth-client";
-
-const iconMap = {
-  heart: heartIcon,
-  leaderboard: leaderboardIcon,
-  learn: learnIcon,
-  loader: loaderIcon,
-  quests: questsIcon,
-  shop: shopIcon,
-  super: superIcon,
-  xp: xpIcon,
-};
 
 type SideMenuItemProps = {
   label: string;
-  icon?: keyof typeof iconMap;
+  icon?: string;
   href: any;
   hideLabel?: boolean;
   isProfile?: boolean;
@@ -64,7 +45,7 @@ export function SideMenuItem({ href, icon, label, hideLabel, isProfile }: SideMe
               <img
                 loading="lazy"
                 className="object-cover"
-                src={iconMap[icon as keyof typeof iconMap]}
+                src={icon}
                 alt={`${label} icon`}
               />
             </span>

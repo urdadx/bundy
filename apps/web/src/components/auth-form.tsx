@@ -4,8 +4,8 @@ import { authClient } from "@/lib/auth-client";
 import { motion, AnimatePresence } from "motion/react";
 import { NameStage } from "./name-stage";
 import { CharacterStage } from "./character-stage";
-import femaleAvatar from "@/assets/avatars/marie-avatar.png";
-import maleAvatar from "@/assets/avatars/jack-avatar.png";
+import femaleAvatar from "@/assets/avatars/marie-avatar.avif";
+import maleAvatar from "@/assets/avatars/jack-avatar.avif";
 import { DialogContent, DialogHeader, Dialog } from "./ui/dialog";
 import { env } from "@wordsearch/env/web";
 
@@ -52,7 +52,7 @@ export const AuthForm = ({
       });
 
       const imageUrl = isProduction
-        ? `${env.VITE_R2_BUCKET}/avatars/${selectedCharacter === "male" ? "jack-avatar.png" : "marie-avatar.png"}`
+        ? `${env.VITE_R2_BUCKET}/avatars/${selectedCharacter === "male" ? "jack-avatar.avif" : "marie-avatar.avif"}`
         : selectedCharacter === "male"
           ? maleAvatar
           : femaleAvatar;

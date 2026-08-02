@@ -1,8 +1,8 @@
 import { Edit2, Calendar } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
-import femaleIdle from "@/assets/characters/female-idle.png";
-import maleIdle from "@/assets/characters/male-idle.png";
-import RobotIdle from "@/assets/characters/robot_idle.png";
+import femaleIdle from "@/assets/characters/female-idle.avif";
+import maleIdle from "@/assets/characters/male-idle.avif";
+import RobotIdle from "@/assets/characters/robot_idle.avif";
 import { normalizeAvatar } from "@/lib/avatars";
 import { AvatarChangeDialog } from "./avatar-change-dialog";
 
@@ -14,9 +14,9 @@ export function ProfileHeader() {
 
   let profileImage;
 
-  if (normalizedAvatar.includes("rudeus-avatar.png")) {
+  if (normalizedAvatar.includes("rudeus-avatar.avif")) {
     profileImage = RobotIdle;
-  } else if (normalizedAvatar.includes("jack-avatar.png")) {
+  } else if (normalizedAvatar.includes("jack-avatar.avif")) {
     profileImage = maleIdle;
   } else {
     profileImage = femaleIdle;

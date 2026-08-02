@@ -74,7 +74,7 @@ export function LobbyGameSettingsUI({
       const result = await createRoom({
         odId: session.user.id,
         odName: session.user.name || "Player",
-        odAvatar: (session.user as any).avatar || "jack-avatar.png",
+        odAvatar: (session.user as any).avatar || "jack-avatar.avif",
         settings,
       });
 

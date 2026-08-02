@@ -3,8 +3,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { AuthForm } from "@/components/auth-form";
 import { authClient } from "@/lib/auth-client";
-import backgroundImage from "@/assets/background/backgroundCastles.png";
-import twoPlayersImage from "@/assets/characters/multiplayer.png";
+import backgroundImage from "@/assets/background/backgroundCastles.avif";
+import twoPlayersImage from "@/assets/characters/multiplayer.avif";
 
 export const Route = createFileRoute("/")({
   component: HomeComponent,

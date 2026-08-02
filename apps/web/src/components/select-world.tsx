@@ -6,12 +6,12 @@ import { GameCard } from "./game-card";
 import { trpc } from "@/utils/trpc";
 import { Loader } from "./loader";
 
-import planet01 from "@/assets/planets/planet01.png";
-import planet02 from "@/assets/planets/planet02.png";
-import planet03 from "@/assets/planets/planet03.png";
-import planet04 from "@/assets/planets/planet04.png";
-import planet05 from "@/assets/planets/planet05.png";
-import planet06 from "@/assets/planets/planet06.png";
+import planet01 from "@/assets/planets/planet01.avif";
+import planet02 from "@/assets/planets/planet02.avif";
+import planet03 from "@/assets/planets/planet03.avif";
+import planet04 from "@/assets/planets/planet04.avif";
+import planet05 from "@/assets/planets/planet05.avif";
+import planet06 from "@/assets/planets/planet06.avif";
 
 const WORLD_IMAGES: Record<string, string> = {
 	meadow: planet01,

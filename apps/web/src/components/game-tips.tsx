@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import EinsteinImage from "@/assets/einstein.png";
+import EinsteinImage from "@/assets/einstein.avif";
 
 const factsByTheme: Record<string, string[]> = {
   animals: [

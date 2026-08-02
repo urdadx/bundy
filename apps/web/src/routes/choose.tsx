@@ -2,12 +2,12 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { GameCard } from "@/components/game-card";
 import { LobbyGameSettingsUI } from "@/components/lobby-game-settings-ui";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import maleIdle from "@/assets/characters/male-idle.png";
-import multiplayerImg from "@/assets/characters/multiplayer.png";
-import backgroundEmpty from "@/assets/background/backgroundEmpty.png";
+import maleIdle from "@/assets/characters/male-idle.avif";
+import multiplayerImg from "@/assets/characters/multiplayer.avif";
+import backgroundEmpty from "@/assets/background/backgroundEmpty.avif";
 import { useCallback } from "react";
 import { authClient } from "@/lib/auth-client";
-import backgroundImage from "@/assets/background/backgroundCastles.png";
+import backgroundImage from "@/assets/background/backgroundCastles.avif";
 import { AuthForm } from "@/components/auth-form";
 
 export const Route = createFileRoute("/choose")({

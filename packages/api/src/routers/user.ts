@@ -5,7 +5,7 @@ import { user } from "@wordsearch/db/schema/auth";
 import { eq, desc, asc, gt, sql } from "drizzle-orm";
 import { z } from "zod";
 
-const VALID_AVATARS = ["jack-avatar.png", "marie-avatar.png", "rudeus-avatar.png"] as const;
+const VALID_AVATARS = ["jack-avatar.avif", "marie-avatar.avif", "rudeus-avatar.avif"] as const;
 
 function calculateLeague(xp: number): string {
   if (xp >= 500) return "Gold";

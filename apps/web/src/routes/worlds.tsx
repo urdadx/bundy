@@ -1,10 +1,10 @@
 import { WorldSelector } from "@/components/select-world";
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
-import backgroundColorGrass from "@/assets/background/backgroundColorGrass.png";
+import backgroundColorGrass from "@/assets/background/backgroundColorGrass.avif";
 import { authClient } from "@/lib/auth-client";
 import { AuthForm } from "@/components/auth-form";
-import backgroundImage from "@/assets/background/backgroundCastles.png";
+import backgroundImage from "@/assets/background/backgroundCastles.avif";
 
 const worldSearchSchema = z.object({
   world: z.string().default("meadow"),

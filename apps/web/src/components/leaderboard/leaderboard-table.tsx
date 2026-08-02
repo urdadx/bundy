@@ -13,9 +13,9 @@ import { Button } from "@/components/ui/button";
 import { trpc } from "@/utils/trpc";
 import { cn } from "@/lib/utils";
 import trophyCabinet from "@/assets/rewards/trophy-cabinet.png";
-import goldMedal from "@/assets/medals/gold-medal.png";
-import silverMedal from "@/assets/medals/silver-medal.png";
-import bronzeMedal from "@/assets/medals/bronze-medal.png";
+import goldMedal from "@/assets/medals/gold-medal.avif";
+import silverMedal from "@/assets/medals/silver-medal.avif";
+import bronzeMedal from "@/assets/medals/bronze-medal.avif";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { Loader } from "../loader";
 

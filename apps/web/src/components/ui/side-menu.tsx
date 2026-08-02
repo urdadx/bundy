@@ -1,6 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { SideMenuItem } from "./side-menu-item";
 import { SideMenuThemeButton } from "./side-menu-theme-button";
+import learnIcon from "@/assets/icons/learn.avif";
+import leaderboardIcon from "@/assets/icons/leaderboard.avif";
+import shopIcon from "@/assets/icons/shop.avif";
 
 export function SideMenu() {
   return (
@@ -17,9 +20,13 @@ export function SideMenu() {
           </Link>
 
           <div className="flex flex-col gap-2">
-            <SideMenuItem href="/arena/lessons" icon="learn" label="learn" />
-            <SideMenuItem href="/arena/leaderboard" icon="leaderboard" label="Leaderboard" />
-            <SideMenuItem href="/arena/shop" icon="shop" label="Shop" />
+            <SideMenuItem href="/arena/lessons" icon={learnIcon} label="learn" />
+            <SideMenuItem
+              href="/arena/leaderboard"
+              icon={leaderboardIcon}
+              label="Leaderboard"
+            />
+            <SideMenuItem href="/arena/shop" icon={shopIcon} label="Shop" />
             <SideMenuItem href="/arena/profile" label="Profile" isProfile={true} />
           </div>
         </nav>
@@ -30,9 +37,14 @@ export function SideMenu() {
       </div>
 
       <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t-2 py-2 flex justify-around z-50">
-        <SideMenuItem href="/arena/lessons" icon="learn" label="home" hideLabel />
-        <SideMenuItem href="/arena/leaderboard" icon="leaderboard" label="Leaderboard" hideLabel />
-        <SideMenuItem href="/arena/shop" icon="shop" label="Shop" hideLabel />
+        <SideMenuItem href="/arena/lessons" icon={learnIcon} label="home" hideLabel />
+        <SideMenuItem
+          href="/arena/leaderboard"
+          icon={leaderboardIcon}
+          label="Leaderboard"
+          hideLabel
+        />
+        <SideMenuItem href="/arena/shop" icon={shopIcon} label="Shop" hideLabel />
         <SideMenuItem href="/arena/profile" label="Profile" hideLabel isProfile={true} />
       </div>
     </>

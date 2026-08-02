@@ -1,7 +1,7 @@
 import { SideMenu } from "@/components/ui/side-menu";
 import { authClient } from "@/lib/auth-client";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import backgroundImage from "@/assets/background/backgroundCastles.png";
+import backgroundImage from "@/assets/background/backgroundCastles.avif";
 import { AuthForm } from "@/components/auth-form";
 
 export const Route = createFileRoute("/arena")({

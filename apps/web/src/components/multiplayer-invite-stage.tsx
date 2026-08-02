@@ -24,7 +24,7 @@ export const MultiplayerInviteStage = ({
 
   const gameCode = roomId || "------";
   const inviteLink = useMemo(() => (roomId ? getInviteLink(roomId) : ""), [roomId]);
-  const hostAvatar = player1Avatar || (session?.user as any)?.avatar || "jack-avatar.png";
+  const hostAvatar = player1Avatar || (session?.user as any)?.avatar || "jack-avatar.avif";
 
   const handleCopyCode = async () => {
     if (!roomId) return;

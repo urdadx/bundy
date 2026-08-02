@@ -15,7 +15,7 @@ import { useHint } from "@/hooks/use-hint";
 import { ColorThemeProvider, useColorTheme } from "@/contexts/color-theme-context";
 import { useAudioSettings } from "@/contexts/audio-settings-context";
 
-import jackAvatar from "@/assets/avatars/jack-avatar.png";
+import jackAvatar from "@/assets/avatars/jack-avatar.avif";
 import backgroundMusic from "@/assets/sounds/background.mp3";
 import { CareerGameHeader } from "@/components/playground/career-game-header";
 import { GameTips } from "@/components/game-tips";

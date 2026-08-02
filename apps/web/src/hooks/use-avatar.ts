@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { trpc } from "@/utils/trpc";
-import type { AvatarId } from "@/lib/avatars";
+import { normalizeAvatar, type AvatarId } from "@/lib/avatars";
 
 interface UseAvatarOptions {
   onSuccess?: (avatar: AvatarId) => void;
@@ -31,7 +31,7 @@ export function useAvatar(options: UseAvatarOptions = {}) {
     }),
   );
 
-  const currentAvatar = (profile?.avatar ?? "jack-avatar.png") as AvatarId;
+  const currentAvatar = normalizeAvatar(profile?.avatar ?? undefined);
 
   const updateAvatar = useCallback(
     (avatar: AvatarId) => {
@@ -51,7 +51,7 @@ export function useAvatar(options: UseAvatarOptions = {}) {
 }
 
 export function useLocalAvatar(initialAvatar?: AvatarId) {
-  const [localAvatar, setLocalAvatar] = useState<AvatarId>(initialAvatar ?? "jack-avatar.png");
+  const [localAvatar, setLocalAvatar] = useState<AvatarId>(initialAvatar ?? "jack-avatar.avif");
 
   useEffect(() => {
     if (initialAvatar) {

@@ -6,10 +6,10 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
 } from "@/components/ui/alert-dialog";
-import maleCheerImg from "@/assets/characters/male-cheer.png";
-import femaleCheerImg from "@/assets/characters/female-cheer.png";
+import maleCheerImg from "@/assets/characters/male-cheer.avif";
+import femaleCheerImg from "@/assets/characters/female-cheer.avif";
 import diamondIcon from "@/assets/icons/diamond.svg";
-import RobotCheer from "@/assets/characters/robot_cheer.png";
+import RobotCheer from "@/assets/characters/robot_cheer.avif";
 import XpIcon from "@/assets/icons/xp.svg";
 import { motion } from "motion/react";
 import { Button } from "./ui/button";
@@ -40,9 +40,9 @@ export function PuzzleCompletionDialog({
 
   let profileImage;
 
-  if (normalizedAvatar.includes("rudeus-avatar.png")) {
+  if (normalizedAvatar.includes("rudeus-avatar.avif")) {
     profileImage = RobotCheer;
-  } else if (normalizedAvatar.includes("jack-avatar.png")) {
+  } else if (normalizedAvatar.includes("jack-avatar.avif")) {
     profileImage = maleCheerImg;
   } else {
     profileImage = femaleCheerImg;

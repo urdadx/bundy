@@ -10,7 +10,7 @@ import { getInviteLink } from "@/lib/multiplayer/api";
 import { cn } from "@/lib/utils";
 import type { AvatarId } from "@/lib/avatars";
 import { normalizeAvatar } from "@/lib/avatars";
-import backgroundImage from "@/assets/background/backgroundCastles.png";
+import backgroundImage from "@/assets/background/backgroundCastles.avif";
 import { CountdownOverlay } from "@/components/playground/countdown-overlay";
 import { GameConnectionError } from "@/components/playground/game-connection-error";
 import { LobbyAuthForm } from "@/components/lobby-auth-form";

@@ -5,9 +5,9 @@ import {
   AlertDialogTitle,
   AlertDialogFooter,
 } from "@/components/ui/alert-dialog";
-import maleSad from "@/assets/characters/male-sad.png";
-import femaleSad from "@/assets/characters/female-sad.png";
-import RobotSad from "@/assets/characters/robot_sad.png";
+import maleSad from "@/assets/characters/male-sad.avif";
+import femaleSad from "@/assets/characters/female-sad.avif";
+import RobotSad from "@/assets/characters/robot_sad.avif";
 import { motion } from "motion/react";
 import { Button } from "./ui/button";
 import { useSession } from "@/lib/auth-client";
@@ -34,9 +34,9 @@ export function PuzzleInCompletionDialog({
 
   let profileImage;
 
-  if (normalizedAvatar.includes("rudeus-avatar.png")) {
+  if (normalizedAvatar.includes("rudeus-avatar.avif")) {
     profileImage = RobotSad;
-  } else if (normalizedAvatar.includes("jack-avatar.png")) {
+  } else if (normalizedAvatar.includes("jack-avatar.avif")) {
     profileImage = maleSad;
   } else {
     profileImage = femaleSad;

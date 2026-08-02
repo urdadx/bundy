@@ -4,8 +4,8 @@ import { authClient } from "@/lib/auth-client";
 import { motion, AnimatePresence } from "motion/react";
 import { NameStage } from "./name-stage";
 import { CharacterStage } from "./character-stage";
-import femaleAvatar from "@/assets/avatars/marie-avatar.png";
-import maleAvatar from "@/assets/avatars/jack-avatar.png";
+import femaleAvatar from "@/assets/avatars/marie-avatar.avif";
+import maleAvatar from "@/assets/avatars/jack-avatar.avif";
 import { AlertDialog, AlertDialogContent, AlertDialogHeader } from "./ui/alert-dialog";
 import { env } from "@wordsearch/env/web";
 
@@ -53,7 +53,7 @@ export const LobbyAuthForm = ({
 
       const imageUrl =
         env.VITE_NODE_ENV === "production"
-          ? `${env.VITE_R2_BUCKET}/avatars/${selectedCharacter === "male" ? "jack-avatar.png" : "marie-avatar.png"}`
+          ? `${env.VITE_R2_BUCKET}/avatars/${selectedCharacter === "male" ? "jack-avatar.avif" : "marie-avatar.avif"}`
           : selectedCharacter === "male"
             ? maleAvatar
             : femaleAvatar;

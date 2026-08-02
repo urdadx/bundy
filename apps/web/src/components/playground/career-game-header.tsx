@@ -2,7 +2,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { GameTimer } from "./game-timer";
 import { cn } from "@/lib/utils";
 import { useSession } from "@/lib/auth-client";
-import jackAvatar from "@/assets/avatars/jack-avatar.png";
+import jackAvatar from "@/assets/avatars/jack-avatar.avif";
 import xpIcon from "@/assets/icons/xp.svg";
 import diamondIcon from "@/assets/icons/diamond.svg";
 

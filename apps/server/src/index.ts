@@ -69,7 +69,7 @@ app.post("/api/multiplayer/rooms", async (c) => {
     const result = handleCreateRoom(
       odId,
       odName,
-      odAvatar || "jack-avatar.png",
+      odAvatar || "jack-avatar.avif",
       settings || {
         theme: "animals",
         difficulty: "medium",

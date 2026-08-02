@@ -56,7 +56,7 @@ export function useMultiplayerGame(options: UseMultiplayerGameOptions = {}) {
       setUser(
         session.user.id,
         session.user.name || "Player",
-        session.user.image || "jack-avatar.png",
+        session.user.image || "jack-avatar.avif",
       );
     }
   }, [session?.user, odId, odName, setUser]);
@@ -80,7 +80,7 @@ export function useMultiplayerGame(options: UseMultiplayerGameOptions = {}) {
       roomId: store.roomId,
       odId,
       odName,
-      avatar: odAvatar || "jack-avatar.png",
+      avatar: odAvatar || "jack-avatar.avif",
     });
   }, [odId, odName, odAvatar, store.roomId, send]);
 
