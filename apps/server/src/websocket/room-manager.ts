@@ -94,6 +94,8 @@ export function joinRoom(
   // Check if this is a reconnection FIRST - allow reconnecting to any room status
   const existingPlayer = room.players.get(odId);
   if (existingPlayer) {
+    existingPlayer.name = odName;
+    existingPlayer.avatar = odAvatar;
     existingPlayer.isConnected = true;
     clearDisconnectTimer(room, odId);
     return { room, isReconnection: true };

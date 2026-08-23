@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { AVATARS } from "@/lib/avatars";
+import { AVATARS, getAvatarSrc, normalizeAvatar } from "@/lib/avatars";
 
 interface AvatarDisplayProps {
   avatarId: string;
@@ -23,7 +23,7 @@ export function AvatarDisplay({
   showBorder = true,
   borderColor,
 }: AvatarDisplayProps) {
-  const avatar = AVATARS.find((a) => a.id === avatarId) ?? AVATARS[0];
+  const avatar = AVATARS.find((a) => a.id === normalizeAvatar(avatarId)) ?? AVATARS[0];
 
   return (
     <div
@@ -35,7 +35,11 @@ export function AvatarDisplay({
       )}
       style={borderColor ? { borderColor } : undefined}
     >
-      <img src={avatar.src} alt={avatar.name} className="w-full h-full object-contain p-1" />
+      <img
+        src={getAvatarSrc(avatarId)}
+        alt={avatar.name}
+        className="w-full h-full object-contain p-1"
+      />
     </div>
   );
 }

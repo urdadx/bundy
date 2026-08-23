@@ -4,12 +4,10 @@ import { useMultiplayerGame } from "@/hooks/use-multiplayer-game";
 import { AvatarDisplay } from "@/components/avatar-selector";
 import { Button } from "@/components/ui/button";
 import { Loader } from "@/components/loader";
-import { authClient, useSession } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth-client";
 import { Swords, LogOutIcon } from "lucide-react";
 import { getInviteLink } from "@/lib/multiplayer/api";
 import { cn } from "@/lib/utils";
-import type { AvatarId } from "@/lib/avatars";
-import { normalizeAvatar } from "@/lib/avatars";
 import backgroundImage from "@/assets/background/backgroundCastles.avif";
 import { CountdownOverlay } from "@/components/playground/countdown-overlay";
 import { GameConnectionError } from "@/components/playground/game-connection-error";
@@ -19,20 +17,17 @@ export const Route = createFileRoute("/lobby/$roomId")({
   component: LobbyPage,
   beforeLoad: async () => {
     const { data: session } = await authClient.getSession();
-    return {
-      session,
-      isAuthenticated: !!session,
-    };
+    return { session };
   },
 });
 
 function LobbyPage() {
   const { roomId } = Route.useParams();
-  const { isAuthenticated, session: initialSession } = Route.useRouteContext();
+  const { session: initialSession } = Route.useRouteContext();
   const navigate = useNavigate();
-  const { data: session } = useSession();
 
-  const currentSession = session || initialSession;
+  const currentSession = initialSession;
+  const isAuthenticated = Boolean(currentSession?.user);
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -48,7 +43,6 @@ function LobbyPage() {
     disconnect,
     leaveRoom,
     setReady,
-    updateAvatar,
     isConnecting,
     players,
     myPlayerId,
@@ -56,21 +50,15 @@ function LobbyPage() {
     error,
     phase,
     countdown,
-  } = useMultiplayerGame({ roomId });
+  } = useMultiplayerGame({ roomId, user: currentSession?.user });
 
   const [copiedLink, setCopiedLink] = useState(false);
-  const avatarSrc = currentSession?.user?.image || "";
-  const [selectedAvatar, setSelectedAvatar] = useState<AvatarId>(
-    normalizeAvatar(avatarSrc),
-  );
-
   useEffect(() => {
-    if (roomId && currentSession?.user?.id && isAuthenticated) {
+    if (roomId && currentSession?.user?.id && myPlayerId === currentSession.user.id) {
       connect();
-      setSelectedAvatar(normalizeAvatar(avatarSrc));
     }
     return () => disconnect();
-  }, [roomId, currentSession?.user?.id, isAuthenticated, connect, disconnect]);
+  }, [roomId, currentSession?.user?.id, myPlayerId, connect, disconnect]);
 
   useEffect(() => {
     if (phase === "playing") {
@@ -87,14 +75,6 @@ function LobbyPage() {
       console.error("Failed to copy:", err);
     }
   }, [roomId]);
-
-  const _handleAvatarChange = useCallback(
-    (avatarId: AvatarId) => {
-      setSelectedAvatar(avatarId);
-      updateAvatar(avatarId);
-    },
-    [updateAvatar],
-  );
 
   const handleReady = useCallback(() => {
     setReady(true);
@@ -182,14 +162,14 @@ function LobbyPage() {
               )}
             >
               <AvatarDisplay
-                avatarId={normalizeAvatar(selectedAvatar || myPlayer?.avatar)}
+                avatarId={myPlayer?.avatar || currentSession?.user?.image || "jack-avatar.avif"}
                 size={isMobile ? "lg" : "xl"}
                 showBorder={false}
               />
             </div>
             <div className="text-center">
               <p className="font-black text-slate-700 text-sm uppercase tracking-wide">
-                {session?.user?.name || "Player 1"}
+                {myPlayer?.name || currentSession?.user?.name || "Player 1"}
               </p>
               <p className="text-sm text-slate-500">
                 {isHost ? "Host" : "You"} {myPlayer?.isReady && "Ready"}
@@ -214,7 +194,7 @@ function LobbyPage() {
             >
               {opponent ? (
                 <AvatarDisplay
-                  avatarId={normalizeAvatar(opponent.avatar)}
+                  avatarId={opponent.avatar}
                   size={isMobile ? "lg" : "xl"}
                   showBorder={false}
                 />

@@ -64,6 +64,7 @@ Create 3 separate **Application** services in Dokploy:
 - **Build Args** (set in Environment → Build Args):
   - `VITE_SERVER_URL`: `https://api.yourdomain.com`
   - `VITE_WS_URL`: `https://ws.yourdomain.com`
+  - `VITE_R2_BUCKET`: `https://assets.yourdomain.com/assets`
 
 #### 2. API Server Service
 
@@ -155,12 +156,21 @@ services:
 
 ### Web Client (Build Args)
 
-| Variable          | Description          | Example                      |
-| ----------------- | -------------------- | ---------------------------- |
-| `VITE_SERVER_URL` | API server URL       | `https://api.yourdomain.com` |
-| `VITE_WS_URL`     | WebSocket server URL | `https://ws.yourdomain.com`  |
+| Variable          | Description          | Example                                    |
+| ----------------- | -------------------- | ------------------------------------------ |
+| `VITE_SERVER_URL` | API server URL       | `https://api.yourdomain.com`               |
+| `VITE_WS_URL`     | WebSocket server URL | `https://ws.yourdomain.com`                |
+| `VITE_R2_BUCKET`  | Public R2 asset URL  | `https://assets.yourdomain.com/assets`     |
 
 > **Note**: Use `https://` for both URLs. The client automatically uses `wss://` for WebSocket connections.
+
+The avatar files must exist in R2 under keys matching the configured URL prefix:
+
+- `assets/avatars/jack-avatar.avif`
+- `assets/avatars/marie-avatar.avif`
+- `assets/avatars/rudeus-avatar.avif`
+
+Opening the custom domain root can return `404`; R2 custom domains serve object keys, not an automatic bucket index.
 
 ## Health Checks
 

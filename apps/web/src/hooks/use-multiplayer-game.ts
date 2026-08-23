@@ -7,13 +7,19 @@ import type { ClientMessage } from "@/lib/multiplayer/types";
 interface UseMultiplayerGameOptions {
   roomId?: string;
   autoConnect?: boolean;
+  user?: {
+    id: string;
+    name?: string | null;
+    image?: string | null;
+  } | null;
 }
 
 export function useMultiplayerGame(options: UseMultiplayerGameOptions = {}) {
-  const { roomId, autoConnect = false } = options;
+  const { roomId, autoConnect = false, user: providedUser } = options;
 
   const store = useMultiplayerStore();
   const { data: session } = useSession();
+  const user = providedUser ?? session?.user;
   const {
     odId,
     odName,
@@ -52,14 +58,15 @@ export function useMultiplayerGame(options: UseMultiplayerGameOptions = {}) {
   } = store;
 
   useEffect(() => {
-    if (session?.user && (!odId || !odName)) {
-      setUser(
-        session.user.id,
-        session.user.name || "Player",
-        session.user.image || "jack-avatar.avif",
-      );
+    if (
+      user &&
+      (odId !== user.id ||
+        odName !== (user.name || "Player") ||
+        odAvatar !== (user.image || "jack-avatar.avif"))
+    ) {
+      setUser(user.id, user.name || "Player", user.image || "jack-avatar.avif");
     }
-  }, [session?.user, odId, odName, setUser]);
+  }, [user?.id, user?.name, user?.image, odId, odName, odAvatar, setUser]);
 
   const { connect, disconnect, send, isConnected } = useMultiplayerSocket({
     onMessage: handleServerMessage,

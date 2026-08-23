@@ -89,13 +89,6 @@ function handleJoinRoom(
   odName: string,
   avatar: string,
 ): void {
-  ws.data.odId = odId;
-  ws.data.odName = odName;
-  ws.data.roomId = roomId;
-  ws.data.odAvatar = avatar;
-
-  setConnection(odId, ws);
-
   const result = joinRoom(roomId, odId, odName, avatar);
 
   if (!result) {
@@ -107,11 +100,17 @@ function handleJoinRoom(
   const player = room.players.get(odId);
   if (!player) return;
 
-  send(ws, { type: "room_state", room: serializeRoom(room) });
+  ws.data.odId = odId;
+  ws.data.odName = odName;
+  ws.data.roomId = roomId;
+  ws.data.odAvatar = avatar;
+  setConnection(odId, ws);
 
   if (isReconnection) {
+    broadcastToAll(roomId, { type: "room_state", room: serializeRoom(room) });
     broadcastToRoom(roomId, { type: "player_reconnected", odId }, odId);
   } else {
+    send(ws, { type: "room_state", room: serializeRoom(room) });
     broadcastToRoom(roomId, { type: "player_joined", player }, odId);
   }
 }
@@ -194,6 +193,7 @@ function handleUpdateAvatar(ws: WSConnection, avatar: string): void {
   if (!player) return;
 
   player.avatar = avatar;
+  ws.data.odAvatar = avatar;
 
   broadcastToAll(roomId, { type: "player_avatar_changed", odId, avatar });
 }

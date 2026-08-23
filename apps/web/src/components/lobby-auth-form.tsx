@@ -63,12 +63,10 @@ export const LobbyAuthForm = ({
         image: imageUrl,
       });
 
-      await authClient.getSession();
-
       localStorage.setItem("characterGender", selectedCharacter);
 
-      router.invalidate();
-      router.navigate({
+      await router.invalidate();
+      await router.navigate({
         to: `/lobby/${roomId}`,
         params: { roomId: roomId as string },
       });

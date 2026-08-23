@@ -27,19 +27,34 @@ export type AvatarId = (typeof AVATARS)[number]["id"];
 
 export function getAvatarSrc(avatarId: string | null | undefined): string {
   const avatar = AVATARS.find((a) => a.id === normalizeAvatar(avatarId ?? undefined));
-  return (
-    avatar?.src ?? (isProduction ? `${env.VITE_R2_BUCKET}/avatars/jack-avatar.avif` : jackAvatar)
-  );
+  if (avatarId && /^https?:\/\//.test(avatarId) && !isGameAvatar(avatarId)) {
+    return avatarId;
+  }
+  return avatar?.src ?? jackAvatar;
 }
 
 export function normalizeAvatar(avatar: string | undefined): AvatarId {
   if (!avatar) return "jack-avatar.avif";
-  const filename = avatar.split("/").pop();
-  if (filename === "marie-avatar.avif" || filename === "marie-avatar.png") {
+  const filename = getAvatarFilename(avatar);
+  if (/^marie-avatar(?:[-.].*)?\.(?:avif|png)$/.test(filename)) {
     return "marie-avatar.avif";
   }
-  if (filename === "rudeus-avatar.avif" || filename === "rudeus-avatar.png") {
+  if (/^rudeus-avatar(?:[-.].*)?\.(?:avif|png)$/.test(filename)) {
     return "rudeus-avatar.avif";
   }
   return "jack-avatar.avif";
+}
+
+function isGameAvatar(avatar: string): boolean {
+  const filename = getAvatarFilename(avatar);
+  return /^(?:jack|marie|rudeus)-avatar(?:[-.].*)?\.(?:avif|png)$/.test(filename);
+}
+
+function getAvatarFilename(avatar: string): string {
+  const filename = avatar.split(/[?#]/)[0]?.split("/").pop() ?? "";
+  try {
+    return decodeURIComponent(filename);
+  } catch {
+    return filename;
+  }
 }

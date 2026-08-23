@@ -16,6 +16,7 @@ services:
       args:
         VITE_SERVER_URL: ${VITE_SERVER_URL}
         VITE_WS_URL: ${VITE_WS_URL}
+        VITE_R2_BUCKET: ${VITE_R2_BUCKET}
     ports:
       - "3001:3001"
     restart: always
