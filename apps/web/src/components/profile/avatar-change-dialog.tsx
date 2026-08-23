@@ -2,7 +2,7 @@ import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { useSession } from "@/lib/auth-client";
 import { AVATARS } from "@/lib/avatars";
-import { env } from "@wordsearch/env/web";
+import { getAvatarSrc } from "@/lib/avatars";
 import {
   Dialog,
   DialogContent,
@@ -27,10 +27,7 @@ export function AvatarChangeDialog({ children }: AvatarChangeDialogProps) {
     setIsUpdating(true);
     try {
       const selectedAvatar = AVATARS[selectedAvatarIndex];
-      const imageUrl =
-        env.VITE_NODE_ENV === "production"
-          ? `${env.VITE_R2_BUCKET}/avatars/${selectedAvatar.id}`
-          : selectedAvatar.src;
+      const imageUrl = getAvatarSrc(selectedAvatar.id);
       await authClient.updateUser({
         image: imageUrl,
       });

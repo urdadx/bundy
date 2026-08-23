@@ -60,6 +60,20 @@ export async function getRoom(roomId: string): Promise<GetRoomResponse> {
   return response.json();
 }
 
+export function leaveRoomOnUnload(roomId: string, odId: string): void {
+  void fetch(`${API_BASE}/api/multiplayer/rooms/${roomId}/leave`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "text/plain;charset=UTF-8",
+    },
+    body: JSON.stringify({ odId }),
+    credentials: "include",
+    keepalive: true,
+  }).catch(() => {
+    // The WebSocket disconnect timeout remains the fallback if unload delivery fails.
+  });
+}
+
 export function getInviteLink(roomId: string): string {
   return `${window.location.origin}/lobby/${roomId}`;
 }

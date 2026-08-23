@@ -131,11 +131,16 @@ function handleLeaveRoom(ws: WSConnection): void {
   const { odId, roomId } = ws.data;
   if (!roomId || !odId) return;
 
+  handlePlayerLeave(roomId, odId);
+}
+
+export function handlePlayerLeave(roomId: string, odId: string): boolean {
   const room = getRoom(roomId);
-  if (!room) return;
+  if (!room) return false;
 
   const player = room.players.get(odId);
-  const odName = player?.name || ws.data.odName || "Player";
+  if (!player) return false;
+  const odName = player.name || "Player";
   const wasPlaying = room.status === "playing";
 
   // If game was in progress, end it with opponent as winner
@@ -165,6 +170,8 @@ function handleLeaveRoom(ws: WSConnection): void {
   if (updatedRoom && !wasPlaying) {
     broadcastToAll(roomId, { type: "room_state", room: serializeRoom(updatedRoom) });
   }
+
+  return true;
 }
 
 function handlePlayerReady(ws: WSConnection, ready: boolean): void {

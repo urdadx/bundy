@@ -9,6 +9,7 @@ import {
   handleClose,
   handleError,
   handleCreateRoom,
+  handlePlayerLeave,
   getRoom,
   type WSData,
   type GameSettings,
@@ -80,6 +81,18 @@ app.get("/api/multiplayer/rooms/:roomId", (c) => {
   }
 
   return c.json({ room: serializeRoom(room) });
+});
+
+app.post("/api/multiplayer/rooms/:roomId/leave", async (c) => {
+  try {
+    const { odId } = JSON.parse(await c.req.text()) as { odId?: string };
+    if (!odId) return c.json({ error: "Missing player ID" }, 400);
+
+    handlePlayerLeave(c.req.param("roomId"), odId);
+    return c.json({ success: true });
+  } catch {
+    return c.json({ error: "Invalid request" }, 400);
+  }
 });
 
 // ============ WebSocket Endpoint ============

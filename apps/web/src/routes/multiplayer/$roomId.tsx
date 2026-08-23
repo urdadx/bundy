@@ -18,6 +18,7 @@ import { ColorThemeProvider, useColorTheme } from "@/contexts/color-theme-contex
 import { useAudioSettings } from "@/contexts/audio-settings-context";
 import { useBackgroundAudio } from "@/hooks/use-background-audio";
 import backgroundMusic from "@/assets/sounds/background.mp3";
+import { leaveRoomOnUnload } from "@/lib/multiplayer/api";
 
 export const Route = createFileRoute("/multiplayer/$roomId")({
   component: () => (
@@ -88,6 +89,14 @@ function MultiplayerGamePage() {
       setShowResultDialog(false);
     }
   }, [phase]);
+
+  useEffect(() => {
+    if (phase !== "playing" || !myPlayerId) return;
+
+    const handlePageHide = () => leaveRoomOnUnload(roomId, myPlayerId);
+    window.addEventListener("pagehide", handlePageHide);
+    return () => window.removeEventListener("pagehide", handlePageHide);
+  }, [phase, roomId, myPlayerId]);
 
   useEffect(() => {
     if ((phase === "waiting" || phase === "ready") && countdown === null && !isRematch) {

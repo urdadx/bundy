@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { AVATARS, getAvatarSrc, normalizeAvatar } from "@/lib/avatars";
+import { AVATARS, getAvatarSrc, getBundledAvatarSrc, normalizeAvatar } from "@/lib/avatars";
 
 interface AvatarDisplayProps {
   avatarId: string;
@@ -39,6 +39,12 @@ export function AvatarDisplay({
         src={getAvatarSrc(avatarId)}
         alt={avatar.name}
         className="w-full h-full object-contain p-1"
+        onError={(event) => {
+          const fallbackSrc = getBundledAvatarSrc(avatarId);
+          if (event.currentTarget.src !== new URL(fallbackSrc, window.location.href).href) {
+            event.currentTarget.src = fallbackSrc;
+          }
+        }}
       />
     </div>
   );

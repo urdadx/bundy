@@ -4,22 +4,23 @@ import rudeusAvatar from "@/assets/avatars/rudeus-avatar.avif";
 import { env } from "@wordsearch/env/web";
 
 const isProduction = env.VITE_NODE_ENV === "production";
+const r2Bucket = isProduction ? env.VITE_R2_BUCKET : undefined;
 
 export const AVATARS = [
   {
     id: "jack-avatar.avif",
     name: "Jack",
-    src: isProduction ? `${env.VITE_R2_BUCKET}/avatars/jack-avatar.avif` : jackAvatar,
+    src: r2Bucket ? `${r2Bucket}/avatars/jack-avatar.avif` : jackAvatar,
   },
   {
     id: "marie-avatar.avif",
     name: "Marie",
-    src: isProduction ? `${env.VITE_R2_BUCKET}/avatars/marie-avatar.avif` : marieAvatar,
+    src: r2Bucket ? `${r2Bucket}/avatars/marie-avatar.avif` : marieAvatar,
   },
   {
     id: "rudeus-avatar.avif",
     name: "Rudeus",
-    src: isProduction ? `${env.VITE_R2_BUCKET}/avatars/rudeus-avatar.avif` : rudeusAvatar,
+    src: r2Bucket ? `${r2Bucket}/avatars/rudeus-avatar.avif` : rudeusAvatar,
   },
 ] as const;
 
@@ -31,6 +32,17 @@ export function getAvatarSrc(avatarId: string | null | undefined): string {
     return avatarId;
   }
   return avatar?.src ?? jackAvatar;
+}
+
+export function getBundledAvatarSrc(avatarId: string | null | undefined): string {
+  switch (normalizeAvatar(avatarId ?? undefined)) {
+    case "marie-avatar.avif":
+      return marieAvatar;
+    case "rudeus-avatar.avif":
+      return rudeusAvatar;
+    default:
+      return jackAvatar;
+  }
 }
 
 export function normalizeAvatar(avatar: string | undefined): AvatarId {

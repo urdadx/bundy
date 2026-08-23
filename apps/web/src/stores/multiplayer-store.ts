@@ -326,6 +326,10 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
           const room = state.room;
           if (!room) break;
 
+          if (message.reason === "forfeit" && message.winnerId === state.odId) {
+            toast.success("Opponent left the game. You win!");
+          }
+
           set({
             room: {
               ...room,

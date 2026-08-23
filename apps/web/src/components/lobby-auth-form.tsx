@@ -4,10 +4,8 @@ import { authClient } from "@/lib/auth-client";
 import { motion, AnimatePresence } from "motion/react";
 import { NameStage } from "./name-stage";
 import { CharacterStage } from "./character-stage";
-import femaleAvatar from "@/assets/avatars/marie-avatar.avif";
-import maleAvatar from "@/assets/avatars/jack-avatar.avif";
 import { AlertDialog, AlertDialogContent, AlertDialogHeader } from "./ui/alert-dialog";
-import { env } from "@wordsearch/env/web";
+import { getAvatarSrc } from "@/lib/avatars";
 
 export const LobbyAuthForm = ({
   open,
@@ -51,12 +49,9 @@ export const LobbyAuthForm = ({
         fetchOptions: {},
       });
 
-      const imageUrl =
-        env.VITE_NODE_ENV === "production"
-          ? `${env.VITE_R2_BUCKET}/avatars/${selectedCharacter === "male" ? "jack-avatar.avif" : "marie-avatar.avif"}`
-          : selectedCharacter === "male"
-            ? maleAvatar
-            : femaleAvatar;
+      const imageUrl = getAvatarSrc(
+        selectedCharacter === "male" ? "jack-avatar.avif" : "marie-avatar.avif",
+      );
 
       await authClient.updateUser({
         name: battleName.trim(),
