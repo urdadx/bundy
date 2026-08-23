@@ -101,6 +101,7 @@ export type ServerMessage =
       isDraw: boolean;
       hostScore: number;
       guestScore: number;
+      reason?: "forfeit";
     }
   | { type: "player_disconnected"; odId: string; odName: string; reconnectTimeout: number }
   | { type: "player_reconnected"; odId: string }
@@ -123,7 +124,11 @@ export type ServerMessage =
 export type ConnectionState = "connecting" | "connected" | "disconnected" | "reconnecting";
 
 // Avatar options (matching the files in assets/avatars)
-export const AVATAR_OPTIONS = ["jack-avatar.avif", "marie-avatar.avif", "rudeus-avatar.avif"] as const;
+export const AVATAR_OPTIONS = [
+  "jack-avatar.avif",
+  "marie-avatar.avif",
+  "rudeus-avatar.avif",
+] as const;
 
 export type AvatarOption = (typeof AVATAR_OPTIONS)[number];
 

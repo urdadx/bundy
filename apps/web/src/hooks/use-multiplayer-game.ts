@@ -27,6 +27,7 @@ export function useMultiplayerGame(options: UseMultiplayerGameOptions = {}) {
     room,
     countdown,
     gameStartTime,
+    gameEndReason,
     opponentCursor,
     error,
     disconnectedPlayerId,
@@ -183,6 +184,7 @@ export function useMultiplayerGame(options: UseMultiplayerGameOptions = {}) {
 
     countdown,
     gameStartTime,
+    gameEndReason,
     opponentCursor,
     error,
     disconnectedPlayerId,

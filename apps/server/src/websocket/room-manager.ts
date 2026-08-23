@@ -266,6 +266,22 @@ export function endGame(room: Room): void {
   }
 }
 
+export function endGameByForfeit(room: Room, losingPlayerId: string): Player | null {
+  if (room.status !== "playing") return null;
+
+  const winner = Array.from(room.players.values()).find((player) => player.id !== losingPlayerId);
+  if (!winner) return null;
+
+  const totalPoints = (room.puzzle?.words.length ?? 0) * POINTS_PER_WORD;
+  winner.score = Math.max(winner.score, totalPoints);
+  room.winnerId = winner.id;
+  room.isDraw = false;
+  room.status = "finished";
+  room.gameEndedAt = Date.now();
+
+  return winner;
+}
+
 export function handleDisconnect(roomId: string, odId: string): void {
   const room = rooms.get(roomId);
   if (!room) return;
@@ -287,6 +303,8 @@ export function handleDisconnect(roomId: string, odId: string): void {
     odId,
   );
 
+  clearDisconnectTimer(room, odId);
+
   // Set reconnection timer
   const timer = setTimeout(() => {
     handleReconnectTimeout(roomId, odId);
@@ -306,26 +324,16 @@ function handleReconnectTimeout(roomId: string, odId: string): void {
 
   // Player failed to reconnect - opponent wins if game was in progress
   if (room.status === "playing") {
-    const opponent = Array.from(room.players.values()).find((p) => p.id !== odId);
-    if (opponent) {
-      room.winnerId = opponent.id;
-      room.isDraw = false;
-      room.status = "finished";
-      room.gameEndedAt = Date.now();
-
-      const opponentWs = connections.get(opponent.id);
-      if (opponentWs) {
-        opponentWs.send(
-          JSON.stringify({
-            type: "opponent_left",
-            reason: "Opponent disconnected",
-          }),
-        );
-        opponentWs.send(
+    const winner = endGameByForfeit(room, odId);
+    if (winner) {
+      const winnerWs = connections.get(winner.id);
+      if (winnerWs) {
+        winnerWs.send(
           JSON.stringify({
             type: "game_ended",
-            winnerId: opponent.id,
+            winnerId: winner.id,
             isDraw: false,
+            reason: "forfeit",
             hostScore: room.players.get(room.hostId)?.score ?? 0,
             guestScore: room.guestId ? (room.players.get(room.guestId)?.score ?? 0) : 0,
           }),

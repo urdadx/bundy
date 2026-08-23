@@ -14,7 +14,6 @@ import { GameConnectionError } from "@/components/playground/game-connection-err
 import { Drawer, DrawerTrigger, DrawerContent } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { ChatPanelMobile } from "@/components/playground/chat/chat-panel-mobile";
-import { sleep } from "@/lib/utils";
 import { ColorThemeProvider, useColorTheme } from "@/contexts/color-theme-context";
 import { useAudioSettings } from "@/contexts/audio-settings-context";
 import { useBackgroundAudio } from "@/hooks/use-background-audio";
@@ -60,6 +59,7 @@ function MultiplayerGamePage() {
     requestRematch,
     leaveRoom,
     gameStartTime,
+    gameEndReason,
     countdown,
     isRematch,
     chatMessages,
@@ -141,16 +141,16 @@ function MultiplayerGamePage() {
   }, [leaveCursor]);
 
   const handleBack = useCallback(() => {
+    leaveRoom();
     disconnect();
     navigate({ to: "/choose" });
-  }, [disconnect, navigate]);
+  }, [leaveRoom, disconnect, navigate]);
 
   const handleResign = useCallback(() => {
     isResigningRef.current = true;
     toast.success("You resigned from the game");
-    navigate({ to: "/arena/lessons" });
-    sleep(1);
     leaveRoom();
+    navigate({ to: "/arena/lessons" });
   }, [leaveRoom, navigate]);
 
   const isPlaying =
@@ -172,7 +172,7 @@ function MultiplayerGamePage() {
     );
   }
 
-  if (error && !isResigningRef.current) {
+  if (error && phase !== "finished" && !isResigningRef.current) {
     return <GameConnectionError error={error} onBack={handleBack} />;
   }
 
@@ -321,6 +321,7 @@ function MultiplayerGamePage() {
         opponent={opponent}
         isHost={isHost}
         onRematch={handleRematch}
+        canRematch={gameEndReason !== "forfeit"}
         onExit={handleBack}
         rematchRequestedBy={rematchRequestedBy}
         myPlayerId={myPlayerId}

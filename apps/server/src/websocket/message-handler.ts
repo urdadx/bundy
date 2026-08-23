@@ -2,7 +2,9 @@ import type { ClientMessage, WSConnection, ServerMessage, GameSettings } from ".
 import { serializeRoom } from "./types";
 import {
   createRoom,
+  endGameByForfeit,
   getRoom,
+  getConnection,
   joinRoom,
   setPlayerReady,
   startGame,
@@ -134,36 +136,33 @@ function handleLeaveRoom(ws: WSConnection): void {
 
   const player = room.players.get(odId);
   const odName = player?.name || ws.data.odName || "Player";
-
-  broadcastToRoom(roomId, { type: "player_left", odId, odName }, odId);
+  const wasPlaying = room.status === "playing";
 
   // If game was in progress, end it with opponent as winner
-  if (room.status === "playing") {
-    const opponent = Array.from(room.players.values()).find((p) => p.id !== odId);
-    if (opponent) {
-      room.winnerId = opponent.id;
-      room.isDraw = false;
-      room.status = "finished";
-      room.gameEndedAt = Date.now();
-
+  if (wasPlaying) {
+    const winner = endGameByForfeit(room, odId);
+    if (winner) {
       broadcastToRoom(
         roomId,
         {
           type: "game_ended",
-          winnerId: opponent.id,
+          winnerId: winner.id,
           isDraw: false,
+          reason: "forfeit",
           ...getScores(room),
         },
         odId,
       );
     }
+  } else {
+    broadcastToRoom(roomId, { type: "player_left", odId, odName }, odId);
   }
 
   removePlayerFromRoom(roomId, odId);
   removeConnection(odId);
 
   const updatedRoom = getRoom(roomId);
-  if (updatedRoom) {
+  if (updatedRoom && !wasPlaying) {
     broadcastToAll(roomId, { type: "room_state", room: serializeRoom(updatedRoom) });
   }
 }
@@ -419,6 +418,7 @@ export function handleClose(ws: WSConnection): void {
   );
 
   if (odId && roomId) {
+    if (getConnection(odId) !== ws) return;
     handleDisconnect(roomId, odId);
   }
 }

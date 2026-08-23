@@ -8,10 +8,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { AvatarDisplay } from "@/components/avatar-selector";
 import { motion } from "motion/react";
-import { useNavigate } from "@tanstack/react-router";
 import { RotateCcw, LogOut, Loader2 } from "lucide-react";
 import type { Player } from "@/lib/multiplayer/types";
-import { normalizeAvatar } from "@/lib/avatars";
 import trophy from "@/assets/rewards/trophy.png";
 import handshake from "@/assets/rewards/handshake.png";
 import sadBunny from "@/assets/rewards/sad.png";
@@ -34,6 +32,7 @@ interface MultiplayerResultDialogProps {
   opponent: Player | null;
   isHost: boolean;
   onRematch: () => void;
+  canRematch: boolean;
   onExit: () => void;
   rematchRequestedBy: string | null;
   myPlayerId: string | null;
@@ -49,10 +48,11 @@ export function MultiplayerResultDialog({
   opponent,
   isHost,
   onRematch,
+  canRematch,
+  onExit,
   rematchRequestedBy,
   myPlayerId,
 }: MultiplayerResultDialogProps) {
-  const navigate = useNavigate();
   const myColor = isHost ? PLAYER_COLORS.host : PLAYER_COLORS.guest;
   const opponentColor = isHost ? PLAYER_COLORS.guest : PLAYER_COLORS.host;
 
@@ -122,7 +122,7 @@ export function MultiplayerResultDialog({
               className="text-center"
             >
               <AvatarDisplay
-                avatarId={normalizeAvatar(currentPlayer?.avatar)}
+                avatarId={currentPlayer?.avatar || "jack-avatar.avif"}
                 size="md"
                 showBorder={false}
               />
@@ -148,7 +148,7 @@ export function MultiplayerResultDialog({
               className="text-center"
             >
               <AvatarDisplay
-                avatarId={normalizeAvatar(opponent?.avatar)}
+                avatarId={opponent?.avatar || "jack-avatar.avif"}
                 size="md"
                 showBorder={false}
               />
@@ -181,38 +181,35 @@ export function MultiplayerResultDialog({
             className="w-full text-base font-semibold"
             onClick={() => {
               onOpenChange(false);
-              navigate({
-                to: "/arena/lessons",
-              });
+              onExit();
             }}
           >
             <LogOut className="w-5 h-5 mr-2" />
             Exit
           </Button>
-          <Button
-            variant="primary"
-            size="lg"
-            className="w-full text-base font-semibold"
-            onClick={onRematch}
-            disabled={hasRequestedRematch}
-          >
-            {hasRequestedRematch ? (
-              <>
+          {canRematch && (
+            <Button
+              variant="primary"
+              size="lg"
+              className="w-full text-base font-semibold"
+              onClick={onRematch}
+              disabled={hasRequestedRematch}
+            >
+              {hasRequestedRematch ? (
                 <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                Waiting...
-              </>
-            ) : opponentRequestedRematch ? (
-              <>
-                <RotateCcw className="w-5 h-5 mr-2" />
-                Accept Rematch
-              </>
-            ) : (
-              <>
-                <RotateCcw className="w-5 h-5 mr-2" />
-                Rematch
-              </>
-            )}
-          </Button>
+              ) : opponentRequestedRematch ? (
+                <>
+                  <RotateCcw className="w-5 h-5 mr-2" />
+                  Accept
+                </>
+              ) : (
+                <>
+                  <RotateCcw className="w-5 h-5 mr-2" />
+                  Rematch
+                </>
+              )}
+            </Button>
+          )}
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

@@ -114,6 +114,7 @@ export type ServerMessage =
       isDraw: boolean;
       hostScore: number;
       guestScore: number;
+      reason?: "forfeit";
     }
   | { type: "player_disconnected"; odId: string; odName: string; reconnectTimeout: number }
   | { type: "player_reconnected"; odId: string }

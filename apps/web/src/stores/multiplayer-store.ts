@@ -41,6 +41,7 @@ interface MultiplayerState {
 
   countdown: number | null;
   gameStartTime: number | null;
+  gameEndReason: "forfeit" | null;
 
   opponentCursor: OpponentCursor | null;
 
@@ -111,6 +112,7 @@ const initialState: MultiplayerState = {
   roomId: null,
   countdown: null,
   gameStartTime: null,
+  gameEndReason: null,
   opponentCursor: null,
   rematchRequestedBy: null,
   isRematch: false,
@@ -255,6 +257,7 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
               gameStartedAt: message.startTime,
             },
             gameStartTime: message.startTime,
+            gameEndReason: null,
             countdown: null,
             isRematch: false,
           });
@@ -340,6 +343,10 @@ export const useMultiplayerStore = create<MultiplayerStore>()(
               }),
             },
             opponentCursor: null,
+            gameEndReason: message.reason ?? null,
+            disconnectedPlayerId: null,
+            reconnectTimeout: null,
+            error: null,
           });
           break;
         }
