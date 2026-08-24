@@ -6,6 +6,7 @@ import { useTheme } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import "../index.css";
 import { seo } from "@/lib/seo";
+import { InstallPrompt } from "@/components/install-prompt";
 
 export interface RouterAppContext {
 	trpc: typeof trpc;
@@ -49,6 +50,7 @@ function RootComponent() {
 				<Outlet />
 			</div>
 			<Toaster theme={theme as "light" | "dark"} richColors />
+			<InstallPrompt />
 			{/* <ReactQueryDevtools position="bottom" buttonPosition="bottom-right" /> */}
 		</>
 	);

@@ -12,10 +12,12 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
+      includeAssets: ["favicon/favicon.ico", "favicon/apple-touch-icon.png"],
       manifest: {
-        name: "bundy",
-        short_name: "bundy",
-        description: "bundy - PWA Application",
+        id: "/",
+        name: "Bundy - A Word Search Adventure",
+        short_name: "Bundy",
+        description: "A word search adventure game for learning and fun.",
         theme_color: "#0c0c0c",
         background_color: "#ffffff",
         display: "standalone",
@@ -24,26 +26,26 @@ export default defineConfig({
         scope: "/",
         icons: [
           {
-            src: "/icon-192x192.svg",
+            src: "/favicon/android-chrome-192x192.png",
             sizes: "192x192",
-            type: "image/svg+xml"
+            type: "image/png"
           },
           {
-            src: "/icon-512x512.svg", 
+            src: "/favicon/android-chrome-512x512.png",
             sizes: "512x512",
-            type: "image/svg+xml"
+            type: "image/png"
           },
           {
-            src: "/icon-192x192.svg",
+            src: "/favicon/android-chrome-192x192.png",
             sizes: "192x192",
-            type: "image/svg+xml",
-            purpose: "any maskable"
+            type: "image/png",
+            purpose: "maskable"
           },
           {
-            src: "/icon-512x512.svg",
-            sizes: "512x512", 
-            type: "image/svg+xml",
-            purpose: "any maskable"
+            src: "/favicon/android-chrome-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "maskable"
           }
         ]
       },
@@ -51,7 +53,7 @@ export default defineConfig({
         disabled: false, 
         config: true
       },
-      devOptions: { enabled: true },
+      devOptions: { enabled: false },
     }),
   ],
   resolve: {
