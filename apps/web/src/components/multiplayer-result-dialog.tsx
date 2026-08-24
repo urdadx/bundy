@@ -196,7 +196,9 @@ export function MultiplayerResultDialog({
               disabled={hasRequestedRematch}
             >
               {hasRequestedRematch ? (
-                "WAITING..."
+                <>
+                  WAITING...
+                </>
               ) : opponentRequestedRematch ? (
                 <>
                   <RotateCcw className="w-5 h-5 mr-2" />
