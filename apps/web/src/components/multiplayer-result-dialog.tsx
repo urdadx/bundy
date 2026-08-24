@@ -8,7 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { AvatarDisplay } from "@/components/avatar-selector";
 import { motion } from "motion/react";
-import { RotateCcw, LogOut, Loader2 } from "lucide-react";
+import { RotateCcw, LogOut } from "lucide-react";
 import type { Player } from "@/lib/multiplayer/types";
 import trophy from "@/assets/rewards/trophy.png";
 import handshake from "@/assets/rewards/handshake.png";
@@ -196,7 +196,7 @@ export function MultiplayerResultDialog({
               disabled={hasRequestedRematch}
             >
               {hasRequestedRematch ? (
-                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                "WAITING..."
               ) : opponentRequestedRematch ? (
                 <>
                   <RotateCcw className="w-5 h-5 mr-2" />

@@ -38,6 +38,7 @@ function MultiplayerGamePage() {
     room,
     connect,
     disconnect,
+    connectionState,
     moveCursor,
     leaveCursor,
     claimWord,
@@ -72,6 +73,7 @@ function MultiplayerGamePage() {
   const [showResultDialog, setShowResultDialog] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState<number>(settings?.timeLimit || 600);
   const isResigningRef = useRef(false);
+  const hasConnectedRef = useRef(false);
 
   useEffect(() => {
     if (roomId) {
@@ -81,6 +83,22 @@ function MultiplayerGamePage() {
       disconnect();
     };
   }, [roomId, connect, disconnect]);
+
+  useEffect(() => {
+    if (connectionState === "connected") {
+      hasConnectedRef.current = true;
+      return;
+    }
+
+    if (
+      connectionState === "disconnected" &&
+      hasConnectedRef.current &&
+      phase !== "finished" &&
+      !isResigningRef.current
+    ) {
+      navigate({ to: "/choose", replace: true });
+    }
+  }, [connectionState, phase, navigate]);
 
   useEffect(() => {
     if (phase === "finished") {
@@ -99,10 +117,15 @@ function MultiplayerGamePage() {
   }, [phase, roomId, myPlayerId]);
 
   useEffect(() => {
-    if ((phase === "waiting" || phase === "ready") && countdown === null && !isRematch) {
+    if (
+      connectionState === "connected" &&
+      (phase === "waiting" || phase === "ready") &&
+      countdown === null &&
+      !isRematch
+    ) {
       navigate({ to: "/lobby/$roomId", params: { roomId } });
     }
-  }, [phase, roomId, navigate, countdown, isRematch]);
+  }, [connectionState, phase, roomId, navigate, countdown, isRematch]);
 
   useEffect(() => {
     if (phase !== "playing" || !gameStartTime || !settings?.timeLimit) {
