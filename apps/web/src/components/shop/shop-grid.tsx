@@ -15,9 +15,15 @@ export default function ShopPage() {
     mutationFn: async (params: { itemId: string }) => {
       return trpcClient.shop.buyItem.mutate(params);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: trpc.shop.getItems.queryKey() });
-      queryClient.invalidateQueries({ queryKey: trpc.user.getStats.queryKey() });
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: trpc.shop.getItems.queryKey() }),
+        queryClient.invalidateQueries({ queryKey: trpc.user.getStats.queryKey() }),
+        queryClient.invalidateQueries({
+          queryKey: trpc.shop.getInventory.queryKey(),
+          refetchType: "all",
+        }),
+      ]);
       toast.success(`Item Purchased!`, {
         description: "It has been added to your inventory.",
       });
