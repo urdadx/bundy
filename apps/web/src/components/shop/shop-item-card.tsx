@@ -62,7 +62,7 @@ export function ShopItemCard({ item, onBuy }: ShopItemCardProps) {
         )}
       >
         <img
-          src={item.image.replace(/^(\/rewards\/.*)\.png$/, "$1.avif")}
+          src={item.image.replace(/^(\/rewards\/.*)\.(?:png|avif)$/, "$1.webp")}
           alt={item.name}
           className="h-32 w-32 object-contain relative z-10 "
         />
