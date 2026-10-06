@@ -59,7 +59,9 @@ export const ProfileCollection = () => {
             >
               <div className="size-16 flex items-center justify-center shrink-0">
                 <img
-                  src={inventoryItem.item.image.replace(/^(\/rewards\/.*)\.(?:png|avif)$/, "$1.webp")}
+                  src={inventoryItem.item.image
+                    .replace(/^\/rewards\/treasure\.(?:png|avif|webp)$/, "/rewards/treasure-v2.webp")
+                    .replace(/^(\/rewards\/.*)\.(?:png|avif)$/, "$1.webp")}
                   alt={inventoryItem.item.name}
                   className="size-full object-contain"
                 />
