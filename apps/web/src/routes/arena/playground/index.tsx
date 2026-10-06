@@ -81,13 +81,29 @@ function RouteComponent() {
     mutationFn: async (params: { stageId: string; completionTime: number; stars: number }) => {
       return trpcClient.stages.completeStage.mutate(params);
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       setCompletionData(data);
-      setCompletionDialogOpen(true);
 
-      queryClient.invalidateQueries({ queryKey: trpc.user.getStats.queryKey() });
-      queryClient.invalidateQueries({ queryKey: trpc.stages.getProgress.queryKey() });
-      queryClient.invalidateQueries({ queryKey: trpc.worlds.getAll.queryKey() });
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: trpc.user.getStats.queryKey(),
+          refetchType: "all",
+        }),
+        queryClient.invalidateQueries({
+          queryKey: trpc.user.getWorldProgress.queryKey(),
+          refetchType: "all",
+        }),
+        queryClient.invalidateQueries({
+          queryKey: trpc.stages.getProgress.queryKey(),
+          refetchType: "all",
+        }),
+        queryClient.invalidateQueries({
+          queryKey: trpc.worlds.getAll.queryKey(),
+          refetchType: "all",
+        }),
+      ]);
+
+      setCompletionDialogOpen(true);
     },
     onError: (error) => {
       console.error("Failed to complete stage:", error);
