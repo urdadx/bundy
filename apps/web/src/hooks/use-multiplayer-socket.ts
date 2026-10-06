@@ -112,6 +112,8 @@ export function useMultiplayerSocket(
       };
 
       ws.onclose = (event) => {
+        if (wsRef.current !== ws) return;
+
         console.log("[WS] Disconnected", event.code, event.reason);
         clearTimers();
         wsRef.current = null;
@@ -174,7 +176,9 @@ export function useMultiplayerSocket(
       isIntentionalDisconnectRef.current = true;
       clearTimers();
       if (wsRef.current) {
-        wsRef.current.close(1000, "Component unmounted");
+        const ws = wsRef.current;
+        wsRef.current = null;
+        ws.close(1000, "Component unmounted");
       }
     };
   }, [clearTimers]);

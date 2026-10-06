@@ -36,7 +36,6 @@ export function useMultiplayerGame(options: UseMultiplayerGameOptions = {}) {
     isRematch,
     chatMessages,
     isOpponentTyping,
-    connectionState,
     setConnectionState,
     handleServerMessage,
     setRoomId,
@@ -69,7 +68,13 @@ export function useMultiplayerGame(options: UseMultiplayerGameOptions = {}) {
     }
   }, [user?.id, user?.name, user?.image, odId, odName, odAvatar, setUser]);
 
-  const { connect, disconnect, send, isConnected } = useMultiplayerSocket({
+  const {
+    connect,
+    disconnect,
+    send,
+    isConnected,
+    connectionState: socketConnectionState,
+  } = useMultiplayerSocket({
     onMessage: handleServerMessage,
     onConnect: () => setConnectionState("connected"),
     onDisconnect: () => setConnectionState("disconnected"),
@@ -172,8 +177,9 @@ export function useMultiplayerGame(options: UseMultiplayerGameOptions = {}) {
     connect,
     disconnect,
     isConnected,
-    connectionState,
-    isConnecting: connectionState === "connecting" || connectionState === "reconnecting",
+    connectionState: socketConnectionState,
+    isConnecting:
+      socketConnectionState === "connecting" || socketConnectionState === "reconnecting",
 
     room,
     roomId: store.roomId,
