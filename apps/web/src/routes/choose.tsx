@@ -2,8 +2,8 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { GameCard } from "@/components/game-card";
 import { LobbyGameSettingsUI } from "@/components/lobby-game-settings-ui";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import maleIdle from "@/assets/characters/male-idle.avif";
-import multiplayerImg from "@/assets/characters/multiplayer.avif";
+import maleIdle from "@/assets/characters/male-idle.webp";
+import multiplayerImg from "@/assets/characters/multiplayer.webp";
 import backgroundEmpty from "@/assets/background/backgroundEmpty.avif";
 import { useCallback } from "react";
 import { authClient } from "@/lib/auth-client";
@@ -82,6 +82,9 @@ function RouteComponent() {
 							<img
 								src={maleIdle}
 								alt="Single Player"
+								width={128}
+								height={128}
+								decoding="async"
 								className="w-32 h-32 object-contain group-hover:scale-105 transition-transform"
 							/>
 						</div>
@@ -97,6 +100,9 @@ function RouteComponent() {
 									<img
 										src={multiplayerImg}
 										alt="Multiplayer"
+										width={128}
+										height={128}
+										decoding="async"
 										className="w-32 h-32 object-contain group-hover:scale-105 transition-transform"
 									/>
 								</div>

@@ -6,8 +6,6 @@ export const env = createEnv({
   client: {
     VITE_SERVER_URL: z.url(),
     VITE_WS_URL: z.url().optional(),
-    VITE_NODE_ENV: z.enum(["development", "production"]).default("production"),
-    VITE_R2_BUCKET: z.url().default("https://assets.urdadx.com/assets"),
   },
   runtimeEnv: (import.meta as any).env,
   emptyStringAsUndefined: true,

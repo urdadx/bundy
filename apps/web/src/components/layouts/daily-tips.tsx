@@ -64,7 +64,7 @@ export const TipOfTheDay = () => {
 					<div className="relative group">
 						<img
 							className="w-24 h-24 object-contain transition-transform group-hover:scale-110"
-							src="/rewards/mascot.avif"
+							src="/rewards/mascot.webp"
 							alt="bundy mascot"
 						/>
 					</div>

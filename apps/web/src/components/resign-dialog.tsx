@@ -5,9 +5,9 @@ import {
   AlertDialogTitle,
   AlertDialogFooter,
 } from "@/components/ui/alert-dialog";
-import maleSad from "@/assets/characters/male-sad.avif";
-import RobotSad from "@/assets/characters/robot_sad.avif";
-import femaleSad from "@/assets/characters/female-sad.avif";
+import maleSad from "@/assets/characters/male-sad.webp";
+import RobotSad from "@/assets/characters/robot_sad.webp";
+import femaleSad from "@/assets/characters/female-sad.webp";
 import { motion } from "motion/react";
 import { Button } from "./ui/button";
 import { useSession } from "@/lib/auth-client";

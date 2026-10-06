@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import EinsteinImage from "@/assets/einstein.avif";
+import EinsteinImage from "@/assets/einstein.webp";
 
 const factsByTheme: Record<string, string[]> = {
   animals: [
@@ -143,6 +143,10 @@ export const GameTips = ({ worldTheme = "animals" }: GameTipsProps) => {
               className="w-24 h-24 object-contain transition-transform group-hover:scale-110"
               src={EinsteinImage}
               alt="einstein mascot"
+              width={96}
+              height={96}
+              loading="lazy"
+              decoding="async"
             />
           </div>
 

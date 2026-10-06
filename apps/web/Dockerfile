@@ -27,11 +27,9 @@ COPY packages ./packages
 # Build arguments for environment variables (needed at build time for Vite)
 ARG VITE_SERVER_URL
 ARG VITE_WS_URL
-ARG VITE_R2_BUCKET
 
 ENV VITE_SERVER_URL=$VITE_SERVER_URL
 ENV VITE_WS_URL=$VITE_WS_URL
-ENV VITE_R2_BUCKET=$VITE_R2_BUCKET
 
 # Build the web app
 WORKDIR /app/apps/web

@@ -2,8 +2,8 @@ import { Button } from "./ui/button";
 import { GameCard } from "./game-card";
 import { cn } from "@/lib/utils";
 import { ArrowLeft } from "lucide-react";
-import femaleIdle from "@/assets/characters/female-idle.avif";
-import maleIdle from "@/assets/characters/male-idle.avif";
+import femaleIdle from "@/assets/characters/female-idle.webp";
+import maleIdle from "@/assets/characters/male-idle.webp";
 
 const CharacterStage = ({
   selectedCharacter,

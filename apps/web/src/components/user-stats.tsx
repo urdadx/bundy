@@ -3,9 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import { trpc } from "@/utils/trpc";
 import diamondIcon from "@/assets/icons/diamond.svg";
 import xpIcon from "@/assets/icons/xp.svg";
-import bronzeMedal from "@/assets/medals/bronze-medal.avif";
-import silverMedal from "@/assets/medals/silver-medal.avif";
-import goldMedal from "@/assets/medals/gold-medal.avif";
+import bronzeMedal from "@/assets/medals/bronze-medal.webp";
+import silverMedal from "@/assets/medals/silver-medal.webp";
+import goldMedal from "@/assets/medals/gold-medal.webp";
 
 const LEAGUE_MEDALS: Record<string, string> = {
   Bronze: bronzeMedal,

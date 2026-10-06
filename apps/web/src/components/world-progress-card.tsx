@@ -5,12 +5,12 @@ import { useQuery } from "@tanstack/react-query";
 import { trpc } from "@/utils/trpc";
 import { Loader } from "./loader";
 
-import planet01 from "@/assets/planets/planet01.avif";
-import planet02 from "@/assets/planets/planet02.avif";
-import planet03 from "@/assets/planets/planet03.avif";
-import planet04 from "@/assets/planets/planet04.avif";
-import planet05 from "@/assets/planets/planet05.avif";
-import planet06 from "@/assets/planets/planet06.avif";
+import planet01 from "@/assets/planets/planet01.webp";
+import planet02 from "@/assets/planets/planet02.webp";
+import planet03 from "@/assets/planets/planet03.webp";
+import planet04 from "@/assets/planets/planet04.webp";
+import planet05 from "@/assets/planets/planet05.webp";
+import planet06 from "@/assets/planets/planet06.webp";
 
 const WORLD_IMAGES: Record<string, string> = {
   meadow: planet01,
@@ -134,6 +134,8 @@ export function WorldProgressCard() {
                 <img
                   src={planetImage}
                   alt={world.name}
+                  width={192}
+                  height={192}
                   className="w-full h-full object-contain"
                   loading="lazy"
                 />

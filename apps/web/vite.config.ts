@@ -13,6 +13,13 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       includeAssets: ["favicon/favicon.ico", "favicon/apple-touch-icon.png"],
+      workbox: {
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+        skipWaiting: true,
+        navigateFallback: "/index.html",
+        navigateFallbackDenylist: [/^\/api\//, /^\/ws\//],
+      },
       manifest: {
         id: "/",
         name: "Bundy - A Word Search Adventure",
@@ -35,23 +42,7 @@ export default defineConfig({
             sizes: "512x512",
             type: "image/png"
           },
-          {
-            src: "/favicon/android-chrome-192x192.png",
-            sizes: "192x192",
-            type: "image/png",
-            purpose: "maskable"
-          },
-          {
-            src: "/favicon/android-chrome-512x512.png",
-            sizes: "512x512",
-            type: "image/png",
-            purpose: "maskable"
-          }
-        ]
-      },
-      pwaAssets: { 
-        disabled: false, 
-        config: true
+        ],
       },
       devOptions: { enabled: false },
     }),

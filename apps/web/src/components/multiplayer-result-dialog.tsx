@@ -10,9 +10,6 @@ import { AvatarDisplay } from "@/components/avatar-selector";
 import { motion } from "motion/react";
 import { RotateCcw, LogOut } from "lucide-react";
 import type { Player } from "@/lib/multiplayer/types";
-import trophy from "@/assets/rewards/trophy.png";
-import handshake from "@/assets/rewards/handshake.png";
-import sadBunny from "@/assets/rewards/sad.png";
 import { useSoundEffect } from "@/hooks/use-sound-effect";
 import levelCompletedSound from "@/assets/sounds/level_completed.mp3";
 import levelLostSound from "@/assets/sounds/level_lost.mp3";
@@ -68,18 +65,18 @@ export function MultiplayerResultDialog({
       case "win":
         return {
           title: "YOU WON",
-          icon: trophy,
+          icon: "/rewards/trophy.webp",
         };
       case "lose":
         return {
           title: "YOU LOST ",
           bgGradient: "bg-gradient-to-b from-slate-50 to-gray-50",
-          icon: sadBunny,
+          icon: "/rewards/sad.webp",
         };
       case "draw":
         return {
           title: "IT'S A DRAW",
-          icon: handshake,
+          icon: "/rewards/handshake.webp",
         };
     }
   };

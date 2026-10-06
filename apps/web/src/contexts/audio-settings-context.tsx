@@ -10,33 +10,34 @@ interface AudioSettingsContextType {
 
 const AudioSettingsContext = createContext<AudioSettingsContextType | undefined>(undefined);
 
-export function AudioSettingsProvider({ children }: { children: ReactNode }) {
-  const [musicEnabled, setMusicEnabled] = useState<boolean>(() => {
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("wordsearch-music-enabled");
-      return stored !== null ? JSON.parse(stored) : true;
-    }
+function getStoredBoolean(key: string): boolean {
+  try {
+    const stored = localStorage.getItem(key);
+    return stored === null ? true : stored === "true";
+  } catch {
     return true;
-  });
+  }
+}
 
-  const [soundEffectsEnabled, setSoundEffectsEnabled] = useState<boolean>(() => {
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("wordsearch-sound-effects-enabled");
-      return stored !== null ? JSON.parse(stored) : true;
-    }
-    return true;
-  });
+export function AudioSettingsProvider({ children }: { children: ReactNode }) {
+  const [musicEnabled, setMusicEnabled] = useState<boolean>(() =>
+    getStoredBoolean("wordsearch-music-enabled"),
+  );
+
+  const [soundEffectsEnabled, setSoundEffectsEnabled] = useState<boolean>(() =>
+    getStoredBoolean("wordsearch-sound-effects-enabled"),
+  );
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    try {
       localStorage.setItem("wordsearch-music-enabled", JSON.stringify(musicEnabled));
-    }
+    } catch {}
   }, [musicEnabled]);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    try {
       localStorage.setItem("wordsearch-sound-effects-enabled", JSON.stringify(soundEffectsEnabled));
-    }
+    } catch {}
   }, [soundEffectsEnabled]);
 
   return (

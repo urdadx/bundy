@@ -6,10 +6,10 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
 } from "@/components/ui/alert-dialog";
-import maleCheerImg from "@/assets/characters/male-cheer.avif";
-import femaleCheerImg from "@/assets/characters/female-cheer.avif";
+import maleCheerImg from "@/assets/characters/male-cheer.webp";
+import femaleCheerImg from "@/assets/characters/female-cheer.webp";
 import diamondIcon from "@/assets/icons/diamond.svg";
-import RobotCheer from "@/assets/characters/robot_cheer.avif";
+import RobotCheer from "@/assets/characters/robot_cheer.webp";
 import XpIcon from "@/assets/icons/xp.svg";
 import { motion } from "motion/react";
 import { Button } from "./ui/button";

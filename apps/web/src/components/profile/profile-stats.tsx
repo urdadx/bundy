@@ -4,7 +4,7 @@ import xpIcon from "@/assets/icons/xp.svg";
 import { leagueAssets } from "../layouts/league-progress";
 import { trpc } from "@/utils/trpc";
 import { useQuery } from "@tanstack/react-query";
-import RankingIcon from "@/assets/icons/ranking.png";
+import RankingIcon from "@/assets/icons/ranking.webp";
 
 interface StatCardProps {
   label: string;

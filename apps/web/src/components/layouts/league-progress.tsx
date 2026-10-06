@@ -9,19 +9,19 @@ interface LeagueProgressProps {
 
 export const leagueAssets = {
 	Bronze: {
-		img: "/rewards/bronze-medal.avif",
+		img: "/rewards/bronze-medal.webp",
 		next: "Silver",
 		color: "bg-amber-500",
 		text: "text-amber-600",
 	},
 	Silver: {
-		img: "/rewards/silver-medal.avif",
+		img: "/rewards/silver-medal.webp",
 		next: "Gold",
 		color: "bg-slate-400",
 		text: "text-slate-500",
 	},
 	Gold: {
-		img: "/rewards/gold-medal.avif",
+		img: "/rewards/gold-medal.webp",
 		next: "Legendary",
 		color: "bg-yellow-400",
 		text: "text-yellow-600",

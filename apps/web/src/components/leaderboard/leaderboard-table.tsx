@@ -12,10 +12,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { trpc } from "@/utils/trpc";
 import { cn } from "@/lib/utils";
-import trophyCabinet from "@/assets/rewards/trophy-cabinet.png";
-import goldMedal from "@/assets/medals/gold-medal.avif";
-import silverMedal from "@/assets/medals/silver-medal.avif";
-import bronzeMedal from "@/assets/medals/bronze-medal.avif";
+import goldMedal from "@/assets/medals/gold-medal.webp";
+import silverMedal from "@/assets/medals/silver-medal.webp";
+import bronzeMedal from "@/assets/medals/bronze-medal.webp";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { Loader } from "../loader";
 
@@ -155,7 +154,13 @@ export function LeaderboardTable() {
       <div className="w-full max-w-2xl mx-auto space-y-6">
         <div className="flex flex-col items-center justify-center space-y-2">
           <div className="relative">
-            <img src={trophyCabinet} alt="Trophy Cabinet" className="w-40 h-40 object-contain" />
+            <img
+              src="/rewards/trophy-cabinet.webp"
+              alt="Trophy Cabinet"
+              width={160}
+              height={160}
+              className="w-40 h-40 object-contain"
+            />
           </div>
           <h2 className="text-3xl tracking-wider text-balance font-black text-slate-800">
             Global Leaderboard

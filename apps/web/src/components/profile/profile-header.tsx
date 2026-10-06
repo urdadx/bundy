@@ -1,8 +1,8 @@
 import { Edit2, Calendar } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
-import femaleIdle from "@/assets/characters/female-idle.avif";
-import maleIdle from "@/assets/characters/male-idle.avif";
-import RobotIdle from "@/assets/characters/robot_idle.avif";
+import femaleIdle from "@/assets/characters/female-idle.webp";
+import maleIdle from "@/assets/characters/male-idle.webp";
+import RobotIdle from "@/assets/characters/robot_idle.webp";
 import { normalizeAvatar } from "@/lib/avatars";
 import { AvatarChangeDialog } from "./avatar-change-dialog";
 

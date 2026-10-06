@@ -6,12 +6,12 @@ import { GameCard } from "./game-card";
 import { trpc } from "@/utils/trpc";
 import { Loader } from "./loader";
 
-import planet01 from "@/assets/planets/planet01.avif";
-import planet02 from "@/assets/planets/planet02.avif";
-import planet03 from "@/assets/planets/planet03.avif";
-import planet04 from "@/assets/planets/planet04.avif";
-import planet05 from "@/assets/planets/planet05.avif";
-import planet06 from "@/assets/planets/planet06.avif";
+import planet01 from "@/assets/planets/planet01.webp";
+import planet02 from "@/assets/planets/planet02.webp";
+import planet03 from "@/assets/planets/planet03.webp";
+import planet04 from "@/assets/planets/planet04.webp";
+import planet05 from "@/assets/planets/planet05.webp";
+import planet06 from "@/assets/planets/planet06.webp";
 
 const WORLD_IMAGES: Record<string, string> = {
 	meadow: planet01,
@@ -82,7 +82,7 @@ export function WorldSelector() {
 			</h1>
 
 			<div className="grid grid-cols-2 md:grid-cols-3 gap-6 w-full place-items-center">
-				{worlds?.map((world) => {
+				{worlds?.map((world, index) => {
 					const isSelected = selectedWorld === world.id;
 					const isLocked = userXp < world.requiredXp;
 					const planetImage = WORLD_IMAGES[world.id] || planet01;
@@ -114,11 +114,14 @@ export function WorldSelector() {
 								<img
 									src={planetImage}
 									alt={world.name}
+									width={96}
+									height={96}
 									className={cn(
 										"w-24 h-24 drop-shadow-md select-none object-cover",
 										isLocked && "grayscale",
 									)}
-									loading="lazy"
+									loading={index === 0 ? "eager" : "lazy"}
+									fetchPriority={index === 0 ? "high" : "auto"}
 								/>
 
 								<span

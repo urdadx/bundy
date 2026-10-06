@@ -4,16 +4,23 @@ import { Button } from "@/components/ui/button";
 import { AuthForm } from "@/components/auth-form";
 import { authClient } from "@/lib/auth-client";
 import backgroundImage from "@/assets/background/backgroundCastles.avif";
-import twoPlayersImage from "@/assets/characters/multiplayer.avif";
+import twoPlayersImage from "@/assets/characters/multiplayer.webp";
 
 export const Route = createFileRoute("/")({
   component: HomeComponent,
   beforeLoad: async () => {
-    const { data: session } = await authClient.getSession();
-    return {
-      session,
-      isAuthenticated: !!session,
-    };
+    try {
+      const { data: session } = await authClient.getSession();
+      return {
+        session,
+        isAuthenticated: !!session,
+      };
+    } catch {
+      return {
+        session: null,
+        isAuthenticated: false,
+      };
+    }
   },
 });
 
@@ -53,6 +60,9 @@ function HomeComponent() {
           <img
             src={twoPlayersImage}
             alt="Multiplayer"
+            width={128}
+            height={128}
+            fetchPriority="high"
             className="w-32 h-32 object-contain group-hover:scale-105 transition-transform"
           />
         </div>{" "}
