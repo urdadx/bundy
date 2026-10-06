@@ -63,7 +63,6 @@ function MultiplayerGamePage() {
     gameStartTime,
     gameEndReason,
     countdown,
-    isRematch,
     chatMessages,
     sendChatMessage,
     sendTyping,
@@ -115,17 +114,6 @@ function MultiplayerGamePage() {
     window.addEventListener("pagehide", handlePageHide);
     return () => window.removeEventListener("pagehide", handlePageHide);
   }, [phase, roomId, myPlayerId]);
-
-  useEffect(() => {
-    if (
-      connectionState === "connected" &&
-      (phase === "waiting" || phase === "ready") &&
-      countdown === null &&
-      !isRematch
-    ) {
-      navigate({ to: "/lobby/$roomId", params: { roomId } });
-    }
-  }, [connectionState, phase, roomId, navigate, countdown, isRematch]);
 
   useEffect(() => {
     if (phase !== "playing" || !gameStartTime || !settings?.timeLimit) {
